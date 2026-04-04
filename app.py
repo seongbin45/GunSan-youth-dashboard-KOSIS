@@ -97,7 +97,8 @@ try:
     # 🔥 문제의 5번 차트 전면 수정!
     st.write("---")
     st.subheader("📊 5. 군산시 청년(18~39세) 생활 지표 요약")
-    st.markdown("데이터가 단일 연도(2024년)만 존재하므로, 요약 막대그래프로 가독성을 높였습니다.")
+    st.markdown("""데이터가 단일 연도(2024년)만 존재하므로,   
+    요약 막대그래프로 가독성을 높였습니다.""")
 
     # 데이터 추출 및 가공
     house_trend = house_df[(house_df['C1_NM'].str.contains("18~39세")) & (house_df['C2_NM'].str.contains("비율"))]
