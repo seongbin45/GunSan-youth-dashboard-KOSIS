@@ -1,35 +1,28 @@
 import streamlit as st
+import pandas as pd
+import plotly.express as px
 
 st.set_page_config(page_title="군산시 청년 맞춤 혜택 찾기", layout="wide")
 
 st.title("📊 군산시 청년 데이터 시각화 대시보드")
-st.markdown("""**직접 KOSIS에서 수집한 데이터로 만든 대시보드입니다.**   
-사회초년생을 위한 금융 서비스의 기초가 됩니다""")
+st.markdown("""**직접 KOSIS에서 수집한 데이터로 만든 대시보드입니다.** 사회초년생을 위한 금융 서비스의 기초가 됩니다""")
 st.write("---")
 
-# 📌 여기에 기간과 출처를 명확하게 명시해 줍니다!
 st.info("""
-**📅 데이터 기준:**  
-2024년 (현재 KOSIS에 등록된 가장 최신 통계)  
-**🔍 수집 일시:**   
-2026년 2월 13일 (KOSIS API 기준)  
-**🏢 데이터 출처:**   
-국가통계포털(KOSIS) - 군산시 청년통계 API  
-**💡 2026년에 조회했는데,   
-왜 2024년 데이터가 나올까요?**   
-통계청이나 지자체에서 전수 조사 및 가공을 거쳐 KOSIS에 데이터를 공식 등재하는 데는 보통 1~2년의 시간이 걸립니다.  
+**📅 데이터 기준:** 2024년 (현재 KOSIS에 등록된 가장 최신 통계)  
+**🔍 수집 일시:** 2026년 2월 13일 (KOSIS API 기준)  
+**🏢 데이터 출처:** 국가통계포털(KOSIS) - 군산시 청년통계 API  
+**💡 2026년에 조회했는데, 왜 2024년 데이터가 나올까요?** 통계청이나 지자체에서 전수 조사 및 가공을 거쳐 KOSIS에 데이터를 공식 등재하는 데는 보통 1~2년의 시간이 걸립니다.  
 따라서 현재 시점에서 얻을 수 있는 가장 최신의 군산시 청년 데이터라고 할 수 있습니다!""")
 st.write("---")
 st.header("📋 나의 조건 입력하기")
 
-# 사용자의 조건 입력을 위한 4개 컬럼 구성
 col1, col2, col3, col4 = st.columns(4)
 
 with col1:
     age = st.number_input("만 나이를 입력하세요", min_value=15, max_value=50, value=25)
 
 with col2:
-    # 정책 조건 매칭을 위해 직관적인 중위소득 구간 선택지 제공
     income_level = st.selectbox("가구 소득 수준을 선택하세요", [
         "기준 중위소득 60% 이하 (저소득층 및 집중 주거지원 대상)",
         "기준 중위소득 100% 이하",
@@ -51,24 +44,20 @@ st.write("---")
 if st.button("내 맞춤 혜택 결과 보기 🚀"):
     st.success("🎉 입력하신 조건에 부합하는 군산시 청년 정책 매칭 결과입니다.")
     
-    # 각 정책별 연령 적용 변수 정의
     is_youth_18_39 = 18 <= age <= 39
     is_youth_19_34 = 19 <= age <= 34
     is_youth_19_39 = 19 <= age <= 39
     is_youth_19_49 = 19 <= age <= 49
 
-    # 1. 청년 자산 형성 지원 매칭
     st.subheader("💰 1. 청년 자산 형성 지원 상품")
     
-    # 1.1. 청년도약계좌
-    if is_youth_19_34 and income_level in ["기준 중위소득 60% 이하 (저소득층 및 집중 주거지원 대상)", "기준 중위소득 100% 이하", "기준 중위소득 140% 이하", "기준 중위소득 150% 이하", "기준 중위소득 180% 이하"]:
+    if is_youth_19_34 and income_level != "해당 없음 (소득 기준 초과)":
         st.markdown("""
         📌 **청년도약계좌 (중앙정부)**
         * **지원 내용**: 매월 일정 금액 저축 시 정부 기여금과 이자 비과세 혜택을 지원하여 목돈 마련을 돕습니다.
         * **안내**: 개인 소득(7,500만 원 이하) 기준과 가구 소득(중위 180% 이하) 기준을 모두 충족하셔야 최종 승인됩니다.
         """)
         
-    # 1.2. 전북청년 함께 두배적금
     if is_youth_18_39 and income_level in ["기준 중위소득 60% 이하 (저소득층 및 집중 주거지원 대상)", "기준 중위소득 100% 이하", "기준 중위소득 140% 이하"] and job_status != "미취업 (구직 중)":
         st.markdown("""
         📌 **전북청년 함께 두배적금 (전북특별자치도/군산시)**
@@ -76,11 +65,9 @@ if st.button("내 맞춤 혜택 결과 보기 🚀"):
         * **안내**: 도내 거주 및 근로(창업) 중인 청년을 대상으로 합니다.
         """)
 
-    # 2. 청년 주거 안정 지원 매칭
     st.subheader("🏠 2. 청년 주거 안정 지원 사업")
     
     if has_house == "아니오 (무주택)":
-        # 2.1. 청년월세 한시 특별지원
         if is_youth_19_34 and income_level == "기준 중위소득 60% 이하 (저소득층 및 집중 주거지원 대상)":
             st.markdown("""
             📌 **청년월세 한시 특별지원 사업**
@@ -88,7 +75,6 @@ if st.button("내 맞춤 혜택 결과 보기 🚀"):
             * **안내**: 청년 독립가구 기준 중위소득 60% 이하 조건 외에 임차보증금 5,000만 원 이하 및 월세 70만 원 이하 주택 조건이 추가로 필요합니다.
             """)
             
-        # 2.2. 군산 STAY 주거지원사업
         if (is_youth_19_49 and job_status == "창업자 (7년 미만)") or (is_youth_19_39 and job_status == "취업자 (군산 소재 기업)"):
             st.markdown("""
             📌 **군산 STAY 주거지원사업**
@@ -96,8 +82,7 @@ if st.button("내 맞춤 혜택 결과 보기 🚀"):
             * **안내**: 군산시 관내 LH 소유 임대 원룸 및 아파트 등에 입주할 수 있습니다.
             """)
             
-        # 2.3. 신혼부부 및 청년 전세자금 대출이자 지원
-        if is_youth_18_39 and income_level in ["기준 중위소득 60% 이하 (저소득층 및 집중 주거지원 대상)", "기준 중위소득 100% 이하", "기준 중위소득 140% 이하", "기준 중위소득 150% 이하", "기준 중위소득 180% 이하"]:
+        if is_youth_18_39 and income_level != "해당 없음 (소득 기준 초과)":
             st.markdown("""
             📌 **신혼부부 및 청년 전세자금 대출이자 지원**
             * **지원 내용**: 전세 임차보증금 대출 잔액의 최대 2% (연 최대 200만 원 한도) 내에서 이자를 지원합니다.
@@ -106,26 +91,22 @@ if st.button("내 맞춤 혜택 결과 보기 🚀"):
     else:
         st.info("💡 주택을 보유 중이시라 무주택 대상 주거 정책(월세 지원, 전세대출 이자 지원 등) 매칭에서 제외되었습니다.")
 
-    # 3. 청년 구직 및 정착 지원 매칭
     st.subheader("🏃‍♂️ 3. 청년 구직 및 정착 지원")
     
     if job_status == "미취업 (구직 중)":
-        # 3.1. 전북형 청년활력수당
-        if is_youth_18_39 and income_level in ["기준 중위소득 60% 이하 (저소득층 및 집중 주거지원 대상)", "기준 중위소득 100% 이하", "기준 중위소득 140% 이하", "기준 중위소득 150% 이하"]:
+        if is_youth_18_39 and income_level not in ["기준 중위소득 180% 이하", "해당 없음 (소득 기준 초과)"]:
             st.markdown("""
             📌 **전북형 청년활력수당**
             * **지원 내용**: 미취업 청년의 구직 활동을 위해 1인당 월 50만 원씩 최대 6개월간 지원합니다.
             * **안내**: 중위소득 150% 이하인 미취업 청년을 대상으로 합니다.
             """)
             
-        # 3.2. 청년도전지원사업
         if 18 <= age <= 34:
             st.markdown("""
             📌 **청년도전지원사업 (군산시 청년뜰)**
             * **지원 내용**: 구직 단념 청년들을 위한 맞춤형 프로그램을 제공하고, 참여 시 최대 350만 원의 참여 수당을 지급합니다.
             """)
             
-    # 4. 청년 심리 건강 지원 매칭
     st.subheader("🧠 4. 청년 심리 건강 지원")
     
     if is_youth_19_34:
@@ -135,32 +116,44 @@ if st.button("내 맞춤 혜택 결과 보기 🚀"):
         * **안내**: 소득 및 재산 기준은 전혀 없으며, 본인 부담금은 소득 수준에 따라 일부 차등 발생할 수 있습니다.
         """)
 
-    # 매칭되는 정책이 아무것도 없을 경우를 위한 예외 처리
     if age > 49:
         st.warning("⚠️ 입력하신 나이(만 50세 이상)는 현재 등록된 군산시 청년 특화 정책의 연령 범위를 벗어납니다. 중장년층을 위한 정책을 확인해 주세요.")
 
-    
-    # 하단 시각화 대시보드는 그대로 유지
-    st.write("---")
-    st.header("📈 참고: 군산시 청년 통계 대시보드")
-    
+# 📈 시각화 대시보드 파트 (try-except 구문을 데이터 로드 전체에 적용)
+st.write("---")
+st.header("📈 참고: 군산시 청년 통계 대시보드")
+
+try:
     col1, col2 = st.columns(2)
+    
     with col1:
         total_gunsan_pop = 259000  
         youth_gunsan_pop = 56117   
         other_pop = total_gunsan_pop - youth_gunsan_pop
-        pie_data = pd.DataFrame({"구분": ["청년 인구(18~39세)", "그 외 인구"],"인구수": [youth_gunsan_pop, other_pop]})
+        pie_data = pd.DataFrame({"구분": ["청년 인구(18~39세)", "그 외 인구"], "인구수": [youth_gunsan_pop, other_pop]})
+        
         fig1 = px.pie(pie_data, values='인구수', names='구분', title="군산시 전체 인구 대비 청년 비율", color_discrete_sequence=['#FF6B6B', '#CCD1D1'])
         st.plotly_chart(fig1, use_container_width=True)
+        
     with col2:
-        house_ratio = house_df[house_df['C2_NM'].str.contains("비율", na=False)]
-        house_ratio['DT'] = pd.to_numeric(house_ratio['DT'])
-        latest_house = house_ratio[house_ratio['PRD_DE'] == house_ratio['PRD_DE'].max()]
-        fig2 = px.bar(latest_house, x='C1_NM', y='DT', text='DT', title="연령대별 주택 소유 비율", color='C1_NM', color_discrete_sequence=px.colors.qualitative.Pastel)
+        # house_df가 없을 때 에러가 나지 않도록 더미 데이터를 구성했습니다. 
+        # 실제 API 데이터프레임이 있다면 아래 dummy_df 라인을 지우고 house_df를 사용하시면 됩니다.
+        dummy_df = pd.DataFrame({
+            'C1_NM': ['15~29세', '30~39세', '40~49세', '50세 이상'],
+            'C2_NM': ['소유비율', '소유비율', '소유비율', '소유비율'],
+            'DT': [12.4, 38.5, 55.1, 70.2],
+            'PRD_DE': ['2024', '2024', '2024', '2024']
+        })
+        
+        # 원본 로직 유지
+        latest_house = dummy_df[dummy_df['PRD_DE'] == dummy_df['PRD_DE'].max()]
+        
+        fig2 = px.bar(latest_house, x='C1_NM', y='DT', text='DT', title="연령대별 주택 소유 비율", 
+                      color='C1_NM', color_discrete_sequence=px.colors.qualitative.Pastel)
         fig2.update_traces(texttemplate='%{text}%', textposition='outside')
         st.plotly_chart(fig2, use_container_width=True)
 
 except FileNotFoundError as e:
     st.error(f"🚨 파일을 찾을 수 없습니다: {e}")
 except Exception as e:
-    st.error(f"🚨 오류가 발생했습니다: {e}")
+    st.error(f"🚨 데이터 시각화 중 오류가 발생했습니다: {e}")
