@@ -71,23 +71,23 @@ st.header("📋 나의 조건 입력하기")
 col1, col2, col3, col4 = st.columns(4)
 
 with col1:
-    age = st.number_input("만 나이를 입력하세요", min_value=15, max_value=50, value=25)
+    age = st.number_input("만 나이를 입력하세요", min_value=15, max_value=50, value=25)
 
 with col2:
-    income_level = st.selectbox("가구 소득 수준을 선택하세요", [
-        "기준 중위소득 60% 이하 (저소득층 및 집중 주거지원 대상)",
-        "기준 중위소득 100% 이하",
-        "기준 중위소득 140% 이하",
-        "기준 중위소득 150% 이하",
-        "기준 중위소득 180% 이하",
-        "해당 없음 (소득 기준 초과)"
-    ])
+    income_level = st.selectbox("가구 소득 수준을 선택하세요", [
+        "기준 중위소득 60% 이하 (저소득층 및 집중 주거지원 대상)",
+        "기준 중위소득 100% 이하",
+        "기준 중위소득 140% 이하",
+        "기준 중위소득 150% 이하",
+        "기준 중위소득 180% 이하",
+        "해당 없음 (소득 기준 초과)"
+    ])
 
 with col3:
-    has_house = st.radio("본인 명의의 주택을 소유하고 계신가요?", ["아니오 (무주택)", "예 (유주택)"])
+    has_house = st.radio("본인 명의의 주택을 소유하고 계신가요?", ["아니오 (무주택)", "예 (유주택)"])
 
 with col4:
-    job_status = st.radio("현재 경제 활동 상태는 무엇인가요?", ["미취업 (구직 중)", "창업자 (7년 미만)", "취업자 (군산 소재 기업)", "농업 종사 (청년창업농 등)"])
+    job_status = st.radio("현재 경제 활동 상태는 무엇인가요?", ["미취업 (구직 중)", "창업자 (7년 미만)", "취업자 (군산 소재 기업)", "농업 종사 (청년창업농 등)"])
 
 st.write("---")
 
@@ -95,7 +95,7 @@ st.write("---")
 if st.button("내 맞춤 혜택 결과 보기 🚀"):
     st.success("🎉 입력하신 조건에 부합하는 군산시 청년 정책 매칭 결과입니다.")
     
-    # [1] 기존 코드 연령/소득 조건 변수들 그대로 유지
+    # 1. 연령/소득 조건 변수들
     is_youth_18_34 = 18 <= age <= 34
     is_youth_19_34 = 19 <= age <= 34
     is_youth_18_39 = 18 <= age <= 39
@@ -107,11 +107,10 @@ if st.button("내 맞춤 혜택 결과 보기 🚀"):
     # 데이터 매칭을 위한 소득 변수 세분화
     is_under_60 = "60% 이하" in income_level
     is_under_100 = is_under_60 or "100% 이하" in income_level
-    is_under_120 = is_under_100 or "140% 이하" not in income_level # 140% 미만 그룹 퉁치기
+    is_under_120 = is_under_100 or "140% 이하" not in income_level
     is_under_140 = is_under_100 or "140% 이하" in income_level
     is_under_150 = is_under_140 or "150% 이하" in income_level
     is_under_180 = is_under_150 or "180% 이하" in income_level
-
 
     # ---------------------------------------------------------
     # 💰 1. 청년 자산 형성 지원 상품
