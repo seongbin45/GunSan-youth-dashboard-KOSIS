@@ -382,23 +382,36 @@ st.write("---")
 # 🔌 [개조 포인트] CSV 대신 DB에서 데이터를 긁어오는 함수!
 @st.cache_data
 def load_data_from_db():
-    # 1. 새로 올리신 DB 파일명으로 변경합니다.
+    # 1. 새로 올려주신 빵빵한 통합 DB 파일명
     conn = sqlite3.connect("gunsan_youth_data.db")
     
-    # SQL 쿼리를 날려 데이터프레임으로 바로 읽어옵니다.
-    pop_df = pd.read_sql("SELECT * FROM population", conn)
-    house_df = pd.read_sql("SELECT * FROM housing", conn)
-    wage_df = pd.read_sql("SELECT * FROM wage", conn)
-    health_df = pd.read_sql("SELECT * FROM health", conn)
-    
-    # 2. 공공데이터 포털에서 받아 DB에 새로 넣은 '취업의 어려움 사회조사' 데이터 읽기
-    # 파일명에 공백이 있어 언더바(_)로 치환되어 저장되었을 테이블명을 쿼리에 적용합니다.
+    # 2. 터미널 결과에 맞춘 정확한 테이블 이름으로 긁어오기!
     try:
+        # 기존 대시보드 그래프용 데이터
+        pop_df = pd.read_sql("SELECT * FROM gunsan_population_tables", conn)
+        house_df = pd.read_sql("SELECT * FROM gunsan_youth_housing_data", conn)
+        wage_df = pd.read_sql("SELECT * FROM gunsan_youth_wage_data", conn)
+        health_df = pd.read_sql("SELECT * FROM gunsan_youth_health_data", conn)
+        
+        # 새로 추가된 공공데이터 포털 데이터
         difficulty_df = pd.read_sql("SELECT * FROM 전북특별자치도_취업의_어려움_사회조사_20221231", conn)
-    except Exception:
-        # 혹시 위 테이블명이 아닐 경우를 대비한 방어 코드입니다.
-        difficulty_df = None
-    
+    except Exception as e:
+        # 혹시 몰라 기존에 쓰던 짧은 이름들도 백업으로 둡니다.
+        try: pop_df = pd.read_sql("SELECT * FROM population", conn)
+        except: pop_df = pd.DataFrame()
+            
+        try: house_df = pd.read_sql("SELECT * FROM housing", conn)
+        except: house_df = pd.DataFrame()
+            
+        try: wage_df = pd.read_sql("SELECT * FROM wage", conn)
+        except: wage_df = pd.DataFrame()
+            
+        try: health_df = pd.read_sql("SELECT * FROM health", conn)
+        except: health_df = pd.DataFrame()
+            
+        try: difficulty_df = pd.read_sql("SELECT * FROM 전북특별자치도_취업의_어려움_사회조사_20221231", conn)
+        except: difficulty_df = None
+
     conn.close() # 작업이 끝나면 안전하게 닫아줍니다.
     return pop_df, house_df, wage_df, health_df, difficulty_df
 
@@ -406,7 +419,7 @@ try:
     # DB에서 데이터 로드 ( difficulty_df 추가)
     pop_df, house_df, wage_df, health_df, difficulty_df = load_data_from_db()
 
-    # (기존 시각화 차트 그리는 코드 1~5번은 완벽하므로 그대로 유지됩니다!)
+    # (이하 시각화 차트를 그리는 코드는 기존과 동일하게 유지됩니다!)
     col1, col2 = st.columns(2)
 
     with col1:
