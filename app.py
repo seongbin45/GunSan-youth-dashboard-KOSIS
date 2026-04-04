@@ -8,6 +8,14 @@ st.title("📊 군산시 청년 데이터 시각화 대시보드")
 st.markdown("직접 KOSIS에서 수집한 데이터로 만든 대시보드입니다. 사회초년생을 위한 금융 서비스의 기초가 됩니다")
 st.write("---")
 
+# 📌 여기에 기간과 출처를 명확하게 명시해 줍니다!
+st.info("""
+**📅 데이터 기준:** 2024년 (현재 KOSIS에 등록된 가장 최신 통계)  
+**🔍 수집 일시:** 2026년 2월 13일  
+**🏢 데이터 출처:** 국가통계포털(KOSIS) 군산시 청년통계 API  
+*※ 본 대시보드는 사회초년생 금융/복지 서비스 기획을 위해 제작되었습니다.*
+""")
+
 @st.cache_data
 def load_data():
     pop_df = pd.read_csv("gunsan_youth_population_success.csv")
