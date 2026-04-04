@@ -571,7 +571,7 @@ try:
     else:
         st.warning("⚠️ DB에서 '연령별취업자' 테이블을 불러오지 못했습니다.")
 
-# 📌 9. 군산시 청년도약계좌 취급은행 현황 (시각화 완성 버전!)
+# 📌 9. 군산시 청년도약계좌 취급은행 현황 (진짜_최종_완성본.py)
     st.write("---")
     st.subheader("💰 9. 군산시 청년도약계좌 취급은행 현황")
     
@@ -579,47 +579,41 @@ try:
         st.info("💡 군산시 청년들이 도약계좌를 주로 어떤 은행에서 만들었는지 한눈에 보여주는 지표입니다.")
         
         try:
-            # 1. 시각화에 불필요한 컬럼('은행코드', '상품명' 등) 제외하고 은행명만 쏙!
-            exclude_cols = ['구분', '기관명', '상품명', '은행코드', '송금은행코드', '취급시작년도']
-            valid_cols = [col for col in saving_df.columns if col not in exclude_cols]
-            filtered_df = saving_df[valid_cols].copy()
+            # 1. 은행별로 이 표에 데이터가 총 몇 건씩 들어있는지 세어줍니다.
+            bank_col = '은행명'  # 캡처에 찍힌 정확한 컬럼명
             
-            # 2. 은행별 가입 건수 카운트하기
-            # (데이터에 가입자수 컬럼이 없으니 건수로 카운트합니다)
-            bank_col = '은행명'  # 스크린샷에 뜬 정확한 컬럼명
-            bank_counts = filtered_df[bank_col].value_counts().reset_index()
+            # 은행 이름별 데이터 개수를 세어서 깔끔한 표로 만듭니다.
+            bank_counts = saving_df[bank_col].value_counts().reset_index()
             bank_counts.columns = ['은행 이름', '가입 건수']
             
-            # 상위 10개 은행 추출
+            # 상위 10개만 자르기
             top_banks = bank_counts.head(10)
             
-            # 3. 데이터 타입을 숫자로 변환 (에러 방지)
-            top_banks['가입 건수'] = pd.to_numeric(top_banks['가입 건수'], errors='coerce')
-            
-            # 4. 가독성 높은 가로 막대 그래프 그리기! 🎨
+            # 2. 에러 유발자였던 변수명들을 완벽하게 교체하여 차트를 그립니다! 🎨
             fig9 = px.bar(
-                top_rooms,  # 이 부분을 top_banks로 수정해주셔야 합니다. 👈 [수정 포인트!]
-                x='건물 수',  # 이 부분을 가입 건수로 수정해주셔야 합니다. 👈 [수정 포인트!]
-                y='동네',    # 이 부분을 은행 이름으로 수정해주셔야 합니다. 👈 [수정 포인트!]
-                text='건물 수', # 이 부분을 가입 건수로 수정해주셔야 합니다. 👈 [수정 포인트!]
-                orientation='h',  # 가로 막대그래프
-                title="군산시 청년도약계좌 은행별 가입 건수 Top 10",
-                color='가입 건수',   # 색상 기준
-                color_continuous_scale='Mint'  # 상큼한 민트색으로!
+                top_banks,             # 👈 7번 데이터가 아닌 진짜 은행 데이터를 씁니다!
+                x='가입 건수',          # 👈 x축은 가입 건수
+                y='은행 이름',          # 👈 y축은 은행 이름
+                text='가입 건수',         # 👈 막대 끝에 표시될 숫자
+                orientation='h',       # 👈 가로 막대그래프
+                title="군산시 청년도약계좌 은행별 취급 건수 Top 10",
+                color='가입 건수',       # 👈 가입 건수에 따라 색이 진해집니다.
+                color_continuous_scale='Mint'  # 상큼한 민트색 테마
             )
             
+            # 막대 끝에 '건'이라는 글자를 붙여 가독성을 높입니다.
             fig9.update_traces(texttemplate='%{text}건', textposition='outside')
             fig9.update_layout(yaxis={'categoryorder':'total ascending'})  # 높은 순으로 정렬
             
-            st.plotly_chart(fig9, use_container_width=True, key="fig9")
+            st.plotly_chart(fig9, use_container_width=True, key="fig9_final")
             
-            # 5. 원본 데이터도 접이식(Expander)으로 깔끔하게 넣어주기
+            # 3. 원본 표도 하단에 잘 묻어둡니다.
             with st.expander("🔍 청년도약계좌 원본 데이터 표 보기"):
-                st.dataframe(saving_df[valid_cols], use_container_width=True)
+                st.dataframe(saving_df, use_container_width=True)
                 
         except Exception as e:
             st.error(f"데이터를 차트로 그리는 중 문제가 발생했습니다: {e}")
-            # 차트 그리기가 실패하면 그냥 원본 표 보여주기
+            # 만약 또 에러가 나면 안전하게 원본 표라도 보여줍니다.
             st.dataframe(saving_df, use_container_width=True)
             
     else:
