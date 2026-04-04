@@ -290,15 +290,9 @@ def load_data():
         except:
             job_df = pd.DataFrame({"DB 내 실제 테이블 목록": tables})
 
-        # 🆕 9번째 데이터: 청년도약계좌 가입현황 불러오기
-        try:
-            saving_df = pd.read_sql("SELECT * FROM 전북특별자치도_군산시_청년도약계좌_가입현황_20260203", conn)
-        except:
-            # 만약 테이블명이 다르면 에러 방지를 위해 테이블 목록을 담아둡니다.
-            cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
-            tables = [row[0] for row in cursor.fetchall()]
-            saving_df = pd.DataFrame({"DB 내 실제 테이블 목록": tables})
-    
+        # 🆕 9. 드디어 찾은 진짜 청년도약계좌 테이블 이름!
+        saving_df = pd.read_sql("SELECT * FROM 서민금융진흥원_청년도약계좌_취급은행_현황_20250731", conn)
+       
     except Exception as e:
         # 오류 해결 2: 에러가 나도 tables 변수를 안전하게 사용하도록 구조를 통일했습니다.
         pop_df = pd.DataFrame()
@@ -577,23 +571,47 @@ try:
     else:
         st.warning("⚠️ DB에서 '연령별취업자' 테이블을 불러오지 못했습니다.")
 
-# 📌 9. 군산시 청년도약계좌 가입 현황
+# 📌 9. 군산시 청년도약계좌 취급은행 현황 (최종 완성!)
     st.write("---")
-    st.subheader("💰 9. 군산시 청년도약계좌 가입 현황")
+    st.subheader("💰 9. 군산시 청년도약계좌 취급은행 현황")
     
     if 'saving_df' in locals() and saving_df is not None and not saving_df.empty:
-        # DB에 테이블을 못 찾았을 때의 방어 코드
-        if "DB 내 실제 테이블 목록" in saving_df.columns:
-            st.warning("⚠️ '청년도약계좌' 관련 테이블을 찾지 못했습니다. 아래 목록 중 진짜 이름이 무엇인지 확인해 주세요!")
-            st.dataframe(saving_df, use_container_width=True)
-        else:
-            st.info("💡 군산시 청년들의 자산 형성을 돕는 청년도약계좌 가입 현황 데이터입니다.")
-            with st.expander("🔍 청년도약계좌 원본 표 보기"):
+        st.info("💡 청년들이 자산 형성을 위해 어떤 은행에서 도약계좌를 주로 개설했는지 보여주는 지표입니다.")
+        
+        try:
+            # 원본 데이터 컬럼명에 맞게 데이터를 정리합니다.
+            # 캡처를 보니 보통 '취급은행'과 '가입자수' 혹은 '건수' 형태일 확률이 높습니다.
+            col_list = saving_df.columns.tolist()
+            
+            # 은행 이름이 들어간 컬럼 찾기
+            bank_col = next((c for c in col_list if '은행' in c or '기관' in c), col_list[0])
+            # 가입자 수나 실적이 들어간 컬럼 찾기
+            val_col = next((c for c in col_list if '수' in c or '건' in c or '값' in c or '실적' in c), None)
+            
+            if val_col:
+                saving_df[val_col] = pd.to_numeric(saving_df[val_col], errors='coerce')
+                # 가입 실적 순으로 정렬
+                df_sorted = saving_df.sort_values(by=val_col, ascending=False).head(10)
+                
+                fig9 = px.bar(
+                    df_sorted, x=val_col, y=bank_col, text=val_col,
+                    orientation='h', title="은행별 청년도약계좌 취급 현황 Top 10",
+                    color=val_col, color_continuous_scale='Mint'
+                )
+                fig9.update_traces(textposition='outside')
+                fig9.update_layout(yaxis={'categoryorder':'total ascending'})
+                st.plotly_chart(fig9, use_container_width=True, key="fig9")
+            
+            with st.expander("🔍 청년도약계좌 원본 데이터 표 보기"):
                 st.dataframe(saving_df, use_container_width=True)
-            st.success("👍 9번 데이터도 성공적으로 로드되었습니다! 표의 형태를 확인한 후 알맞은 그래프로 바꿔드릴게요.")
+                
+        except Exception as e:
+            st.warning("데이터를 가공하는 중 오류가 발생했습니다. 원본 표를 확인해 주세요.")
+            st.dataframe(saving_df, use_container_width=True)
+            
     else:
         st.warning("⚠️ DB에서 '청년도약계좌' 테이블을 불러오지 못했습니다.")
-
+    
 # --- 파일 끝 ---
 except FileNotFoundError as e:
     st.error(f"🚨 파일을 찾을 수 없습니다: {e}")
