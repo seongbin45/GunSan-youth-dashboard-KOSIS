@@ -5,8 +5,7 @@ import plotly.express as px
 
 st.set_page_config(page_title="군산시 청년 맞춤 혜택 찾기", layout="wide")
 
-st.title("""📢 군산시 청년 맞춤 혜택 찾기
-(어울리는 제목을 추천해주세요ㅠ)""")
+st.title("""📢 군산시 청년 맞춤 혜택 찾기(어울리는 제목을 추천해주세요ㅠ)""")
 st.markdown("""**직접 KOSIS에서 수집한 데이터로 만든 서비스입니다.**  
 사회초년생을 위한 금융 서비스의 기초가 됩니다""")
 
