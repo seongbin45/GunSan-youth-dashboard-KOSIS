@@ -258,12 +258,16 @@ st.info("""
 st.write("---")
 
 # 🔌 [개조 포인트] CSV 대신 DB에서 데이터를 긁어오는 함수!
+import streamlit as st
+import pandas as pd
+import sqlite3
+import plotly.express as px
+
+# 🔌 1. DB에서 데이터를 안전하게 긁어오는 함수
 @st.cache_data
 def load_data():
-    # 1. 새로 올리신 빵빵한 통합 DB 파일명
     conn = sqlite3.connect("gunsan_youth_data.db")
     
-    # 2. 터미널 결과에 맞춘 정확한 테이블 이름으로 긁어오기!
     try:
         # 기존 대시보드 그래프용 데이터
         pop_df = pd.read_sql("SELECT * FROM gunsan_population_tables", conn)
@@ -271,10 +275,12 @@ def load_data():
         wage_df = pd.read_sql("SELECT * FROM gunsan_youth_wage_data", conn)
         health_df = pd.read_sql("SELECT * FROM gunsan_youth_health_data", conn)
         
-        # 새로 추가된 공공데이터 포털 데이터
+        # 새로 추가된 공공데이터 포털 데이터 (취업의 어려움 & 원룸 현황)
         difficulty_df = pd.read_sql("SELECT * FROM 전북특별자치도_취업의_어려움_사회조사_20221231", conn)
+        room_df = pd.read_sql("SELECT * FROM 전북특별자치도_군산시_원룸_및_오피스텔_현황_20260203", conn)
+        
     except Exception as e:
-        # 혹시 몰라 기존에 쓰던 짧은 이름들도 백업으로 둡니다.
+        # 혹시 에러가 날 경우를 대비한 백업 방어 코드
         try: pop_df = pd.read_sql("SELECT * FROM population", conn)
         except: pop_df = pd.DataFrame()
             
@@ -289,15 +295,21 @@ def load_data():
             
         try: difficulty_df = pd.read_sql("SELECT * FROM 전북특별자치도_취업의_어려움_사회조사_20221231", conn)
         except: difficulty_df = None
+            
+        try: room_df = pd.read_sql("SELECT * FROM 전북특별자치도_군산시_원룸_및_오피스텔_현황_20260203", conn)
+        except: room_df = pd.DataFrame()
 
-    conn.close() # 작업이 끝나면 안전하게 닫아줍니다.
-    return pop_df, house_df, wage_df, health_df, difficulty_df
+    conn.close() 
+    return pop_df, house_df, wage_df, health_df, difficulty_df, room_df
+
+# 💡 상단 타이틀 영역
+st.title("📊 군산시 청년 통계 대시보드")
 
 try:
-    # 🔌 [개조 포인트] CSV 대신 DB에서 데이터를 긁어옵니다.
-    pop_df, house_df, wage_df, health_df, difficulty_df = load_data()
+    # 🔌 load_data()가 뱉는 6개의 뭉치를 그대로 받아줍니다.
+    pop_df, house_df, wage_df, health_df, difficulty_df, room_df = load_data()
 
-    # (이하 시각화 차트를 그리는 코드는 기존과 동일하게 유지됩니다!)
+    # 📌 1 & 2번 영역
     col1, col2 = st.columns(2)
 
     with col1:
@@ -314,7 +326,6 @@ try:
         fig1 = px.pie(pie_data, values='인구수', names='구분', 
                       title="군산시 전체 인구 대비 청년 비율",
                       color_discrete_sequence=['#FF6B6B', '#CCD1D1'])
-        # --- [충돌 해결] key 인자 추가 ---
         st.plotly_chart(fig1, use_container_width=True, key="fig1")
 
     with col2:
@@ -330,11 +341,11 @@ try:
                       labels={'C1_NM': '구분', 'DT': '소유 비율(%)'},
                       color='C1_NM', color_discrete_sequence=px.colors.qualitative.Pastel)
         fig2.update_traces(texttemplate='%{text}%', textposition='outside')
-        # --- [충돌 해결] key 인자 추가 ---
         st.plotly_chart(fig2, use_container_width=True, key="fig2")
 
     st.write("---")
     
+    # 📌 3 & 4번 영역
     col3, col4 = st.columns(2)
     
     with col3:
@@ -347,7 +358,6 @@ try:
                       title=f"{latest_wage_year}년 소득 구간별 인구",
                       labels={'C2_NM': '소득 구간', 'DT': '인구(천명)'},
                       barmode='group')
-        # --- [충돌 해결] key 인자 추가 ---
         st.plotly_chart(fig3, use_container_width=True, key="fig3")
 
     with col4:
@@ -360,9 +370,9 @@ try:
                       title=f"{latest_health_year}년 생활 건강 지표 비교",
                       labels={'C2_NM': '지표 구분', 'DT': '비율(%)'},
                       barmode='group', color_discrete_sequence=px.colors.qualitative.Set2)
-        # --- [충돌 해결] key 인자 추가 ---
         st.plotly_chart(fig4, use_container_width=True, key="fig4")
 
+    # 📌 5번 영역
     st.write("---")
     st.subheader("📊 5. 군산시 청년(18~39세) 생활 지표 요약")
     
@@ -383,68 +393,78 @@ try:
                   labels={'지표': '지표 종류', 'DT': '수치(%)'},
                   color='지표', color_discrete_sequence=px.colors.qualitative.Safe)
     fig5.update_traces(texttemplate='%{text}%', textposition='outside')
-    # --- [충돌 해결] key 인자 추가 ---
     st.plotly_chart(fig5, use_container_width=True, key="fig5")
 
-# 🆕 6. 새로 추가한 데이터 연동 영역
+    # 📌 6번 영역 (취업의 어려움)
     st.write("---")
     st.subheader("🎯 6. 군산시 청년 취업의 어려움 (2022)")
     
     if difficulty_df is not None:
         st.info("💡 공공데이터 포털에서 수집한 '전북 사회조사' 데이터 중 **군산시** 데이터만 추출했습니다.")
-        
-        # [핵심] 군산시 데이터만 필터링
-        # 컬럼 이름이나 데이터 상황에 맞게 조금씩 수정될 수 있습니다.
         gunsan_data = difficulty_df[difficulty_df['특성별2'] == '군산시']
         
         if not gunsan_data.empty:
-            # 1. 시각화에 불필요한 '특성별1', '특성별2', '소계' 컬럼 제외하기
             exclude_cols = ['특성별1', '특성별2', '소계', '계']
             valid_cols = [col for col in gunsan_data.columns if col not in exclude_cols]
             
-            # 2. 데이터를 그래프용으로 길게 재정렬 (Melt)
             melted_gunsan = pd.melt(
-                gunsan_data, 
-                id_vars=[], 
-                value_vars=valid_cols,
-                var_name='어려움 요인', 
-                value_name='비율(%)'
+                gunsan_data, id_vars=[], value_vars=valid_cols,
+                var_name='어려움 요인', value_name='비율(%)'
             )
-            
-            # 3. 데이터 타입을 숫자로 변환 (에러 방지)
             melted_gunsan['비율(%)'] = pd.to_numeric(melted_gunsan['비율(%)'], errors='coerce')
-            
-            # 4. 비율이 높은 순으로 정렬
             melted_gunsan = melted_gunsan.sort_values(by='비율(%)', ascending=False)
             
-            # 5. 가독성 높은 가로 막대 그래프 그리기!
             fig6 = px.bar(
-                melted_gunsan, 
-                x='비율(%)', 
-                y='어려움 요인', 
-                text='비율(%)',
-                orientation='h',  # 가로 막대그래프
-                title="군산시 청년이 느끼는 취업의 어려움 요인 (단위: %)",
-                color='비율(%)', 
-                color_continuous_scale='Blues'
+                melted_gunsan, x='비율(%)', y='어려움 요인', text='비율(%)',
+                orientation='h', title="군산시 청년이 느끼는 취업의 어려움 요인 (단위: %)",
+                color='비율(%)', color_continuous_scale='Blues'
             )
-            
             fig6.update_traces(texttemplate='%{text}%', textposition='outside')
-            fig6.update_layout(yaxis={'categoryorder':'total ascending'})  # 높은 순으로 정렬
-            
+            fig6.update_layout(yaxis={'categoryorder':'total ascending'})
             st.plotly_chart(fig6, use_container_width=True, key="fig6")
             
-            # 6. 원본 데이터도 접이식(Expander)으로 깔끔하게 넣어주기
             with st.expander("🔍 군산시 원본 데이터 표 보기"):
                 st.dataframe(gunsan_data[valid_cols], use_container_width=True)
-                
         else:
-            st.warning("⚠️ 데이터 내에서 '군산시' 행을 찾지 못했습니다. 원본 표의 '특성별2' 컬럼에 '군산시'가 맞는지 확인해 주세요.")
-            # 찾지 못했을 땐 그냥 원본 표 보여주기
+            st.warning("⚠️ '군산시' 행을 찾지 못했습니다. 원본 표를 확인해 주세요.")
             st.dataframe(difficulty_df, use_container_width=True)
-            
     else:
         st.warning("⚠️ DB에서 '취업의 어려움 사회조사' 테이블을 불러오지 못했습니다.")
+
+    # 📌 7번 영역 (원룸 및 오피스텔 분포 - 신규!)
+    st.write("---")
+    st.subheader("🏠 7. 군산시 읍면동별 원룸 및 오피스텔 분포")
+    
+    if room_df is not None and not room_df.empty:
+        st.info("💡 군산시의 청년들이 거주하기 좋은 원룸과 오피스텔이 어느 동네에 밀집해 있는지 보여주는 데이터입니다.")
+        
+        col_list = room_df.columns.tolist()
+        dong_col = None
+        for c in col_list:
+            if '동' in c or '소재지' in c or '주소' in c:
+                dong_col = c
+                break
+                
+        if dong_col:
+            room_counts = room_df[dong_col].value_counts().reset_index()
+            room_counts.columns = ['동네', '건물 수']
+            top_rooms = room_counts.head(10)
+            
+            fig7 = px.bar(
+                top_rooms, x='건물 수', y='동네', text='건물 수',
+                orientation='h', title="군산시 원룸 및 오피스텔 밀집 동네 Top 10",
+                color='건물 수', color_continuous_scale='Purples'
+            )
+            fig7.update_traces(texttemplate='%{text}개', textposition='outside')
+            fig7.update_layout(yaxis={'categoryorder':'total ascending'})
+            st.plotly_chart(fig7, use_container_width=True, key="fig7")
+        else:
+            st.warning("⚠️ 동네를 구분할 수 있는 컬럼을 찾지 못했습니다.")
+            
+        with st.expander("🔍 군산시 원룸 및 오피스텔 원본 표 보기"):
+            st.dataframe(room_df, use_container_width=True)
+    else:
+        st.warning("⚠️ DB에서 '원룸 및 오피스텔 현황' 테이블을 불러오지 못했습니다.")
 
 except FileNotFoundError as e:
     st.error(f"🚨 파일을 찾을 수 없습니다: {e}")
