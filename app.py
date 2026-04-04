@@ -381,8 +381,8 @@ st.write("---")
 
 # 🔌 [개조 포인트] CSV 대신 DB에서 데이터를 긁어오는 함수!
 @st.cache_data
-def load_data_from_db():
-    # 1. 새로 올려주신 빵빵한 통합 DB 파일명
+def load_data():
+    # 1. 새로 올리신 빵빵한 통합 DB 파일명
     conn = sqlite3.connect("gunsan_youth_data.db")
     
     # 2. 터미널 결과에 맞춘 정확한 테이블 이름으로 긁어오기!
@@ -416,8 +416,8 @@ def load_data_from_db():
     return pop_df, house_df, wage_df, health_df, difficulty_df
 
 try:
-    # DB에서 데이터 로드 ( difficulty_df 추가)
-    pop_df, house_df, wage_df, health_df, difficulty_df = load_data_from_db()
+    # 🔌 [개조 포인트] CSV 대신 DB에서 데이터를 긁어옵니다.
+    pop_df, house_df, wage_df, health_df, difficulty_df = load_data()
 
     # (이하 시각화 차트를 그리는 코드는 기존과 동일하게 유지됩니다!)
     col1, col2 = st.columns(2)
@@ -436,7 +436,8 @@ try:
         fig1 = px.pie(pie_data, values='인구수', names='구분', 
                       title="군산시 전체 인구 대비 청년 비율",
                       color_discrete_sequence=['#FF6B6B', '#CCD1D1'])
-        st.plotly_chart(fig1, use_container_width=True)
+        # --- [충돌 해결] key 인자 추가 ---
+        st.plotly_chart(fig1, use_container_width=True, key="fig1")
 
     with col2:
         st.subheader("🏠 2. 청년 주택 소유 비율 (%)")
@@ -451,7 +452,8 @@ try:
                       labels={'C1_NM': '구분', 'DT': '소유 비율(%)'},
                       color='C1_NM', color_discrete_sequence=px.colors.qualitative.Pastel)
         fig2.update_traces(texttemplate='%{text}%', textposition='outside')
-        st.plotly_chart(fig2, use_container_width=True)
+        # --- [충돌 해결] key 인자 추가 ---
+        st.plotly_chart(fig2, use_container_width=True, key="fig2")
 
     st.write("---")
     
@@ -467,7 +469,8 @@ try:
                       title=f"{latest_wage_year}년 소득 구간별 인구",
                       labels={'C2_NM': '소득 구간', 'DT': '인구(천명)'},
                       barmode='group')
-        st.plotly_chart(fig3, use_container_width=True)
+        # --- [충돌 해결] key 인자 추가 ---
+        st.plotly_chart(fig3, use_container_width=True, key="fig3")
 
     with col4:
         st.subheader("🍺 4. 청년 건강 지표 (%)")
@@ -479,7 +482,8 @@ try:
                       title=f"{latest_health_year}년 생활 건강 지표 비교",
                       labels={'C2_NM': '지표 구분', 'DT': '비율(%)'},
                       barmode='group', color_discrete_sequence=px.colors.qualitative.Set2)
-        st.plotly_chart(fig4, use_container_width=True)
+        # --- [충돌 해결] key 인자 추가 ---
+        st.plotly_chart(fig4, use_container_width=True, key="fig4")
 
     st.write("---")
     st.subheader("📊 5. 군산시 청년(18~39세) 생활 지표 요약")
@@ -501,7 +505,8 @@ try:
                   labels={'지표': '지표 종류', 'DT': '수치(%)'},
                   color='지표', color_discrete_sequence=px.colors.qualitative.Safe)
     fig5.update_traces(texttemplate='%{text}%', textposition='outside')
-    st.plotly_chart(fig5, use_container_width=True)
+    # --- [충돌 해결] key 인자 추가 ---
+    st.plotly_chart(fig5, use_container_width=True, key="fig5")
 
     # 🆕 6. 새로 추가한 데이터 연동 영역
     st.write("---")
