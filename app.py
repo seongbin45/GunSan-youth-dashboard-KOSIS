@@ -445,23 +445,62 @@ try:
             fig7.update_layout(yaxis={'categoryorder':'total ascending'})
             st.plotly_chart(fig7, use_container_width=True, key="fig7")
 
-    # 📌 8번 영역 (데이터 탐정단 모드)
+    # 📌 8. 전북특별자치도 연령별 취업자 비중 (완성 버전!)
     st.write("---")
-    st.subheader("💼 8. 전북특별자치도 연령별 취업자 비중 (2021)")
+    st.subheader("💼 8. 전북특별자치도 연령별 취업자 비중")
     
     if 'job_df' in locals() and job_df is not None and not job_df.empty:
-        # 🔍 DB에 테이블을 못 찾았을 때의 방어 코드
-        if "DB 내 실제 테이블 목록" in job_df.columns:
-            st.warning("⚠️ '전북특별자치도_연령별취업자_20211231' 테이블을 찾지 못했습니다. 아래 목록 중 진짜 이름이 무엇인지 확인해 주세요!")
-            st.dataframe(job_df, use_container_width=True)
-        else:
-            st.info("💡 전북 전체에서 청년층의 취업자 비중이 얼마나 되는지 연령대별로 비교해 보는 데이터입니다.")
+        st.info("💡 전북 전체 취업자 중 청년층(15~39세)이 차지하는 비중을 한눈에 보여줍니다.")
+        
+        try:
+            # 1. 데이터 전처리 (가장 최근 연도 기준)
+            # 텍스트로 되어있을지 모를 숫자를 진짜 숫자로 변환
+            job_df['연도'] = pd.to_numeric(job_df['연도'], errors='coerce')
+            job_df['취업자수'] = pd.to_numeric(job_df['취업자수'], errors='coerce')
+            
+            # 가장 최근 연도 찾기
+            latest_year = job_df['연도'].max()
+            
+            # 최근 연도 데이터만 쏙 빼오기
+            recent_job_df = job_df[job_df['연도'] == latest_year].copy()
+            
+            # 2. 청년층(15~39세) vs 그 외 연령대 분류기
+            def categorize_age(age):
+                youth_ages = ['15~19세', '20~24세', '25~29세', '30~34세', '35~39세']
+                if age in youth_ages:
+                    return '청년층 (15~39세)'
+                else:
+                    return '그 외 연령대'
+                    
+            recent_job_df['연령_그룹'] = recent_job_df['연령'].apply(categorize_age)
+            
+            # 3. 그룹별로 취업자수 다 더하기
+            grouped_job = recent_job_df.groupby('연령_그룹')['취업자수'].sum().reset_index()
+            
+            # 4. 파이 차트 그리기 🎨
+            fig8 = px.pie(
+                grouped_job, values='취업자수', names='연령_그룹', 
+                title=f"{int(latest_year)}년 전북 취업자 중 청년층 비율",
+                color='연령_그룹', 
+                color_discrete_map={'청년층 (15~39세)': '#3498DB', '그 외 연령대': '#E5E7E9'}
+            )
+            
+            # 차트 안팎으로 퍼센트와 이름 예쁘게 표시
+            fig8.update_traces(textinfo='percent+label', textfont_size=15, pull=[0.05, 0])
+            st.plotly_chart(fig8, use_container_width=True, key="fig8")
+            
+            # 표도 숨겨서 놔두기
             with st.expander("🔍 연령별 취업자 원본 표 보기"):
-                st.dataframe(job_df, use_container_width=True)
-            st.success("👍 성공적으로 로드되었습니다!")
+                st.dataframe(recent_job_df, use_container_width=True)
+                
+        except Exception as e:
+            st.error(f"데이터를 차트로 그리는 중 문제가 발생했습니다: {e}")
+            st.dataframe(job_df)
+
     else:
         st.warning("⚠️ DB에서 '연령별취업자' 테이블을 불러오지 못했습니다.")
 
+# --- 파일 끝 ---
 except FileNotFoundError as e:
     st.error(f"🚨 파일을 찾을 수 없습니다: {e}")
 except Exception as e:
