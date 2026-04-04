@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
+import sqlite3
 
 st.set_page_config(page_title="군산시 청년 통계 대시보드", layout="wide")
 
@@ -22,17 +23,28 @@ st.info("""
 통계청이나 지자체에서 전수 조사 및 가공을 거쳐 KOSIS에 데이터를 공식 등재하는 데는 보통 1~2년의 시간이 걸립니다. 따라서 현재 시점에서 얻을 수 있는 가장 최신의 군산시 청년 데이터라고 할 수 있습니다!*
 """)
 
+st.write("---")
+
+# 🔌 [개조 포인트] CSV 대신 DB에서 데이터를 긁어오는 함수!
 @st.cache_data
-def load_data():
-    pop_df = pd.read_csv("gunsan_youth_population_success.csv")
-    house_df = pd.read_csv("gunsan_youth_housing_data.csv")
-    wage_df = pd.read_csv("gunsan_youth_wage_data.csv")
-    health_df = pd.read_csv("gunsan_youth_health_data.csv")
+def load_data_from_db():
+    # 데이터베이스 연결
+    conn = sqlite3.connect("gunsan_youth.db")
+    
+    # SQL 쿼리를 날려 데이터프레임으로 바로 읽어옵니다.
+    pop_df = pd.read_sql("SELECT * FROM population", conn)
+    house_df = pd.read_sql("SELECT * FROM housing", conn)
+    wage_df = pd.read_sql("SELECT * FROM wage", conn)
+    health_df = pd.read_sql("SELECT * FROM health", conn)
+    
+    conn.close() # 작업이 끝나면 안전하게 닫아줍니다.
     return pop_df, house_df, wage_df, health_df
 
 try:
-    pop_df, house_df, wage_df, health_df = load_data()
+    # DB에서 데이터 로드
+    pop_df, house_df, wage_df, health_df = load_data_from_db()
 
+    # (이하 시각화 차트를 그리는 코드는 기존과 동일하게 유지됩니다!)
     col1, col2 = st.columns(2)
 
     with col1:
@@ -94,13 +106,9 @@ try:
                       barmode='group', color_discrete_sequence=px.colors.qualitative.Set2)
         st.plotly_chart(fig4, use_container_width=True)
 
-    # 🔥 문제의 5번 차트 전면 수정!
     st.write("---")
     st.subheader("📊 5. 군산시 청년(18~39세) 생활 지표 요약")
-    st.markdown("""데이터가 단일 연도(2024년)만 존재하므로,   
-    요약 막대그래프로 가독성을 높였습니다.""")
-
-    # 데이터 추출 및 가공
+    
     house_trend = house_df[(house_df['C1_NM'].str.contains("18~39세")) & (house_df['C2_NM'].str.contains("비율"))]
     health_trend = health_df[health_df['C1_NM'].str.contains("18~39세")]
 
@@ -113,7 +121,6 @@ try:
     ])
     combined_summary['DT'] = pd.to_numeric(combined_summary['DT'])
 
-    # 막대그래프로 깔끔하게 표현
     fig5 = px.bar(combined_summary, x='지표', y='DT', text='DT',
                   title="2024년 군산시 청년 주요 지표 모아보기",
                   labels={'지표': '지표 종류', 'DT': '수치(%)'},
