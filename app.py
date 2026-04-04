@@ -124,36 +124,94 @@ st.write("---")
 st.header("📈 참고: 군산시 청년 통계 대시보드")
 
 try:
+    # DB에서 데이터 로드
+    pop_df, house_df, wage_df, health_df = load_data_from_db()
+
+    # (이하 시각화 차트를 그리는 코드는 기존과 동일하게 유지됩니다!)
     col1, col2 = st.columns(2)
-    
+
     with col1:
+        st.subheader("📌 1. 군산시 청년 인구 비중 (2024)")
         total_gunsan_pop = 259000  
         youth_gunsan_pop = 56117   
         other_pop = total_gunsan_pop - youth_gunsan_pop
-        pie_data = pd.DataFrame({"구분": ["청년 인구(18~39세)", "그 외 인구"], "인구수": [youth_gunsan_pop, other_pop]})
         
-        fig1 = px.pie(pie_data, values='인구수', names='구분', title="군산시 전체 인구 대비 청년 비율", color_discrete_sequence=['#FF6B6B', '#CCD1D1'])
-        st.plotly_chart(fig1, use_container_width=True)
-        
-    with col2:
-        # house_df가 없을 때 에러가 나지 않도록 더미 데이터를 구성했습니다. 
-        # 실제 API 데이터프레임이 있다면 아래 dummy_df 라인을 지우고 house_df를 사용하시면 됩니다.
-        dummy_df = pd.DataFrame({
-            'C1_NM': ['15~29세', '30~39세', '40~49세', '50세 이상'],
-            'C2_NM': ['소유비율', '소유비율', '소유비율', '소유비율'],
-            'DT': [12.4, 38.5, 55.1, 70.2],
-            'PRD_DE': ['2024', '2024', '2024', '2024']
+        pie_data = pd.DataFrame({
+            "구분": ["청년 인구(18~39세)", "그 외 인구"],
+            "인구수": [youth_gunsan_pop, other_pop]
         })
         
-        # 원본 로직 유지
-        latest_house = dummy_df[dummy_df['PRD_DE'] == dummy_df['PRD_DE'].max()]
+        fig1 = px.pie(pie_data, values='인구수', names='구분', 
+                      title="군산시 전체 인구 대비 청년 비율",
+                      color_discrete_sequence=['#FF6B6B', '#CCD1D1'])
+        st.plotly_chart(fig1, use_container_width=True)
+
+    with col2:
+        st.subheader("🏠 2. 청년 주택 소유 비율 (%)")
+        house_ratio = house_df[house_df['C2_NM'].str.contains("비율", na=False)]
+        house_ratio['DT'] = pd.to_numeric(house_ratio['DT'])
         
-        fig2 = px.bar(latest_house, x='C1_NM', y='DT', text='DT', title="연령대별 주택 소유 비율", 
+        latest_year = house_ratio['PRD_DE'].max()
+        latest_house = house_ratio[house_ratio['PRD_DE'] == latest_year]
+        
+        fig2 = px.bar(latest_house, x='C1_NM', y='DT', 
+                      text='DT', title=f"{latest_year}년 연령대별 주택 소유 비율",
+                      labels={'C1_NM': '구분', 'DT': '소유 비율(%)'},
                       color='C1_NM', color_discrete_sequence=px.colors.qualitative.Pastel)
         fig2.update_traces(texttemplate='%{text}%', textposition='outside')
         st.plotly_chart(fig2, use_container_width=True)
 
+    st.write("---")
+    
+    col3, col4 = st.columns(2)
+    
+    with col3:
+        st.subheader("💰 3. 청년 소득 분포 (천 명)")
+        wage_df['DT'] = pd.to_numeric(wage_df['DT'])
+        latest_wage_year = wage_df['PRD_DE'].max()
+        latest_wage = wage_df[wage_df['PRD_DE'] == latest_wage_year]
+        
+        fig3 = px.bar(latest_wage, x='C2_NM', y='DT', color='C1_NM',
+                      title=f"{latest_wage_year}년 소득 구간별 인구",
+                      labels={'C2_NM': '소득 구간', 'DT': '인구(천명)'},
+                      barmode='group')
+        st.plotly_chart(fig3, use_container_width=True)
+
+    with col4:
+        st.subheader("🍺 4. 청년 건강 지표 (%)")
+        health_df['DT'] = pd.to_numeric(health_df['DT'])
+        latest_health_year = health_df['PRD_DE'].max()
+        latest_health = health_df[health_df['PRD_DE'] == latest_health_year]
+        
+        fig4 = px.bar(latest_health, x='C2_NM', y='DT', color='C1_NM',
+                      title=f"{latest_health_year}년 생활 건강 지표 비교",
+                      labels={'C2_NM': '지표 구분', 'DT': '비율(%)'},
+                      barmode='group', color_discrete_sequence=px.colors.qualitative.Set2)
+        st.plotly_chart(fig4, use_container_width=True)
+
+    st.write("---")
+    st.subheader("📊 5. 군산시 청년(18~39세) 생활 지표 요약")
+    
+    house_trend = house_df[(house_df['C1_NM'].str.contains("18~39세")) & (house_df['C2_NM'].str.contains("비율"))]
+    health_trend = health_df[health_df['C1_NM'].str.contains("18~39세")]
+
+    house_trend['지표'] = '주택 소유 비율'
+    health_trend['지표'] = health_trend['C2_NM']
+    
+    combined_summary = pd.concat([
+        house_trend[['DT', '지표']],
+        health_trend[['DT', '지표']]
+    ])
+    combined_summary['DT'] = pd.to_numeric(combined_summary['DT'])
+
+    fig5 = px.bar(combined_summary, x='지표', y='DT', text='DT',
+                  title="2024년 군산시 청년 주요 지표 모아보기",
+                  labels={'지표': '지표 종류', 'DT': '수치(%)'},
+                  color='지표', color_discrete_sequence=px.colors.qualitative.Safe)
+    fig5.update_traces(texttemplate='%{text}%', textposition='outside')
+    st.plotly_chart(fig5, use_container_width=True)
+
 except FileNotFoundError as e:
     st.error(f"🚨 파일을 찾을 수 없습니다: {e}")
 except Exception as e:
-    st.error(f"🚨 데이터 시각화 중 오류가 발생했습니다: {e}")
+    st.error(f"🚨 오류가 발생했습니다: {e}")
