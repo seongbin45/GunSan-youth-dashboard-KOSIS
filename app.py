@@ -571,49 +571,44 @@ try:
     else:
         st.warning("⚠️ DB에서 '연령별취업자' 테이블을 불러오지 못했습니다.")
 
-# 📌 9. 군산시 청년도약계좌 취급은행 현황 (진짜_최종_완성본.py)
+# 📌 9. 군산시 청년도약계좌 취급은행 현황 (최종 UI 개선 버전)
     st.write("---")
     st.subheader("💰 9. 군산시 청년도약계좌 취급은행 현황")
     
     if 'saving_df' in locals() and saving_df is not None and not saving_df.empty:
-        st.info("💡 군산시 청년들이 도약계좌를 주로 어떤 은행에서 만들었는지 한눈에 보여주는 지표입니다.")
+        st.info("💡 군산시 청년들이 도약계좌를 개설할 수 있는 취급 은행 목록입니다.")
         
         try:
-            # 1. 은행별로 이 표에 데이터가 총 몇 건씩 들어있는지 세어줍니다.
-            bank_col = '은행명'  # 캡처에 찍힌 정확한 컬럼명
+            # 은행명 컬럼에서 고유한 은행 이름들만 쏙 뽑아내기
+            bank_col = '은행명'
+            banks = saving_df[bank_col].dropna().unique().tolist()
             
-            # 은행 이름별 데이터 개수를 세어서 깔끔한 표로 만듭니다.
-            bank_counts = saving_df[bank_col].value_counts().reset_index()
-            bank_counts.columns = ['은행 이름', '가입 건수']
+            st.markdown("#### 🏦 가입 가능한 제휴 은행 (가나다순)")
             
-            # 상위 10개만 자르기
-            top_banks = bank_counts.head(10)
+            # 은행 목록을 가나다순으로 정렬
+            banks.sort()
             
-            # 2. 에러 유발자였던 변수명들을 완벽하게 교체하여 차트를 그립니다! 🎨
-            fig9 = px.bar(
-                top_banks,             # 👈 7번 데이터가 아닌 진짜 은행 데이터를 씁니다!
-                x='가입 건수',          # 👈 x축은 가입 건수
-                y='은행 이름',          # 👈 y축은 은행 이름
-                text='가입 건수',         # 👈 막대 끝에 표시될 숫자
-                orientation='h',       # 👈 가로 막대그래프
-                title="군산시 청년도약계좌 은행별 취급 건수 Top 10",
-                color='가입 건수',       # 👈 가입 건수에 따라 색이 진해집니다.
-                color_continuous_scale='Mint'  # 상큼한 민트색 테마
-            )
+            # 한 줄에 3개씩 예쁜 카드로 배치하기 위해 Streamlit 컬럼 기능 활용!
+            for i in range(0, len(banks), 3):
+                cols = st.columns(3)
+                # 첫 번째 칸
+                if i < len(banks):
+                    cols[0].success(f"**{banks[i]}**")
+                # 두 번째 칸
+                if i+1 < len(banks):
+                    cols[1].success(f"**{banks[i+1]}**")
+                # 세 번째 칸
+                if i+2 < len(banks):
+                    cols[2].success(f"**{banks[i+2]}**")
             
-            # 막대 끝에 '건'이라는 글자를 붙여 가독성을 높입니다.
-            fig9.update_traces(texttemplate='%{text}건', textposition='outside')
-            fig9.update_layout(yaxis={'categoryorder':'total ascending'})  # 높은 순으로 정렬
+            st.write("") # 줄바꿈용 공백
             
-            st.plotly_chart(fig9, use_container_width=True, key="fig9_final")
-            
-            # 3. 원본 표도 하단에 잘 묻어둡니다.
-            with st.expander("🔍 청년도약계좌 원본 데이터 표 보기"):
+            # 원본 데이터도 하단에 얌전히 묻어두기
+            with st.expander("🔍 원본 데이터 표 보기"):
                 st.dataframe(saving_df, use_container_width=True)
                 
         except Exception as e:
-            st.error(f"데이터를 차트로 그리는 중 문제가 발생했습니다: {e}")
-            # 만약 또 에러가 나면 안전하게 원본 표라도 보여줍니다.
+            st.error(f"데이터를 불러오는 중 문제가 발생했습니다: {e}")
             st.dataframe(saving_df, use_container_width=True)
             
     else:
