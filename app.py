@@ -5,7 +5,7 @@ import plotly.express as px
 st.set_page_config(page_title="군산시 청년 통계 대시보드", layout="wide")
 
 st.title("📊 군산시 청년 데이터 시각화 대시보드")
-st.markdown("**직접 KOSIS에서 수집한 데이터로 만든 대시보드입니다.** * **사회초년생을 위한 금융 서비스의 기초가 됩니다")
+st.markdown("**직접 KOSIS에서 수집한 데이터로 만든 대시보드입니다.** 사회초년생을 위한 금융 서비스의 기초가 됩니다")
 st.write("---")
 
 # 📌 여기에 기간과 출처를 명확하게 명시해 줍니다!
