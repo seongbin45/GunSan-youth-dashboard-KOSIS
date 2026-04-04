@@ -136,10 +136,8 @@ if st.button("내 맞춤 혜택 결과 보기 🚀", type="primary"):
     is_multichild = "다자녀 가구" in selected_keywords
 
     # 특수 조건 변수 결합
-    is_stay_eligible = (19 <= age <= 49 and job_status == "창업자 (7년 미만)") or (19 <= age <= 39 and job_status == "취업자 (군산 소재 기업)")
-    is_transition_35_39 = 35 <= age <= 39
-    is_farmer_18_45 = 18 <= age <= 45 and job_status == "농업 종사 (청년창업농 등)"
-    is_mid_40_69 = 40 <= age <= 69
+    is_stay_eligible = (is_founder and 19 <= age <= 49) or (is_worker and 19 <= age <= 39)
+    is_farmer_18_45 = 18 <= age <= 45 and is_farmer
     
     # ---------------------------------------------------------
     # 🔍 [수정] 소득 조건을 완벽히 거르는 매칭 변수 생성
