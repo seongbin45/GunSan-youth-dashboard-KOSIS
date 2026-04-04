@@ -275,11 +275,17 @@ def load_data():
         wage_df = pd.read_sql("SELECT * FROM gunsan_youth_wage_data", conn)
         health_df = pd.read_sql("SELECT * FROM gunsan_youth_health_data", conn)
         
-        # 새로 추가된 공공데이터 포털 데이터 (취업의 어려움 & 원룸 현황)
+       # 공공데이터
         difficulty_df = pd.read_sql("SELECT * FROM 전북특별자치도_취업의_어려움_사회조사_20221231", conn)
         room_df = pd.read_sql("SELECT * FROM 전북특별자치도_군산시_원룸_및_오피스텔_현황_20260203", conn)
-        job_df = pd.read_sql("SELECT * FROM 전북특별자치도_연령별취업자_20211231", conn)
         
+        # ⚠️ 여기서 에러가 날 확률이 높으니 안전장치를 겁니다.
+        try:
+            job_df = pd.read_sql("SELECT * FROM 전북특별자치도_연령별취업자_20211231", conn)
+        except:
+            # 만약 이름이 다르면 빈 데이터프레임 대신 '테이블 목록'을 담아 보냅니다.
+            job_df = pd.DataFrame({"DB 내 실제 테이블 목록": tables})
+            
     except Exception as e:
         # 혹시 에러가 날 경우를 대비한 백업 방어 코드
         try: pop_df = pd.read_sql("SELECT * FROM population", conn)
@@ -488,22 +494,23 @@ try:
     else:
         st.warning("⚠️ DB에서 '원룸 및 오피스텔 현황' 테이블을 불러오지 못했습니다.")
 
-# 📌 8. 전북특별자치도 연령별 취업자 현황 (신규 추가!)
+# 📌 8. 전북특별자치도 연령별 취업자 현황
     st.write("---")
     st.subheader("💼 8. 전북특별자치도 연령별 취업자 비중 (2021)")
     
     if 'job_df' in locals() and job_df is not None and not job_df.empty:
-        st.info("💡 전북 전체에서 청년층의 취업자 비중이 얼마나 되는지 연령대별로 비교해 보는 데이터입니다.")
-        
-        # 데이터 구조 파악을 위해 먼저 원본 데이터 표를 보여줍니다.
-        with st.expander("🔍 연령별 취업자 원본 표 보기"):
+        # 만약 'DB 내 실제 테이블 목록'이라는 컬럼이 있다면 테이블을 못 찾은 겁니다.
+        if "DB 내 실제 테이블 목록" in job_df.columns:
+            st.warning("⚠️ '전북특별자치도_연령별취업자_20211231' 테이블을 찾지 못했습니다. 아래 목록 중 진짜 이름이 무엇인지 확인해 주세요!")
             st.dataframe(job_df, use_container_width=True)
-            
-        st.success("👍 8번 데이터도 성공적으로 로드되었습니다! 원본 데이터의 구조(컬럼명)를 확인한 후 멋진 파이 차트로 변환해 드릴게요.")
-            
+        else:
+            st.info("💡 전북 전체에서 청년층의 취업자 비중이 얼마나 되는지 연령대별로 비교해 보는 데이터입니다.")
+            with st.expander("🔍 연령별 취업자 원본 표 보기"):
+                st.dataframe(job_df, use_container_width=True)
+            st.success("👍 성공적으로 로드되었습니다!")
     else:
         st.warning("⚠️ DB에서 '연령별취업자' 테이블을 불러오지 못했습니다.")
-
+        
 except FileNotFoundError as e:
     st.error(f"🚨 파일을 찾을 수 없습니다: {e}")
 except Exception as e:
