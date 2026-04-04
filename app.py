@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import sqlite3  # 👈 이 녀석이 빠져 있어서 에러가 났던 겁니다!
 import plotly.express as px
 
 st.set_page_config(page_title="군산시 청년 맞춤 혜택 찾기", layout="wide")
