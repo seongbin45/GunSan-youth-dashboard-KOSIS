@@ -484,9 +484,6 @@ def load_data():
     # 🌟 함수가 끝날 때 총 8개의 덩어리를 밖으로 뱉어줍니다!
     return pop_df, house_df, wage_df, health_df, difficulty_df, room_df, job_df, saving_df
 
-# 💡 상단 타이틀 영역
-st.title("📊 군산시 청년 통계 대시보드")
-
 try:
     # 🌟 밖에서도 8개의 변수로 똑같이 쪼개서 받아줍니다!
     pop_df, house_df, wage_df, health_df, difficulty_df, room_df, job_df, saving_df = load_data()
