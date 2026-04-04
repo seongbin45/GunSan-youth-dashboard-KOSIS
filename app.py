@@ -289,7 +289,16 @@ def load_data():
             job_df = pd.read_sql("SELECT * FROM 전북특별자치도_연령별취업자_20211231", conn)
         except:
             job_df = pd.DataFrame({"DB 내 실제 테이블 목록": tables})
-        
+
+        # 🆕 9번째 데이터: 청년도약계좌 가입현황 불러오기
+        try:
+            saving_df = pd.read_sql("SELECT * FROM 전북특별자치도_군산시_청년도약계좌_가입현황_20260203", conn)
+        except:
+            # 만약 테이블명이 다르면 에러 방지를 위해 테이블 목록을 담아둡니다.
+            cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
+            tables = [row[0] for row in cursor.fetchall()]
+            saving_df = pd.DataFrame({"DB 내 실제 테이블 목록": tables})
+    
     except Exception as e:
         # 오류 해결 2: 에러가 나도 tables 변수를 안전하게 사용하도록 구조를 통일했습니다.
         pop_df = pd.DataFrame()
@@ -301,15 +310,16 @@ def load_data():
         job_df = pd.DataFrame({"DB 내 실제 테이블 목록": tables})
 
     conn.close() 
-    return pop_df, house_df, wage_df, health_df, difficulty_df, room_df, job_df
+    # 🌟 함수가 끝날 때 총 8개의 덩어리를 밖으로 뱉어줍니다!
+    return pop_df, house_df, wage_df, health_df, difficulty_df, room_df, job_df, saving_df
 
 # 💡 상단 타이틀 영역
 st.title("📊 군산시 청년 통계 대시보드")
 
 try:
-    # 7개의 뭉치를 그대로 받아줍니다.
-    pop_df, house_df, wage_df, health_df, difficulty_df, room_df, job_df = load_data()
-
+    # 🌟 밖에서도 8개의 변수로 똑같이 쪼개서 받아줍니다!
+    pop_df, house_df, wage_df, health_df, difficulty_df, room_df, job_df, saving_df = load_data()
+    
     # 📌 1 & 2번 영역
     col1, col2 = st.columns(2)
 
@@ -566,6 +576,23 @@ try:
 
     else:
         st.warning("⚠️ DB에서 '연령별취업자' 테이블을 불러오지 못했습니다.")
+
+# 📌 9. 군산시 청년도약계좌 가입 현황
+    st.write("---")
+    st.subheader("💰 9. 군산시 청년도약계좌 가입 현황")
+    
+    if 'saving_df' in locals() and saving_df is not None and not saving_df.empty:
+        # DB에 테이블을 못 찾았을 때의 방어 코드
+        if "DB 내 실제 테이블 목록" in saving_df.columns:
+            st.warning("⚠️ '청년도약계좌' 관련 테이블을 찾지 못했습니다. 아래 목록 중 진짜 이름이 무엇인지 확인해 주세요!")
+            st.dataframe(saving_df, use_container_width=True)
+        else:
+            st.info("💡 군산시 청년들의 자산 형성을 돕는 청년도약계좌 가입 현황 데이터입니다.")
+            with st.expander("🔍 청년도약계좌 원본 표 보기"):
+                st.dataframe(saving_df, use_container_width=True)
+            st.success("👍 9번 데이터도 성공적으로 로드되었습니다! 표의 형태를 확인한 후 알맞은 그래프로 바꿔드릴게요.")
+    else:
+        st.warning("⚠️ DB에서 '청년도약계좌' 테이블을 불러오지 못했습니다.")
 
 # --- 파일 끝 ---
 except FileNotFoundError as e:
