@@ -508,16 +508,65 @@ try:
     # --- [충돌 해결] key 인자 추가 ---
     st.plotly_chart(fig5, use_container_width=True, key="fig5")
 
-    # 🆕 6. 새로 추가한 데이터 연동 영역
+# 🆕 6. 새로 추가한 데이터 연동 영역
     st.write("---")
-    st.subheader("📋 6. 전북특별자치도 취업의 어려움 사회조사")
+    st.subheader("🎯 6. 군산시 청년 취업의 어려움 (2022)")
     
     if difficulty_df is not None:
-        st.info("💡 공공데이터 포털에서 직접 수집하여 등록한 로컬 DB 기반 데이터입니다.")
-        # 데이터프레임을 스트림릿 화면에 깔끔한 표로 보여줍니다.
-        st.dataframe(difficulty_df, use_container_width=True)
+        st.info("💡 공공데이터 포털에서 수집한 '전북 사회조사' 데이터 중 **군산시** 데이터만 추출했습니다.")
+        
+        # [핵심] 군산시 데이터만 필터링
+        # 컬럼 이름이나 데이터 상황에 맞게 조금씩 수정될 수 있습니다.
+        gunsan_data = difficulty_df[difficulty_df['특성별2'] == '군산시']
+        
+        if not gunsan_data.empty:
+            # 1. 시각화에 불필요한 '특성별1', '특성별2', '소계' 컬럼 제외하기
+            exclude_cols = ['특성별1', '특성별2', '소계', '계']
+            valid_cols = [col for col in gunsan_data.columns if col not in exclude_cols]
+            
+            # 2. 데이터를 그래프용으로 길게 재정렬 (Melt)
+            melted_gunsan = pd.melt(
+                gunsan_data, 
+                id_vars=[], 
+                value_vars=valid_cols,
+                var_name='어려움 요인', 
+                value_name='비율(%)'
+            )
+            
+            # 3. 데이터 타입을 숫자로 변환 (에러 방지)
+            melted_gunsan['비율(%)'] = pd.to_numeric(melted_gunsan['비율(%)'], errors='coerce')
+            
+            # 4. 비율이 높은 순으로 정렬
+            melted_gunsan = melted_gunsan.sort_values(by='비율(%)', ascending=False)
+            
+            # 5. 가독성 높은 가로 막대 그래프 그리기!
+            fig6 = px.bar(
+                melted_gunsan, 
+                x='비율(%)', 
+                y='어려움 요인', 
+                text='비율(%)',
+                orientation='h',  # 가로 막대그래프
+                title="군산시 청년이 느끼는 취업의 어려움 요인 (단위: %)",
+                color='비율(%)', 
+                color_continuous_scale='Blues'
+            )
+            
+            fig6.update_traces(texttemplate='%{text}%', textposition='outside')
+            fig6.update_layout(yaxis={'categoryorder':'total ascending'})  # 높은 순으로 정렬
+            
+            st.plotly_chart(fig6, use_container_width=True, key="fig6")
+            
+            # 6. 원본 데이터도 접이식(Expander)으로 깔끔하게 넣어주기
+            with st.expander("🔍 군산시 원본 데이터 표 보기"):
+                st.dataframe(gunsan_data[valid_cols], use_container_width=True)
+                
+        else:
+            st.warning("⚠️ 데이터 내에서 '군산시' 행을 찾지 못했습니다. 원본 표의 '특성별2' 컬럼에 '군산시'가 맞는지 확인해 주세요.")
+            # 찾지 못했을 땐 그냥 원본 표 보여주기
+            st.dataframe(difficulty_df, use_container_width=True)
+            
     else:
-        st.warning("⚠️ DB에서 '취업의 어려움 사회조사' 테이블을 불러오지 못했습니다. 테이블 명칭을 확인해 주세요.")
+        st.warning("⚠️ DB에서 '취업의 어려움 사회조사' 테이블을 불러오지 못했습니다.")
 
 except FileNotFoundError as e:
     st.error(f"🚨 파일을 찾을 수 없습니다: {e}")
