@@ -145,18 +145,18 @@ if st.button("내 맞춤 혜택 결과 보기 🚀", type="primary"):
     # 특수 조건 변수 결합
     is_stay_eligible = (is_founder and 19 <= age <= 49) or (is_worker and 19 <= age <= 39)
     is_farmer_18_45 = 18 <= age <= 45 and is_farmer
-
+    
     # ---------------------------------------------------------
     # 💰 1. 청년 자산 형성 지원 상품
     # ---------------------------------------------------------
     st.subheader("💰 1. 청년 자산 형성 지원 상품")
     asset_match_count = 0 
     
-    # 35~39세 변수가 정의 안 되어 있을 것을 대비해 안전하게 직접 나이 조건 부여
+    # 35~39세 변수 안전하게 직접 나이 조건 부여
     is_transition_35_39 = 35 <= age <= 39
     
     # 청년미래적금 (중앙정부 - 2026년 신설)
-    if is_youth_19_34 and income_level != "해당 없음 (소득 기준 초과)":
+    if is_youth_19_34 and not is_over_limit:
         asset_match_count += 1
         st.markdown("""
         📌 **청년미래적금 (중앙정부 - 2026년 신설)**
@@ -173,8 +173,8 @@ if st.button("내 맞춤 혜택 결과 보기 🚀", type="primary"):
         * **안내**: 만 19~34세 청년 중 개인 소득 7,500만 원 이하, 가구 소득 중위 250% 이하 조건을 충족해야 합니다. 2년 이상 유지 시 납입 원금의 40% 이내에서 부분 인출이 가능합니다.
         """)
 
-    # 전북청년 함께 두배적금
-    if is_youth_18_39 and income_level in ["기준 중위소득 60% 이하 (저소득층 및 집중 주거지원 대상)", "기준 중위소득 100% 이하", "기준 중위소득 140% 이하"] and job_status != "미취업 (구직 중)":
+    # 전북청년 함께 두배적금 (키워드 방식 매칭으로 변경!)
+    if is_youth_18_39 and (is_under_60 or is_under_100 or is_under_140) and not is_unemployed:
         asset_match_count += 1
         st.markdown("""
         📌 **전북청년 함께 두배적금 (전북특별자치도/군산시)**
@@ -184,7 +184,7 @@ if st.button("내 맞춤 혜택 결과 보기 🚀", type="primary"):
 
     # 안정·전환기(35~39세) 청년 특화 혜택
     if is_transition_35_39:
-        asset_match_count += 1 # life_match에서 asset_match_count로 수정
+        asset_match_count += 1 
         st.markdown("""
         📌 **안정·전환기(35~39세) 청년 특화 혜택**
         * **다자녀 패밀리카 지원**: 다자녀 가정을 위한 차량 관련 지원 (해당 시)
@@ -193,14 +193,15 @@ if st.button("내 맞춤 혜택 결과 보기 🚀", type="primary"):
 
     if asset_match_count == 0:
         st.info("ℹ️ 현재 입력하신 조건(나이, 소득 등)에 맞는 자산 형성 지원 상품이 없습니다.")
-
+    
     # ---------------------------------------------------------
     # 🏠 2. 청년 주거 안정 지원 사업
     # ---------------------------------------------------------
     st.subheader("🏠 2. 청년 주거 안정 지원 사업")
     housing_match_count = 0
     
-    if has_house == "아니오 (무주택)":
+    # UI 개선안에 맞춘 "무주택" 조건으로 수정
+    if has_house == "무주택":
         # 청년월세 한시 특별지원
         if is_youth_19_34 and is_under_60:
             housing_match_count += 1
@@ -211,7 +212,7 @@ if st.button("내 맞춤 혜택 결과 보기 🚀", type="primary"):
             """)
             
         # 전세보증금 반환보증 보증료 지원
-        if is_youth_19_39 and income_level != "해당 없음 (소득 기준 초과)":
+        if is_youth_19_39 and not is_over_limit:
             housing_match_count += 1
             st.markdown("""
             📌 **전세보증금 반환보증 보증료 지원 (중앙정부)**
@@ -229,7 +230,7 @@ if st.button("내 맞춤 혜택 결과 보기 🚀", type="primary"):
             """)
 
         # 신혼부부 및 청년 전세자금 대출이자 지원
-        if is_youth_18_39 and income_level != "해당 없음 (소득 기준 초과)":
+        if is_youth_18_39 and not is_over_limit:
             housing_match_count += 1
             st.markdown("""
             📌 **신혼부부 및 청년 전세자금 대출이자 지원**
@@ -249,7 +250,7 @@ if st.button("내 맞춤 혜택 결과 보기 🚀", type="primary"):
     job_match_count = 0
     
     # 국민취업지원제도 1유형
-    if job_status == "미취업 (구직 중)" and is_youth_18_34 and is_under_120:
+    if is_unemployed and is_youth_18_34 and is_under_120:
         job_match_count += 1
         st.markdown("""
         📌 **국민취업지원제도 1유형 (중앙정부)**
@@ -258,7 +259,7 @@ if st.button("내 맞춤 혜택 결과 보기 🚀", type="primary"):
         """)
 
     # 청년일자리도약장려금
-    if job_status == "취업자 (군산 소재 기업)" and is_youth_18_34:
+    if is_worker and is_youth_18_34:
         job_match_count += 1
         st.markdown("""
         📌 **청년일자리도약장려금 - 비수도권 근속 인센티브 (중앙정부)**
@@ -267,7 +268,7 @@ if st.button("내 맞춤 혜택 결과 보기 🚀", type="primary"):
         """)
 
     # 전북형 청년활력수당
-    if job_status == "미취업 (구직 중)" and is_youth_18_39 and is_under_150:
+    if is_unemployed and is_youth_18_39 and is_under_150:
         job_match_count += 1
         st.markdown("""
         📌 **전북형 청년활력수당 (전북특별자치도/군산시)**
@@ -276,7 +277,7 @@ if st.button("내 맞춤 혜택 결과 보기 🚀", type="primary"):
         """)
 
     # 지역정착 지원사업
-    if is_youth_18_39 and is_under_150 and job_status in ["취업자 (군산 소재 기업)", "농업 종사 (청년창업농 등)"]:
+    if is_youth_18_39 and is_under_150 and (is_worker or is_farmer):
         job_match_count += 1
         st.markdown("""
         📌 **지역정착 지원사업 (전북특별자치도/군산시)**
@@ -285,7 +286,7 @@ if st.button("내 맞춤 혜택 결과 보기 🚀", type="primary"):
         """)
 
     # 모두의 창업 프로젝트
-    if job_status == "창업자 (7년 미만)" or job_status == "미취업 (구직 중)":
+    if is_founder or is_unemployed:
         job_match_count += 1
         st.markdown("""
         📌 **모두의 창업 프로젝트 (중앙정부 - 2026년 신설)**
@@ -308,8 +309,8 @@ if st.button("내 맞춤 혜택 결과 보기 🚀", type="primary"):
         📌 **청년농업인 육성 및 영농정착지원사업 (만 18~45세)**: 청년창업농 영농 정착 자금 지원
         """)
 
-    # 신중년 취업 지원 정책 (안전하게 변수 대신 직접 나이 조건 부여)
-    if 40 <= age <= 69 and job_status == "미취업 (구직 중)":
+    # 신중년 취업 지원 정책
+    if 40 <= age <= 69 and is_unemployed:
         job_match_count += 1
         st.markdown("""
         📌 **신중년 취업 지원 정책 (만 40~69세)**: 중년층 재취업 시 장기 근속에 따라 개인에게 최대 200만 원 취업 장려금 지급
@@ -317,8 +318,7 @@ if st.button("내 맞춤 혜택 결과 보기 🚀", type="primary"):
 
     if job_match_count == 0:
         st.info("ℹ️ 현재 직업 상태나 소득 수준에 맞는 구직/정착 지원 정책이 없습니다.")
-    
-    # ---------------------------------------------------------
+# ---------------------------------------------------------
     # 🧠 4. 생활·복지 및 문화 예술 지원
     # ---------------------------------------------------------
     st.subheader("🧠 4. 생활·복지 및 문화 예술 지원")
@@ -344,7 +344,7 @@ if st.button("내 맞춤 혜택 결과 보기 🚀", type="primary"):
 
     # 청년 마음건강지원사업
     if is_youth_19_34:
-        life_match_count += 1 # trial_match_count에서 life_match_count로 수정
+        life_match_count += 1
         st.markdown("""
         📌 **청년 마음건강지원사업**
         * **지원 내용**: 정서적 어려움이 있는 청년에게 전문 심리상담 바우처를 제공합니다.
@@ -369,8 +369,8 @@ if st.button("내 맞춤 혜택 결과 보기 🚀", type="primary"):
         * **안내**: 만 19~20세 청년이 대상이며, 2026년에는 사용 분야에 '영화'가 추가되었습니다.
         """)
 
-    # 직장인 든든한 한끼
-    if job_status == "취업자 (군산 소재 기업)":
+    # 직장인 든든한 한끼 (job_status 대신 is_worker 변수로 수정)
+    if is_worker:
         life_match_count += 1
         st.markdown("""
         📌 **직장인 든든한 한끼 (중앙정부 - 2026년 신설)**
@@ -387,7 +387,7 @@ if st.button("내 맞춤 혜택 결과 보기 🚀", type="primary"):
 
     if life_match_count == 0:
         st.info("ℹ️ 현재 연령 조건에서는 지원 가능한 생활·문화 사업이 없습니다.")
-
+    
     # ---------------------------------------------------------
     # 📱 5. 정책 정보 접근 및 참여
     # ---------------------------------------------------------
@@ -398,7 +398,6 @@ if st.button("내 맞춤 혜택 결과 보기 🚀", type="primary"):
     * **지원 내용**: 3,000여 개의 중앙·지자체 정책을 AI 챗봇 상담과 공공마이데이터 기반 자가진단으로 맞춤형 검색할 수 있습니다.
     * **안내**: 별도 회원가입 없이 간편 인증으로 이용 가능하며, 청년신문고를 통해 직접 정책 개선안을 제안할 수도 있습니다.
     """)
-
 
 # 📈 시각화 대시보드 파트 (try-except 구문을 데이터 로드 전체에 적용)
 st.write("---")
