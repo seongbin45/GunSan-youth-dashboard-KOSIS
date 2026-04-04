@@ -431,7 +431,7 @@ try:
     else:
         st.warning("⚠️ DB에서 '취업의 어려움 사회조사' 테이블을 불러오지 못했습니다.")
 
-    # 📌 7번 영역 (원룸 및 오피스텔 분포 - 신규!)
+# 📌 7번 영역 (원룸 및 오피스텔 분포 - 정밀화 버전)
     st.write("---")
     st.subheader("🏠 7. 군산시 읍면동별 원룸 및 오피스텔 분포")
     
@@ -446,10 +446,30 @@ try:
                 break
                 
         if dong_col:
-            room_counts = room_df[dong_col].value_counts().reset_index()
+            # ✂️ [긴급 수술] 번지수가 붙은 상세주소에서 '동'까지만 싹둑 자릅니다.
+            # 예: "전북특별자치도 군산시 소룡동 831" -> "소룡동"
+            def extract_dong(address):
+                if not address:
+                    return "기타"
+                # 공백으로 주소를 쪼갠 뒤, '동', '읍', '면'으로 끝나는 글자만 찾아냅니다.
+                parts = str(address).split()
+                for part in parts:
+                    if part.endswith('동') or part.endswith('읍') or part.endswith('면'):
+                        return part
+                return "기타"
+            
+            # 새로운 '정제된_동네' 컬럼을 만들어 동만 쏙 뽑아 넣습니다.
+            room_df['정제된_동네'] = room_df[dong_col].apply(extract_dong)
+            
+            # 묶어서 개수 세기!
+            room_counts = room_df['정제된_동네'].value_counts().reset_index()
             room_counts.columns = ['동네', '건물 수']
+            
+            # '기타'로 빠진 데이터는 제외하고 상위 10개 추출
+            room_counts = room_counts[room_counts['동네'] != '기타']
             top_rooms = room_counts.head(10)
             
+            # 가로 막대 그래프 그리기
             fig7 = px.bar(
                 top_rooms, x='건물 수', y='동네', text='건물 수',
                 orientation='h', title="군산시 원룸 및 오피스텔 밀집 동네 Top 10",
@@ -458,6 +478,7 @@ try:
             fig7.update_traces(texttemplate='%{text}개', textposition='outside')
             fig7.update_layout(yaxis={'categoryorder':'total ascending'})
             st.plotly_chart(fig7, use_container_width=True, key="fig7")
+            
         else:
             st.warning("⚠️ 동네를 구분할 수 있는 컬럼을 찾지 못했습니다.")
             
