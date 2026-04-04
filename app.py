@@ -260,13 +260,18 @@ st.write("---")
 # 🔌 [개조 포인트] CSV 대신 DB에서 데이터를 긁어오는 함수!
 import streamlit as st
 import pandas as pd
-import sqlite3
+import sqlite3 # 👈 오류 해결 1: sqlite3 모듈을 확실하게 불러옵니다.
 import plotly.express as px
 
 # 🔌 1. DB에서 데이터를 안전하게 긁어오는 함수
 @st.cache_data
 def load_data():
     conn = sqlite3.connect("gunsan_youth_data.db")
+    
+    # 🔍 DB 안에 있는 진짜 테이블 목록을 싹 긁어와 봅니다.
+    cursor = conn.cursor()
+    cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
+    tables = [row[0] for row in cursor.fetchall()]
     
     try:
         # 기존 대시보드 그래프용 데이터
@@ -275,46 +280,35 @@ def load_data():
         wage_df = pd.read_sql("SELECT * FROM gunsan_youth_wage_data", conn)
         health_df = pd.read_sql("SELECT * FROM gunsan_youth_health_data", conn)
         
-       # 공공데이터
+        # 새로 추가된 공공데이터 포털 데이터 (취업의 어려움 & 원룸 현황)
         difficulty_df = pd.read_sql("SELECT * FROM 전북특별자치도_취업의_어려움_사회조사_20221231", conn)
         room_df = pd.read_sql("SELECT * FROM 전북특별자치도_군산시_원룸_및_오피스텔_현황_20260203", conn)
         
-        # ⚠️ 여기서 에러가 날 확률이 높으니 안전장치를 겁니다.
+        # ⚠️ 여기가 문제의 구간! 일단 읽어오되, 실패하면 목록을 담아 보냅니다.
         try:
             job_df = pd.read_sql("SELECT * FROM 전북특별자치도_연령별취업자_20211231", conn)
         except:
-            # 만약 이름이 다르면 빈 데이터프레임 대신 '테이블 목록'을 담아 보냅니다.
             job_df = pd.DataFrame({"DB 내 실제 테이블 목록": tables})
-            
+        
     except Exception as e:
-        # 혹시 에러가 날 경우를 대비한 백업 방어 코드
-        try: pop_df = pd.read_sql("SELECT * FROM population", conn)
-        except: pop_df = pd.DataFrame()
-            
-        try: house_df = pd.read_sql("SELECT * FROM housing", conn)
-        except: house_df = pd.DataFrame()
-            
-        try: wage_df = pd.read_sql("SELECT * FROM wage", conn)
-        except: wage_df = pd.DataFrame()
-            
-        try: health_df = pd.read_sql("SELECT * FROM health", conn)
-        except: health_df = pd.DataFrame()
-            
-        try: difficulty_df = pd.read_sql("SELECT * FROM 전북특별자치도_취업의_어려움_사회조사_20221231", conn)
-        except: difficulty_df = None
-            
-        try: room_df = pd.read_sql("SELECT * FROM 전북특별자치도_군산시_원룸_및_오피스텔_현황_20260203", conn)
-        except: room_df = pd.DataFrame()
+        # 오류 해결 2: 에러가 나도 tables 변수를 안전하게 사용하도록 구조를 통일했습니다.
+        pop_df = pd.DataFrame()
+        house_df = pd.DataFrame()
+        wage_df = pd.DataFrame()
+        health_df = pd.DataFrame()
+        difficulty_df = None
+        room_df = pd.DataFrame()
+        job_df = pd.DataFrame({"DB 내 실제 테이블 목록": tables})
 
     conn.close() 
-    return pop_df, house_df, wage_df, health_df, difficulty_df, room_df
+    return pop_df, house_df, wage_df, health_df, difficulty_df, room_df, job_df
 
 # 💡 상단 타이틀 영역
 st.title("📊 군산시 청년 통계 대시보드")
 
 try:
-    # 🔌 load_data()가 뱉는 6개의 뭉치를 그대로 받아줍니다.
-    pop_df, house_df, wage_df, health_df, difficulty_df, room_df = load_data()
+    # 7개의 뭉치를 그대로 받아줍니다.
+    pop_df, house_df, wage_df, health_df, difficulty_df, room_df, job_df = load_data()
 
     # 📌 1 & 2번 영역
     col1, col2 = st.columns(2)
@@ -407,44 +401,24 @@ try:
     st.subheader("🎯 6. 군산시 청년 취업의 어려움 (2022)")
     
     if difficulty_df is not None:
-        st.info("💡 공공데이터 포털에서 수집한 '전북 사회조사' 데이터 중 **군산시** 데이터만 추출했습니다.")
         gunsan_data = difficulty_df[difficulty_df['특성별2'] == '군산시']
-        
         if not gunsan_data.empty:
             exclude_cols = ['특성별1', '특성별2', '소계', '계']
             valid_cols = [col for col in gunsan_data.columns if col not in exclude_cols]
-            
-            melted_gunsan = pd.melt(
-                gunsan_data, id_vars=[], value_vars=valid_cols,
-                var_name='어려움 요인', value_name='비율(%)'
-            )
+            melted_gunsan = pd.melt(gunsan_data, id_vars=[], value_vars=valid_cols, var_name='어려움 요인', value_name='비율(%)')
             melted_gunsan['비율(%)'] = pd.to_numeric(melted_gunsan['비율(%)'], errors='coerce')
             melted_gunsan = melted_gunsan.sort_values(by='비율(%)', ascending=False)
             
-            fig6 = px.bar(
-                melted_gunsan, x='비율(%)', y='어려움 요인', text='비율(%)',
-                orientation='h', title="군산시 청년이 느끼는 취업의 어려움 요인 (단위: %)",
-                color='비율(%)', color_continuous_scale='Blues'
-            )
+            fig6 = px.bar(melted_gunsan, x='비율(%)', y='어려움 요인', text='비율(%)', orientation='h', title="군산시 청년이 느끼는 취업의 어려움 요인 (단위: %)", color='비율(%)', color_continuous_scale='Blues')
             fig6.update_traces(texttemplate='%{text}%', textposition='outside')
             fig6.update_layout(yaxis={'categoryorder':'total ascending'})
             st.plotly_chart(fig6, use_container_width=True, key="fig6")
-            
-            with st.expander("🔍 군산시 원본 데이터 표 보기"):
-                st.dataframe(gunsan_data[valid_cols], use_container_width=True)
-        else:
-            st.warning("⚠️ '군산시' 행을 찾지 못했습니다. 원본 표를 확인해 주세요.")
-            st.dataframe(difficulty_df, use_container_width=True)
-    else:
-        st.warning("⚠️ DB에서 '취업의 어려움 사회조사' 테이블을 불러오지 못했습니다.")
 
-# 📌 7번 영역 (원룸 및 오피스텔 분포 - 정밀화 버전)
+    # 📌 7번 영역 (원룸 분포)
     st.write("---")
     st.subheader("🏠 7. 군산시 읍면동별 원룸 및 오피스텔 분포")
     
     if room_df is not None and not room_df.empty:
-        st.info("💡 군산시의 청년들이 거주하기 좋은 원룸과 오피스텔이 어느 동네에 밀집해 있는지 보여주는 데이터입니다.")
-        
         col_list = room_df.columns.tolist()
         dong_col = None
         for c in col_list:
@@ -453,53 +427,30 @@ try:
                 break
                 
         if dong_col:
-            # ✂️ [긴급 수술] 번지수가 붙은 상세주소에서 '동'까지만 싹둑 자릅니다.
-            # 예: "전북특별자치도 군산시 소룡동 831" -> "소룡동"
             def extract_dong(address):
-                if not address:
-                    return "기타"
-                # 공백으로 주소를 쪼갠 뒤, '동', '읍', '면'으로 끝나는 글자만 찾아냅니다.
+                if not address: return "기타"
                 parts = str(address).split()
                 for part in parts:
-                    if part.endswith('동') or part.endswith('읍') or part.endswith('면'):
-                        return part
+                    if part.endswith('동') or part.endswith('읍') or part.endswith('면'): return part
                 return "기타"
             
-            # 새로운 '정제된_동네' 컬럼을 만들어 동만 쏙 뽑아 넣습니다.
             room_df['정제된_동네'] = room_df[dong_col].apply(extract_dong)
-            
-            # 묶어서 개수 세기!
             room_counts = room_df['정제된_동네'].value_counts().reset_index()
             room_counts.columns = ['동네', '건물 수']
-            
-            # '기타'로 빠진 데이터는 제외하고 상위 10개 추출
             room_counts = room_counts[room_counts['동네'] != '기타']
             top_rooms = room_counts.head(10)
             
-            # 가로 막대 그래프 그리기
-            fig7 = px.bar(
-                top_rooms, x='건물 수', y='동네', text='건물 수',
-                orientation='h', title="군산시 원룸 및 오피스텔 밀집 동네 Top 10",
-                color='건물 수', color_continuous_scale='Purples'
-            )
+            fig7 = px.bar(top_rooms, x='건물 수', y='동네', text='건물 수', orientation='h', title="군산시 원룸 및 오피스텔 밀집 동네 Top 10", color='건물 수', color_continuous_scale='Purples')
             fig7.update_traces(texttemplate='%{text}개', textposition='outside')
             fig7.update_layout(yaxis={'categoryorder':'total ascending'})
             st.plotly_chart(fig7, use_container_width=True, key="fig7")
-            
-        else:
-            st.warning("⚠️ 동네를 구분할 수 있는 컬럼을 찾지 못했습니다.")
-            
-        with st.expander("🔍 군산시 원룸 및 오피스텔 원본 표 보기"):
-            st.dataframe(room_df, use_container_width=True)
-    else:
-        st.warning("⚠️ DB에서 '원룸 및 오피스텔 현황' 테이블을 불러오지 못했습니다.")
 
-# 📌 8. 전북특별자치도 연령별 취업자 현황
+    # 📌 8번 영역 (데이터 탐정단 모드)
     st.write("---")
     st.subheader("💼 8. 전북특별자치도 연령별 취업자 비중 (2021)")
     
     if 'job_df' in locals() and job_df is not None and not job_df.empty:
-        # 만약 'DB 내 실제 테이블 목록'이라는 컬럼이 있다면 테이블을 못 찾은 겁니다.
+        # 🔍 DB에 테이블을 못 찾았을 때의 방어 코드
         if "DB 내 실제 테이블 목록" in job_df.columns:
             st.warning("⚠️ '전북특별자치도_연령별취업자_20211231' 테이블을 찾지 못했습니다. 아래 목록 중 진짜 이름이 무엇인지 확인해 주세요!")
             st.dataframe(job_df, use_container_width=True)
@@ -510,7 +461,7 @@ try:
             st.success("👍 성공적으로 로드되었습니다!")
     else:
         st.warning("⚠️ DB에서 '연령별취업자' 테이블을 불러오지 못했습니다.")
-        
+
 except FileNotFoundError as e:
     st.error(f"🚨 파일을 찾을 수 없습니다: {e}")
 except Exception as e:
