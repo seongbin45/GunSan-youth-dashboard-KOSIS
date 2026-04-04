@@ -126,15 +126,6 @@ if st.button("내 맞춤 혜택 결과 보기 🚀", type="primary"):
     is_youth_19_39 = 19 <= age <= 39
     is_transition_35_39 = 35 <= age <= 39
     is_mid_40_69 = 40 <= age <= 69
-    
-    # 소득 조건 변수 (더 간결하게 매칭)
-    is_under_60 = "60%" in income_level
-    is_under_100 = is_under_60 or "100%" in income_level
-    is_under_120 = is_under_100 or "140%" not in income_level # 120% 러프하게 매칭
-    is_under_140 = is_under_100 or "140%" in income_level
-    is_under_150 = is_under_140 or "150%" in income_level
-    is_under_180 = is_under_150 or "180%" in income_level
-    is_over_limit = "해당 없음" in income_level
 
     # 키워드 체크용 변수 (오류 방지)
     is_unemployed = "미취업 (구직 중)" in selected_keywords
@@ -147,6 +138,28 @@ if st.button("내 맞춤 혜택 결과 보기 🚀", type="primary"):
     # 특수 조건 변수 결합
     is_stay_eligible = (is_founder and 19 <= age <= 49) or (is_worker and 19 <= age <= 39)
     is_farmer_18_45 = 18 <= age <= 45 and is_farmer
+    
+    # ---------------------------------------------------------
+    # 🔍 [수정] 소득 조건을 완벽히 거르는 매칭 변수 생성
+    # ---------------------------------------------------------
+    # 1. 소득 초과자 먼저 정의 (최우선 차단)
+    is_over_limit = "해당 없음" in income_level
+
+    # 2. 소득 초과자가 아닐 때만 하위 소득 조건을 연쇄적으로 True 처리
+    if is_over_limit:
+        is_under_60 = is_under_100 = is_under_120 = is_under_140 = is_under_150 = is_under_180 = False
+    else:
+        is_under_60 = "60%" in income_level
+        is_under_100 = is_under_60 or "100%" in income_level
+        is_under_120 = is_under_100 or income_level in ["100% 이하", "140% 이하"는 아니지만 120%이하 조건을 충족할 때] # 명시적 처리 위해 아래처럼 수정 권장
+        
+        # 더 안전하고 직관적인 직접 매칭 방식
+        is_under_60 = income_level == "60% 이하 (저소득층 및 집중 주거지원 대상)"
+        is_under_100 = is_under_60 or income_level == "100% 이하"
+        is_under_120 = is_under_100 # 대시보드 선택지 기준 100% 이하면 120% 이하도 충족함
+        is_under_140 = is_under_100 or income_level == "140% 이하"
+        is_under_150 = is_under_140 or income_level == "150% 이하"
+        is_under_180 = is_under_150 or income_level == "180% 이하"
     
     # ---------------------------------------------------------
     # 💰 1. 청년 자산 형성 지원 상품
