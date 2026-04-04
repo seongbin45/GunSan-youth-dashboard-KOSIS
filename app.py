@@ -573,7 +573,7 @@ try:
 
 # 📌 9. 군산시 청년도약계좌 취급은행 현황 (최종 UI 개선 버전)
     st.write("---")
-    st.subheader("💰 9. 군산시 청년도약계좌 취급은행 현황")
+    st.subheader("💰 9. 청년도약계좌 취급은행 현황")
     
     if 'saving_df' in locals() and saving_df is not None and not saving_df.empty:
         st.info("💡 군산시 청년들이 도약계좌를 개설할 수 있는 취급 은행 목록입니다.")
