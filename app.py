@@ -138,3 +138,31 @@ if st.button("내 맞춤 혜택 결과 보기 🚀"):
     # 매칭되는 정책이 아무것도 없을 경우를 위한 예외 처리
     if age > 49:
         st.warning("⚠️ 입력하신 나이(만 50세 이상)는 현재 등록된 군산시 청년 특화 정책의 연령 범위를 벗어납니다. 중장년층을 위한 정책을 확인해 주세요.")
+
+
+
+
+# 하단 시각화 대시보드는 그대로 유지
+    st.write("---")
+    st.header("📈 참고: 군산시 청년 통계 대시보드")
+    
+    col1, col2 = st.columns(2)
+    with col1:
+        total_gunsan_pop = 259000  
+        youth_gunsan_pop = 56117   
+        other_pop = total_gunsan_pop - youth_gunsan_pop
+        pie_data = pd.DataFrame({"구분": ["청년 인구(18~39세)", "그 외 인구"],"인구수": [youth_gunsan_pop, other_pop]})
+        fig1 = px.pie(pie_data, values='인구수', names='구분', title="군산시 전체 인구 대비 청년 비율", color_discrete_sequence=['#FF6B6B', '#CCD1D1'])
+        st.plotly_chart(fig1, use_container_width=True)
+    with col2:
+        house_ratio = house_df[house_df['C2_NM'].str.contains("비율", na=False)]
+        house_ratio['DT'] = pd.to_numeric(house_ratio['DT'])
+        latest_house = house_ratio[house_ratio['PRD_DE'] == house_ratio['PRD_DE'].max()]
+        fig2 = px.bar(latest_house, x='C1_NM', y='DT', text='DT', title="연령대별 주택 소유 비율", color='C1_NM', color_discrete_sequence=px.colors.qualitative.Pastel)
+        fig2.update_traces(texttemplate='%{text}%', textposition='outside')
+        st.plotly_chart(fig2, use_container_width=True)
+
+except FileNotFoundError as e:
+    st.error(f"🚨 파일을 찾을 수 없습니다: {e}")
+except Exception as e:
+    st.error(f"🚨 오류가 발생했습니다: {e}")
