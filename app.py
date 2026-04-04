@@ -428,6 +428,12 @@ st.info("""
 
 st.write("---")
 
+st.title("📊 군산시 청년 데이터 시각화 대시보드")
+st.markdown("""**직접 KOSIS에서 수집한 데이터로 만든 대시보드입니다.**  
+사회초년생을 위한 금융 서비스의 기초가 됩니다""")
+
+st.write("---")
+
 # 🔌 [개조 포인트] CSV 대신 DB에서 데이터를 긁어오는 함수!
 import streamlit as st
 import pandas as pd
