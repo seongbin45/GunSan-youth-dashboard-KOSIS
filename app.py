@@ -414,11 +414,13 @@ try:
             fig6.update_layout(yaxis={'categoryorder':'total ascending'})
             st.plotly_chart(fig6, use_container_width=True, key="fig6")
 
-    # 📌 7번 영역 (원룸 분포)
+# 📌 7번 영역 (원룸 및 오피스텔 분포 - 정밀화 버전)
     st.write("---")
     st.subheader("🏠 7. 군산시 읍면동별 원룸 및 오피스텔 분포")
     
     if room_df is not None and not room_df.empty:
+        st.info("💡 군산시의 청년들이 거주하기 좋은 원룸과 오피스텔이 어느 동네에 밀집해 있는지 보여주는 데이터입니다.")
+        
         col_list = room_df.columns.tolist()
         dong_col = None
         for c in col_list:
@@ -427,23 +429,46 @@ try:
                 break
                 
         if dong_col:
+            # ✂️ [긴급 수술] 번지수가 붙은 상세주소에서 '동'까지만 싹둑 자릅니다.
+            # 예: "전북특별자치도 군산시 소룡동 831" -> "소룡동"
             def extract_dong(address):
-                if not address: return "기타"
+                if not address:
+                    return "기타"
+                # 공백으로 주소를 쪼갠 뒤, '동', '읍', '면'으로 끝나는 글자만 찾아냅니다.
                 parts = str(address).split()
                 for part in parts:
-                    if part.endswith('동') or part.endswith('읍') or part.endswith('면'): return part
+                    if part.endswith('동') or part.endswith('읍') or part.endswith('면'):
+                        return part
                 return "기타"
             
+            # 새로운 '정제된_동네' 컬럼을 만들어 동만 쏙 뽑아 넣습니다.
             room_df['정제된_동네'] = room_df[dong_col].apply(extract_dong)
+            
+            # 묶어서 개수 세기!
             room_counts = room_df['정제된_동네'].value_counts().reset_index()
             room_counts.columns = ['동네', '건물 수']
+            
+            # '기타'로 빠진 데이터는 제외하고 상위 10개 추출
             room_counts = room_counts[room_counts['동네'] != '기타']
             top_rooms = room_counts.head(10)
             
-            fig7 = px.bar(top_rooms, x='건물 수', y='동네', text='건물 수', orientation='h', title="군산시 원룸 및 오피스텔 밀집 동네 Top 10", color='건물 수', color_continuous_scale='Purples')
+            # 가로 막대 그래프 그리기
+            fig7 = px.bar(
+                top_rooms, x='건물 수', y='동네', text='건물 수',
+                orientation='h', title="군산시 원룸 및 오피스텔 밀집 동네 Top 10",
+                color='건물 수', color_continuous_scale='Purples'
+            )
             fig7.update_traces(texttemplate='%{text}개', textposition='outside')
             fig7.update_layout(yaxis={'categoryorder':'total ascending'})
             st.plotly_chart(fig7, use_container_width=True, key="fig7")
+            
+        else:
+            st.warning("⚠️ 동네를 구분할 수 있는 컬럼을 찾지 못했습니다.")
+            
+        with st.expander("🔍 군산시 원룸 및 오피스텔 원본 표 보기"):
+            st.dataframe(room_df, use_container_width=True)
+    else:
+        st.warning("⚠️ DB에서 '원룸 및 오피스텔 현황' 테이블을 불러오지 못했습니다.")
 
     # 📌 8. 전북특별자치도 연령별 취업자 비중 (완성 버전!)
     st.write("---")
