@@ -123,6 +123,33 @@ if st.button("내 맞춤 혜택 결과 보기 🚀"):
 st.write("---")
 st.header("📈 참고: 군산시 청년 통계 대시보드")
 
+st.info("""
+**📊 데이터 안내**
+
+* **기준 연도:** 2024년 (KOSIS 제공 최신 데이터)
+* **수집 일시:** 2026년 2월 13일
+* **출처:** 국가통계포털(KOSIS) 군산시 청년통계 API
+
+*국가 통계의 특성상 집계 및 공표에 1~2년이 소요되므로 현재 시점의 가장 최신 데이터입니다.*
+""")
+
+st.write("---")
+
+# 🔌 [개조 포인트] CSV 대신 DB에서 데이터를 긁어오는 함수!
+@st.cache_data
+def load_data_from_db():
+    # 데이터베이스 연결
+    conn = sqlite3.connect("gunsan_youth.db")
+    
+    # SQL 쿼리를 날려 데이터프레임으로 바로 읽어옵니다.
+    pop_df = pd.read_sql("SELECT * FROM population", conn)
+    house_df = pd.read_sql("SELECT * FROM housing", conn)
+    wage_df = pd.read_sql("SELECT * FROM wage", conn)
+    health_df = pd.read_sql("SELECT * FROM health", conn)
+    
+    conn.close() # 작업이 끝나면 안전하게 닫아줍니다.
+    return pop_df, house_df, wage_df, health_df
+
 try:
     # DB에서 데이터 로드
     pop_df, house_df, wage_df, health_df = load_data_from_db()
