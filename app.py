@@ -103,7 +103,7 @@ if st.button("내 맞춤 혜택 결과 보기 🚀"):
     
     st.subheader("💰 1. 청년 자산 형성 지원 상품")
     
-    asset_match = 0  # 매칭 여부 체크용 카운터
+    asset_match_count = 0  # 정책이 매칭될 때마다 1씩 증가시킬 변수
     
     if is_youth_19_34 and income_level != "해당 없음 (소득 기준 초과)":
         st.markdown("""
@@ -126,7 +126,7 @@ if st.button("내 맞춤 혜택 결과 보기 🚀"):
     
     st.subheader("🏠 2. 청년 주거 안정 지원 사업")
     
-    housing_match = 0
+    housing_match_count = 0
     
     if has_house == "아니오 (무주택)":
         if is_youth_19_34 and income_level == "기준 중위소득 60% 이하 (저소득층 및 집중 주거지원 대상)":
@@ -160,7 +160,7 @@ if st.button("내 맞춤 혜택 결과 보기 🚀"):
     
     st.subheader("🏃‍♂️ 3. 청년 구직 및 정착 지원")
 
-    job_match = 0
+    job_match_count = 0
     
     if job_status == "미취업 (구직 중)":
         if is_youth_18_39 and income_level not in ["기준 중위소득 180% 이하", "해당 없음 (소득 기준 초과)"]:
