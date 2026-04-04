@@ -5,7 +5,8 @@ import plotly.express as px
 st.set_page_config(page_title="군산시 청년 맞춤 혜택 찾기", layout="wide")
 
 st.title("📊 군산시 청년 데이터 시각화 대시보드")
-st.markdown("""**직접 KOSIS에서 수집한 데이터로 만든 대시보드입니다.** 사회초년생을 위한 금융 서비스의 기초가 됩니다""")
+st.markdown("""**직접 KOSIS에서 수집한 데이터로 만든 대시보드입니다.**  
+사회초년생을 위한 금융 서비스의 기초가 됩니다""")
 st.write("---")
 
 # 📌 청소년과 대학생을 위해 친절하게 수정한 안내판!
