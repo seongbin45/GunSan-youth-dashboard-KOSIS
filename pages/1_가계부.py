@@ -6,7 +6,7 @@ from datetime import date
 
 st.set_page_config(page_title="가계부", page_icon="📒", layout="wide")
 st.title("📒 가계부")
-st.markdown("""아직 계발 초기단계이기 때문에    
+st.markdown("""아직 계발 초기단계이기 때문에,    
 **사이트를 나갔다가 들어오면 데이터가 모두 사라집니다!**  
 주의하여 주시기 바랍니다""")
 
