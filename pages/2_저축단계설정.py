@@ -40,8 +40,6 @@ income = st.session_state.income
 level  = st.session_state.level
 
 
-
-st.divider()
 st.subheader(f"✅ 현재 선택: {level}단계 — {LEVELS[level]['name']}")
 
 lv = LEVELS[level]
@@ -153,6 +151,8 @@ with col2:
             <span style="color:#888; font-size:0.85em"> / 월</span>
         </div>
         """, unsafe_allow_html=True)
+        
+st.write("---")
 
 # 전체 단계 비교표
 st.subheader("📊 전체 단계 비교")
