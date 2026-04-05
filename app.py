@@ -46,7 +46,7 @@ with col1:
 
     st.subheader("🎚️ 저축 강도 선택 (1~10단계)")
     level = st.slider(
-        "1 = 여가 최우선 / 10 = 생존형 저축",
+        "1 = 여가 최우선 ~ 10 = 생존형 저축",
         min_value=1, max_value=10,
         value=st.session_state.level
     )
