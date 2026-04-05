@@ -101,7 +101,7 @@ st.session_state.LEVELS = LEVELS
 col1, col2 = st.columns([1, 1], gap="large")
 
 with col1:
-    st.subheader("📋 기본 정보 검토")
+    st.subheader("📋 본인의 정보 검토")
     income = st.number_input(
         "월 소득 / 용돈 (원)",
         min_value=100000, max_value=10000000,
