@@ -10,7 +10,7 @@ st.set_page_config(page_title="가계부", page_icon="📒", layout="wide")
 st.title("📒 가계부")
 st.markdown("""https://docs.google.com/spreadsheets/d/1pEUv0K4Iva7yZTOk5Y6TAwWklU2w_4YN53ekdywPY_Q/edit?usp=sharing  
 (위 링크를 클릭하시면 데이터의 원본을 보실 수 있습니다.)  
-이 사이트는 사회초년생을 위한 금융 서비스의 기초가 됩니다""")
+""")
 
 # ══════════════════════════════════════════════════
 # ★ 여기만 수정하면 됩니다 ★
