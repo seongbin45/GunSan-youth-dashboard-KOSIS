@@ -26,7 +26,7 @@ LEVELS = {
 st.session_state.LEVELS = LEVELS
 
 # ── 메인 화면 ─────────────────────────────────────────────────────────────────
-st.title("💰 청년 머니 플래너")
+st.title("🎯 저축 단계 상세 가이드")
 st.markdown("#### 사회초년생을 위한 저축·소비 습관 계획 서비스")
 st.divider()
 
@@ -87,7 +87,6 @@ with col2:
 st.write("---")
 
 st.set_page_config(page_title="저축단계 상세", page_icon="🎯", layout="wide")
-st.title("🎯 저축 단계 상세 가이드")
 
 if "income" not in st.session_state:
     st.session_state.income = 2000000
