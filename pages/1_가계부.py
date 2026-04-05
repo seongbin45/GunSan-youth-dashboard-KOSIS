@@ -8,6 +8,8 @@ from google.oauth2.service_account import Credentials
 
 st.set_page_config(page_title="가계부", page_icon="📒", layout="wide")
 st.title("📒 가계부")
+st.markdown("""https://docs.google.com/spreadsheets/d/1pEUv0K4Iva7yZTOk5Y6TAwWklU2w_4YN53ekdywPY_Q/edit?usp=sharing  
+사회초년생을 위한 금융 서비스의 기초가 됩니다""")
 
 # ══════════════════════════════════════════════════
 # ★ 여기만 수정하면 됩니다 ★
