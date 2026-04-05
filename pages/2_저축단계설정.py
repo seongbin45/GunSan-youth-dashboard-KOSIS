@@ -5,6 +5,8 @@ st.write("---")
 
 st.set_page_config(page_title="저축단계 상세", page_icon="🎯", layout="wide")
 st.title("🎯 저축 단계 상세 가이드")
+st.markdown("#### 사회초년생을 위한 저축·소비 습관 계획 서비스")
+st.divider()
 
 if "income" not in st.session_state:
     st.session_state.income = 2000000
@@ -37,19 +39,7 @@ LEVELS = {
 income = st.session_state.income
 level  = st.session_state.level
 
-# 전체 단계 비교표
-st.subheader("📊 전체 단계 비교")
-levels_list = list(LEVELS.items())
-fig = go.Figure()
-fig.add_bar(name="저축", x=[f"{k}단계" for k,_ in levels_list],
-            y=[v["save"]*100 for _,v in levels_list], marker_color="#9C27B0")
-fig.add_bar(name="고정비", x=[f"{k}단계" for k,_ in levels_list],
-            y=[v["fix"]*100 for _,v in levels_list], marker_color="#2196F3")
-fig.add_bar(name="여가·식비", x=[f"{k}단계" for k,_ in levels_list],
-            y=[v["leisure"]*100 for _,v in levels_list], marker_color="#4CAF50")
-fig.update_layout(barmode="stack", height=350,
-                  yaxis_title="비율 (%)", margin=dict(l=10,r=10,t=10,b=10))
-st.plotly_chart(fig, use_container_width=True)
+
 
 st.divider()
 st.subheader(f"✅ 현재 선택: {level}단계 — {LEVELS[level]['name']}")
@@ -109,9 +99,6 @@ LEVELS = {
 st.session_state.LEVELS = LEVELS
 
 # ── 메인 화면 ─────────────────────────────────────────────────────────────────
-st.title("🎯 저축 단계 상세 가이드")
-st.markdown("#### 사회초년생을 위한 저축·소비 습관 계획 서비스")
-st.divider()
 
 col1, col2 = st.columns([1, 1], gap="large")
 
@@ -166,3 +153,17 @@ with col2:
             <span style="color:#888; font-size:0.85em"> / 월</span>
         </div>
         """, unsafe_allow_html=True)
+
+# 전체 단계 비교표
+st.subheader("📊 전체 단계 비교")
+levels_list = list(LEVELS.items())
+fig = go.Figure()
+fig.add_bar(name="저축", x=[f"{k}단계" for k,_ in levels_list],
+            y=[v["save"]*100 for _,v in levels_list], marker_color="#9C27B0")
+fig.add_bar(name="고정비", x=[f"{k}단계" for k,_ in levels_list],
+            y=[v["fix"]*100 for _,v in levels_list], marker_color="#2196F3")
+fig.add_bar(name="여가·식비", x=[f"{k}단계" for k,_ in levels_list],
+            y=[v["leisure"]*100 for _,v in levels_list], marker_color="#4CAF50")
+fig.update_layout(barmode="stack", height=350,
+                  yaxis_title="비율 (%)", margin=dict(l=10,r=10,t=10,b=10))
+st.plotly_chart(fig, use_container_width=True)
