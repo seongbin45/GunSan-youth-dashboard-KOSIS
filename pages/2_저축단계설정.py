@@ -4,7 +4,7 @@ import plotly.graph_objects as go
 st.write("---")
 
 st.set_page_config(page_title="저축단계 상세", page_icon="🎯", layout="wide")
-st.title("🎯 저축 단계 상세 가이드")
+st.title("🎯 상세 가이드")
 st.markdown("#### 사회초년생을 위한 저축·소비 습관 계획 서비스")
 st.divider()
 
