@@ -84,6 +84,8 @@ with col2:
         </div>
         """, unsafe_allow_html=True)
 
+st.write("---")
+
 st.set_page_config(page_title="저축단계 상세", page_icon="🎯", layout="wide")
 st.title("🎯 저축 단계 상세 가이드")
 
