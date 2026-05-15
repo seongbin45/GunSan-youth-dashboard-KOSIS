@@ -1,7 +1,7 @@
 ﻿import os
 
 YOUTH_API_BASE_URL = os.getenv("YOUTH_API_BASE_URL", "https://www.youthcenter.go.kr")
-YOUTH_API_KEY = os.getenv("YOUTH_API_KEY", "")
+YOUTH_API_KEY = _secret("YOUTH_API_KEY", "")
 YOUTH_POLICY_LIST_PATH = os.getenv("YOUTH_POLICY_LIST_PATH", "/opi/youthPlcyList.do")
 YOUTH_SPACE_LIST_PATH = os.getenv("YOUTH_SPACE_LIST_PATH", "/opi/youthSpaceList.do")
 YOUTH_CONTENT_LIST_PATH = os.getenv("YOUTH_CONTENT_LIST_PATH", "/opi/youthContentList.do")
