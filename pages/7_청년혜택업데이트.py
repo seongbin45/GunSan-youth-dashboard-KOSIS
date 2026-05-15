@@ -1,5 +1,8 @@
 import streamlit as st
 
+from finfit_youth import config
+st.write("DEBUG BASE_URL:", repr(config.YOUTH_API_BASE_URL))
+st.write("DEBUG POLICY_PATH:", repr(config.YOUTH_POLICY_LIST_PATH))
 from finfit_youth.service import YouthDataService
 from finfit_youth.scheduler import ensure_scheduler_started
 
