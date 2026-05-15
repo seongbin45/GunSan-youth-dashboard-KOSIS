@@ -12,6 +12,7 @@ if "youth_scheduler" not in st.session_state:
     st.session_state.youth_scheduler = ensure_scheduler_started(service, interval_seconds=30 * 60)
 
 left, right = st.columns([2, 1])
+
 with left:
     source_label = st.selectbox("데이터 구분", ["정책", "공간", "콘텐츠"], index=0)
     source_map = {"정책": "policy", "공간": "space", "콘텐츠": "content"}
@@ -23,14 +24,13 @@ with left:
 
     refresh_clicked = st.button("지금 동기화")
     if refresh_clicked:
-    with st.spinner("동기화 중..."):
-        try:
-            result = service.sync_source(source)
-            st.success(f"{source_label} 동기화 완료: {result['count']}건")
-        except Exception as e:
-            st.error(f"동기화 실패: {e}")
-            st.stop()
-
+        with st.spinner("동기화 중..."):
+            try:
+                result = service.sync_source(source)
+                st.success(f"{source_label} 동기화 완료: {result['count']}건")
+            except Exception as e:
+                st.error(f"동기화 실패: {e}")
+                st.stop()
 
 with right:
     st.info(
@@ -42,8 +42,8 @@ with right:
 
 try:
     result = service.get_list(source=source, query=query, page=int(page), size=int(size))
-except Exception as exc:
-    st.error(f"목록 조회 실패: {exc}")
+except Exception as e:
+    st.error(f"목록 조회 실패: {e}")
     st.stop()
 
 st.divider()
@@ -66,7 +66,7 @@ for item in items:
                 try:
                     detail = service.get_detail(source=source, item_id=item_id)
                     st.json(detail)
-                except Exception as exc:
-                    st.error(f"상세 조회 실패: {exc}")
+                except Exception as e:
+                    st.error(f"상세 조회 실패: {e}")
         else:
             st.caption("상세 조회를 위한 식별자가 없어 목록 데이터만 표시합니다.")
