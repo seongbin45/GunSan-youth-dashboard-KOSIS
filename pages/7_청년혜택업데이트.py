@@ -23,9 +23,14 @@ with left:
 
     refresh_clicked = st.button("지금 동기화")
     if refresh_clicked:
-        with st.spinner("동기화 중..."):
+    with st.spinner("동기화 중..."):
+        try:
             result = service.sync_source(source)
-        st.success(f"{source_label} 동기화 완료: {result['count']}건")
+            st.success(f"{source_label} 동기화 완료: {result['count']}건")
+        except Exception as e:
+            st.error(f"동기화 실패: {e}")
+            st.stop()
+
 
 with right:
     st.info(
