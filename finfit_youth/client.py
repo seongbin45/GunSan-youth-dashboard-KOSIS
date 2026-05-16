@@ -1,4 +1,4 @@
-﻿from __future__ import annotations
+from __future__ import annotations
 
 import json
 import time
@@ -33,7 +33,6 @@ class YouthApiClient:
 
         self.rate_limiter = SimpleRateLimiter(HTTP_RATE_LIMIT_PER_MINUTE)
 
-
     def _parse_response(self, response: requests.Response) -> Any:
         text = response.text.strip()
         if not text:
@@ -46,7 +45,6 @@ class YouthApiClient:
         if text.startswith("{") or text.startswith("["):
             return json.loads(text)
 
-        # XML fallback (the provider documents XML transfer for some endpoints)
         root = ElementTree.fromstring(text)
         return self._xml_to_dict(root)
 
@@ -54,6 +52,7 @@ class YouthApiClient:
         children = list(element)
         if not children:
             return element.text or ""
+
         result: dict[str, Any] = {}
         for child in children:
             value = self._xml_to_dict(child)
@@ -69,33 +68,29 @@ class YouthApiClient:
 
     def get(self, path: str, params: dict[str, Any] | None = None) -> Any:
         if not self.api_key:
-        raise YouthApiError("YOUTH_API_KEY is not set")
+            raise YouthApiError("YOUTH_API_KEY is not set")
 
-        # base_url 강제 정리
         base = (self.base_url or "").strip()
         if (not base) or (":8080" in base) or (not base.startswith("https://")):
             base = "https://www.youthcenter.go.kr"
-    
-        # path 강제 정리
+
         p = (path or "").strip()
-        # path에 잘못된 절대 URL이 들어온 경우 방어
         if p.startswith("http://") or p.startswith("https://"):
-            # youthcenter 도메인이어도 URL 전체는 버리고 기본 정책 경로로 교체
             p = "/opi/youthPlcyList.do"
         if not p.startswith("/"):
             p = "/" + p
         if p == "/":
             p = "/opi/youthPlcyList.do"
-    
+
         endpoint = f"{base}{p}"
-        print(f"DEBUG endpoint={endpoint}")  # 로그 확인용
-    
+        print(f"DEBUG endpoint={endpoint}")
+
         query = dict(params or {})
         query["openApiVlak"] = self.api_key
-    
+
         attempt = 0
         last_error: Exception | None = None
-    
+
         while attempt < HTTP_MAX_RETRIES:
             attempt += 1
             self.rate_limiter.acquire()
@@ -111,6 +106,5 @@ class YouthApiClient:
                 if attempt >= HTTP_MAX_RETRIES:
                     break
                 time.sleep(HTTP_BACKOFF_SECONDS * attempt)
-    
+
         raise YouthApiError(str(last_error) if last_error else "unknown API error")
-    
