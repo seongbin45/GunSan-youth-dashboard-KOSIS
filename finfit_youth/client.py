@@ -69,15 +69,33 @@ class YouthApiClient:
 
     def get(self, path: str, params: dict[str, Any] | None = None) -> Any:
         if not self.api_key:
-            raise YouthApiError("YOUTH_API_KEY is not set")
+        raise YouthApiError("YOUTH_API_KEY is not set")
 
-        endpoint = f"{self.base_url}{path}"
+        # base_url 강제 정리
+        base = (self.base_url or "").strip()
+        if (not base) or (":8080" in base) or (not base.startswith("https://")):
+            base = "https://www.youthcenter.go.kr"
+    
+        # path 강제 정리
+        p = (path or "").strip()
+        # path에 잘못된 절대 URL이 들어온 경우 방어
+        if p.startswith("http://") or p.startswith("https://"):
+            # youthcenter 도메인이어도 URL 전체는 버리고 기본 정책 경로로 교체
+            p = "/opi/youthPlcyList.do"
+        if not p.startswith("/"):
+            p = "/" + p
+        if p == "/":
+            p = "/opi/youthPlcyList.do"
+    
+        endpoint = f"{base}{p}"
+        print(f"DEBUG endpoint={endpoint}")  # 로그 확인용
+    
         query = dict(params or {})
         query["openApiVlak"] = self.api_key
-
+    
         attempt = 0
         last_error: Exception | None = None
-
+    
         while attempt < HTTP_MAX_RETRIES:
             attempt += 1
             self.rate_limiter.acquire()
@@ -88,10 +106,11 @@ class YouthApiClient:
                 if response.status_code >= 400:
                     raise YouthApiError(f"request failed: {response.status_code}")
                 return self._parse_response(response)
-            except Exception as exc:  # network parse timeout etc
+            except Exception as exc:
                 last_error = exc
                 if attempt >= HTTP_MAX_RETRIES:
                     break
                 time.sleep(HTTP_BACKOFF_SECONDS * attempt)
-
+    
         raise YouthApiError(str(last_error) if last_error else "unknown API error")
+    
