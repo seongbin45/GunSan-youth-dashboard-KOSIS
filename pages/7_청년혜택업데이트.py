@@ -22,10 +22,9 @@ with left:
     source = source_map[source_label]
 
     query = st.text_input("검색어", placeholder="예: 취업, 주거, 금융")
+    page = st.number_input("페이지", min_value=1, value=1, step=1)
     size_label = st.selectbox("페이지 크기", [10, 20, 30, 50, 100, "Max"], index=2)
     size = 9999 if size_label == "Max" else int(size_label)
-    
-    page = 1 if size_label == "Max" else st.number_input("페이지", min_value=1, value=1, step=1)
 
     refresh_clicked = st.button("지금 동기화")
     if refresh_clicked:
