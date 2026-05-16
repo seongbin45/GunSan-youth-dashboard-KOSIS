@@ -1,10 +1,10 @@
 from __future__ import annotations
-raise RuntimeError("CLIENT_PY_NEW_VERSION_LOADED")
 
 import json
 import time
 from typing import Any
 from xml.etree import ElementTree
+raise RuntimeError("CLIENT_PY_NEW_VERSION_LOADED")
 
 import requests
 
