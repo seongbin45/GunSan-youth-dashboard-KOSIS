@@ -9,8 +9,11 @@ from .config import (
     CACHE_DB_PATH,
     CACHE_TTL_SECONDS,
     DETAIL_TTL_SECONDS,
+    YOUTH_CONTENT_DEFAULT_PAGE_SIZE,
+    YOUTH_CONTENT_DEFAULT_RTN_TYPE,
     YOUTH_CONTENT_DETAIL_PATH,
     YOUTH_CONTENT_LIST_PATH,
+    YOUTH_CONTENT_URL,
     YOUTH_POLICY_DEFAULT_PAGE_SIZE,
     YOUTH_POLICY_DEFAULT_RTN_TYPE,
     YOUTH_POLICY_URL,
@@ -23,7 +26,7 @@ logger = logging.getLogger(__name__)
 SOURCE_MAP = {
     "policy": {"list": YOUTH_POLICY_URL, "detail": YOUTH_POLICY_URL},
     "space": {"list": YOUTH_SPACE_LIST_PATH, "detail": YOUTH_SPACE_DETAIL_PATH},
-    "content": {"list": YOUTH_CONTENT_LIST_PATH, "detail": YOUTH_CONTENT_DETAIL_PATH},
+    "content": {"list": YOUTH_CONTENT_URL, "detail": YOUTH_CONTENT_URL},
 }
 
 
@@ -33,9 +36,37 @@ class YouthDataService:
         self.store = store or CacheStore(CACHE_DB_PATH)
 
     def _normalize_item(self, source: str, item: dict[str, Any]) -> dict[str, Any]:
-        uid = str(item.get("plcyNo") or item.get("bizId") or item.get("id") or item.get("idx") or "")
-        title = str(item.get("plcyNm") or item.get("polyBizSjnm") or item.get("title") or item.get("name") or "")
-        summary = str(item.get("plcyExplnCn") or item.get("polyItcnCn") or item.get("summary") or item.get("desc") or "")
+        if source == "content":
+            uid = str(item.get("pstSn") or item.get("id") or item.get("idx") or "")
+            title = str(item.get("pstTtl") or item.get("title") or item.get("name") or "")
+            summary = str(item.get("pstWholCn") or item.get("summary") or item.get("desc") or "")
+            region = str(item.get("pstSeCd") or item.get("region") or item.get("rgnNm") or "")
+            return {
+                "id": uid,
+                "source": source,
+                "title": title,
+                "summary": summary,
+                "region": region,
+                "raw": item,
+            }
+
+        if source == "policy":
+            uid = str(item.get("plcyNo") or item.get("id") or item.get("idx") or "")
+            title = str(item.get("plcyNm") or item.get("title") or item.get("name") or "")
+            summary = str(item.get("plcyExplnCn") or item.get("summary") or item.get("desc") or "")
+            region = str(item.get("zipCd") or item.get("region") or item.get("rgnNm") or "")
+            return {
+                "id": uid,
+                "source": source,
+                "title": title,
+                "summary": summary,
+                "region": region,
+                "raw": item,
+            }
+
+        uid = str(item.get("bizId") or item.get("id") or item.get("idx") or "")
+        title = str(item.get("polyBizSjnm") or item.get("title") or item.get("name") or "")
+        summary = str(item.get("polyItcnCn") or item.get("summary") or item.get("desc") or "")
         region = str(item.get("zipCd") or item.get("region") or item.get("rgnNm") or "")
         return {
             "id": uid,
@@ -50,7 +81,7 @@ class YouthDataService:
         if isinstance(payload, list):
             return [x for x in payload if isinstance(x, dict)]
         if isinstance(payload, dict):
-            for key in ("result", "data", "list", "youthPolicyList", "items"):
+            for key in ("result", "data", "list", "youthPolicyList", "youthContentList", "items"):
                 value = payload.get(key)
                 if isinstance(value, list):
                     return [x for x in value if isinstance(x, dict)]
@@ -75,6 +106,24 @@ class YouthDataService:
             "rtnType": YOUTH_POLICY_DEFAULT_RTN_TYPE,
         }
 
+    def _content_list_params(self, pst_se_cd: str | None = None) -> dict[str, Any]:
+        params: dict[str, Any] = {
+            "pageNum": 1,
+            "pageSize": YOUTH_CONTENT_DEFAULT_PAGE_SIZE,
+            "pageType": "1",
+            "rtnType": YOUTH_CONTENT_DEFAULT_RTN_TYPE,
+        }
+        if pst_se_cd:
+            params["pstSeCd"] = pst_se_cd
+        return params
+
+    def _content_detail_params(self, pst_sn: str) -> dict[str, Any]:
+        return {
+            "pageType": "2",
+            "pstSn": pst_sn,
+            "rtnType": YOUTH_CONTENT_DEFAULT_RTN_TYPE,
+        }
+
     def sync_source(self, source: str) -> dict[str, Any]:
         endpoint = SOURCE_MAP[source]["list"]
         if not endpoint:
@@ -82,8 +131,9 @@ class YouthDataService:
 
         if source == "policy":
             payload = self.client.get(endpoint, params=self._policy_list_params())
+        elif source == "content":
+            payload = self.client.get(endpoint, params=self._content_list_params())
         else:
-            # legacy space/content 유지
             payload = self.client.get(endpoint, params={"pageIndex": 1, "display": 100})
 
         items = self._extract_list(payload)
@@ -144,8 +194,9 @@ class YouthDataService:
 
         if source == "policy":
             payload = self.client.get(endpoint, params=self._policy_detail_params(item_id))
+        elif source == "content":
+            payload = self.client.get(endpoint, params=self._content_detail_params(item_id))
         else:
-            # legacy space/content 유지
             payload = self.client.get(endpoint, params={"id": item_id, "bizId": item_id})
 
         detail = payload if isinstance(payload, dict) else {"raw": payload}
