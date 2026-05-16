@@ -6,6 +6,7 @@ from typing import Any
 from xml.etree import ElementTree
 
 import requests
+raise RuntimeError("CLIENT_PY_NEW_VERSION_LOADED")
 
 from .config import (
     HTTP_BACKOFF_SECONDS,
