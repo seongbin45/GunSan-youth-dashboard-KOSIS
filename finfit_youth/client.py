@@ -14,6 +14,7 @@ from .config import (
     HTTP_TIMEOUT_SECONDS,
     YOUTH_API_BASE_URL,
     YOUTH_API_KEY,
+    YOUTH_CONTENT_API_KEY,
 )
 from .rate_limit import SimpleRateLimiter
 
@@ -66,15 +67,16 @@ class YouthApiClient:
                 result[child.tag] = value
         return result
 
+
+        
+        # 정책/콘텐츠는 각각 다른 apiKeyNm 사용
     def get(self, path: str, params: dict[str, Any] | None = None) -> Any:
-        if not self.api_key:
-            raise YouthApiError("YOUTH_API_KEY is not set")
-    
         p = (path or "").strip()
         if p.startswith("http://"):
             p = "https://" + p[len("http://"):]
         if ":8080" in p:
             p = p.replace(":8080", "")
+    
         if p.startswith("https://"):
             endpoint = p
         else:
@@ -87,11 +89,18 @@ class YouthApiClient:
     
         query = dict(params or {})
     
-        # new policy endpoint
-        if "/go/ythip/getPlcy" in endpoint:
+        if "/go/ythip/getContent" in endpoint:
+            content_key = (YOUTH_CONTENT_API_KEY or "").strip()
+            if not content_key:
+                raise YouthApiError("YOUTH_CONTENT_API_KEY is not set")
+            query.setdefault("apiKeyNm", content_key)
+        elif "/go/ythip/getPlcy" in endpoint:
+            if not self.api_key:
+                raise YouthApiError("YOUTH_API_KEY is not set")
             query.setdefault("apiKeyNm", self.api_key)
         else:
-            # legacy endpoints
+            if not self.api_key:
+                raise YouthApiError("YOUTH_API_KEY is not set")
             query.setdefault("openApiVlak", self.api_key)
     
         attempt = 0
@@ -114,4 +123,5 @@ class YouthApiClient:
                 time.sleep(HTTP_BACKOFF_SECONDS * attempt)
     
         raise YouthApiError(str(last_error) if last_error else "unknown API error")
-
+    
+    
