@@ -25,8 +25,14 @@ class YouthApiError(Exception):
 class YouthApiClient:
     def __init__(self, api_key: str | None = None, base_url: str | None = None):
         self.api_key = api_key if api_key is not None else YOUTH_API_KEY
-        self.base_url = (base_url or YOUTH_API_BASE_URL).rstrip("/")
+
+        raw_base = (base_url or YOUTH_API_BASE_URL or "").strip()
+        if (not raw_base) or (":8080" in raw_base) or (not raw_base.startswith("https://")):
+            raw_base = "https://www.youthcenter.go.kr"
+        self.base_url = raw_base.rstrip("/")
+
         self.rate_limiter = SimpleRateLimiter(HTTP_RATE_LIMIT_PER_MINUTE)
+
 
     def _parse_response(self, response: requests.Response) -> Any:
         text = response.text.strip()
