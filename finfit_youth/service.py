@@ -1,4 +1,4 @@
-﻿from __future__ import annotations
+from __future__ import annotations
 
 import logging
 from typing import Any
@@ -11,8 +11,9 @@ from .config import (
     DETAIL_TTL_SECONDS,
     YOUTH_CONTENT_DETAIL_PATH,
     YOUTH_CONTENT_LIST_PATH,
-    YOUTH_POLICY_DETAIL_PATH,
-    YOUTH_POLICY_LIST_PATH,
+    YOUTH_POLICY_DEFAULT_PAGE_SIZE,
+    YOUTH_POLICY_DEFAULT_RTN_TYPE,
+    YOUTH_POLICY_URL,
     YOUTH_SPACE_DETAIL_PATH,
     YOUTH_SPACE_LIST_PATH,
 )
@@ -20,7 +21,7 @@ from .config import (
 logger = logging.getLogger(__name__)
 
 SOURCE_MAP = {
-    "policy": {"list": YOUTH_POLICY_LIST_PATH, "detail": YOUTH_POLICY_DETAIL_PATH},
+    "policy": {"list": YOUTH_POLICY_URL, "detail": YOUTH_POLICY_URL},
     "space": {"list": YOUTH_SPACE_LIST_PATH, "detail": YOUTH_SPACE_DETAIL_PATH},
     "content": {"list": YOUTH_CONTENT_LIST_PATH, "detail": YOUTH_CONTENT_DETAIL_PATH},
 }
@@ -32,9 +33,9 @@ class YouthDataService:
         self.store = store or CacheStore(CACHE_DB_PATH)
 
     def _normalize_item(self, source: str, item: dict[str, Any]) -> dict[str, Any]:
-        uid = str(item.get("bizId") or item.get("id") or item.get("idx") or item.get("polyBizSjnm") or "")
-        title = str(item.get("polyBizSjnm") or item.get("title") or item.get("name") or "")
-        summary = str(item.get("polyItcnCn") or item.get("summary") or item.get("desc") or "")
+        uid = str(item.get("plcyNo") or item.get("bizId") or item.get("id") or item.get("idx") or "")
+        title = str(item.get("plcyNm") or item.get("polyBizSjnm") or item.get("title") or item.get("name") or "")
+        summary = str(item.get("plcyExplnCn") or item.get("polyItcnCn") or item.get("summary") or item.get("desc") or "")
         region = str(item.get("zipCd") or item.get("region") or item.get("rgnNm") or "")
         return {
             "id": uid,
@@ -59,12 +60,32 @@ class YouthDataService:
                         return nested
         return []
 
+    def _policy_list_params(self) -> dict[str, Any]:
+        return {
+            "pageNum": 1,
+            "pageSize": YOUTH_POLICY_DEFAULT_PAGE_SIZE,
+            "pageType": "1",
+            "rtnType": YOUTH_POLICY_DEFAULT_RTN_TYPE,
+        }
+
+    def _policy_detail_params(self, plcy_no: str) -> dict[str, Any]:
+        return {
+            "pageType": "2",
+            "plcyNo": plcy_no,
+            "rtnType": YOUTH_POLICY_DEFAULT_RTN_TYPE,
+        }
+
     def sync_source(self, source: str) -> dict[str, Any]:
         endpoint = SOURCE_MAP[source]["list"]
         if not endpoint:
             raise YouthApiError(f"{source} list endpoint is not configured")
 
-        payload = self.client.get(endpoint, params={"pageIndex": 1, "display": 100})
+        if source == "policy":
+            payload = self.client.get(endpoint, params=self._policy_list_params())
+        else:
+            # legacy space/content 유지
+            payload = self.client.get(endpoint, params={"pageIndex": 1, "display": 100})
+
         items = self._extract_list(payload)
         normalized = [self._normalize_item(source, x) for x in items]
 
@@ -121,7 +142,12 @@ class YouthDataService:
         if not endpoint:
             raise YouthApiError(f"{source} detail endpoint is not configured")
 
-        payload = self.client.get(endpoint, params={"id": item_id, "bizId": item_id})
+        if source == "policy":
+            payload = self.client.get(endpoint, params=self._policy_detail_params(item_id))
+        else:
+            # legacy space/content 유지
+            payload = self.client.get(endpoint, params={"id": item_id, "bizId": item_id})
+
         detail = payload if isinstance(payload, dict) else {"raw": payload}
         detail["id"] = item_id
         detail["source"] = source
