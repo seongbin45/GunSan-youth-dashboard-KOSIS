@@ -7,6 +7,7 @@ except Exception:
 
 
 def _secret(name: str, default: str = "") -> str:
+    # 1) Streamlit Secrets 우선
     if st is not None:
         try:
             v = st.secrets.get(name, None)
@@ -15,8 +16,9 @@ def _secret(name: str, default: str = "") -> str:
         except Exception:
             pass
 
+    # 2) 환경변수 fallback
     v = os.getenv(name)
-    if v and str(v).strip() != "":
+    if v is not None and str(v).strip() != "":
         return str(v).strip()
 
     return default
