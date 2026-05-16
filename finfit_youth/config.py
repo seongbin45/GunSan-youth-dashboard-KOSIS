@@ -39,7 +39,9 @@ def _safe_path(v: str, default: str) -> str:
 
 
 YOUTH_API_BASE_URL = _safe_base_url(_secret("YOUTH_API_BASE_URL", "https://www.youthcenter.go.kr"))
-YOUTH_API_KEY = _secret("YOUTH_API_KEY", "")
+YOUTH_API_KEY = _secret("YOUTH_API_KEY", "")  # 정책용
+YOUTH_CONTENT_API_KEY = _secret("YOUTH_CONTENT_API_KEY", "")  # 콘텐츠용
+
 
 YOUTH_POLICY_URL = _secret("YOUTH_POLICY_URL", "https://www.youthcenter.go.kr/go/ythip/getPlcy")
 YOUTH_POLICY_DEFAULT_PAGE_SIZE = int(_secret("YOUTH_POLICY_DEFAULT_PAGE_SIZE", "100"))
