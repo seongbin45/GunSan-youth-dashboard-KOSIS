@@ -69,28 +69,34 @@ class YouthApiClient:
     def get(self, path: str, params: dict[str, Any] | None = None) -> Any:
         if not self.api_key:
             raise YouthApiError("YOUTH_API_KEY is not set")
-
-        base = (self.base_url or "").strip()
-        if (not base) or (":8080" in base) or (not base.startswith("https://")):
-            base = "https://www.youthcenter.go.kr"
-
+    
         p = (path or "").strip()
-        if p.startswith("http://") or p.startswith("https://"):
-            p = "/opi/youthPlcyList.do"
-        if not p.startswith("/"):
-            p = "/" + p
-        if p == "/":
-            p = "/opi/youthPlcyList.do"
-
-        endpoint = f"{base}{p}"
-        print(f"DEBUG endpoint={endpoint}")
-
+        if p.startswith("http://"):
+            p = "https://" + p[len("http://"):]
+        if ":8080" in p:
+            p = p.replace(":8080", "")
+        if p.startswith("https://"):
+            endpoint = p
+        else:
+            base = (self.base_url or "").strip()
+            if (not base) or (":8080" in base) or (not base.startswith("https://")):
+                base = "https://www.youthcenter.go.kr"
+            if not p.startswith("/"):
+                p = "/" + p
+            endpoint = f"{base}{p}"
+    
         query = dict(params or {})
-        query["openApiVlak"] = self.api_key
-
+    
+        # new policy endpoint
+        if "/go/ythip/getPlcy" in endpoint:
+            query.setdefault("apiKeyNm", self.api_key)
+        else:
+            # legacy endpoints
+            query.setdefault("openApiVlak", self.api_key)
+    
         attempt = 0
         last_error: Exception | None = None
-
+    
         while attempt < HTTP_MAX_RETRIES:
             attempt += 1
             self.rate_limiter.acquire()
@@ -106,5 +112,6 @@ class YouthApiClient:
                 if attempt >= HTTP_MAX_RETRIES:
                     break
                 time.sleep(HTTP_BACKOFF_SECONDS * attempt)
-
+    
         raise YouthApiError(str(last_error) if last_error else "unknown API error")
+
