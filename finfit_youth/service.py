@@ -220,8 +220,39 @@ class YouthDataService:
 
         if source == "policy":
             payload = self.client.get(endpoint, params=self._policy_detail_params(item_id))
+
         elif source == "content":
-            payload = self.client.get(endpoint, params=self._content_detail_params(item_id))
+            # content detail 400 대응: 파라미터 조합 fallback
+            attempts = [
+                {"pageType": "2", "pstSn": item_id, "rtnType": YOUTH_CONTENT_DEFAULT_RTN_TYPE},
+                {"pstSn": item_id, "rtnType": YOUTH_CONTENT_DEFAULT_RTN_TYPE},
+                {"pageType": "2", "pstSn": item_id},
+            ]
+
+            payload = None
+            last_exc: Exception | None = None
+
+            for params in attempts:
+                try:
+                    payload = self.client.get(endpoint, params=params)
+                    break
+                except Exception as exc:
+                    last_exc = exc
+
+            if payload is None:
+                # API 상세가 계속 실패하면 목록 snapshot raw 데이터로 폴백
+                snapshot = self.store.get("snapshot:content", max_age_seconds=None) or []
+                for row in snapshot:
+                    if str(row.get("id")) == str(item_id):
+                        detail = dict(row.get("raw") or {})
+                        detail["id"] = item_id
+                        detail["source"] = source
+                        detail["fallback"] = "snapshot_raw"
+                        self.store.set(cache_key, detail)
+                        return detail
+
+                raise last_exc if last_exc else YouthApiError("content detail failed")
+
         else:
             payload = self.client.get(endpoint, params={"id": item_id, "bizId": item_id})
 
