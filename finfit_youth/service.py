@@ -1,4 +1,4 @@
-from __future__ import annotations
+﻿from __future__ import annotations
 
 import logging
 from typing import Any, Callable
@@ -9,21 +9,22 @@ from .config import (
     CACHE_DB_PATH,
     CACHE_TTL_SECONDS,
     DETAIL_TTL_SECONDS,
+    YOUTH_CENTER_DEFAULT_PAGE_SIZE,
+    YOUTH_CENTER_DEFAULT_RTN_TYPE,
+    YOUTH_CENTER_URL,
     YOUTH_CONTENT_DEFAULT_PAGE_SIZE,
     YOUTH_CONTENT_DEFAULT_RTN_TYPE,
     YOUTH_CONTENT_URL,
     YOUTH_POLICY_DEFAULT_PAGE_SIZE,
     YOUTH_POLICY_DEFAULT_RTN_TYPE,
     YOUTH_POLICY_URL,
-    YOUTH_SPACE_DETAIL_PATH,
-    YOUTH_SPACE_LIST_PATH,
 )
 
 logger = logging.getLogger(__name__)
 
 SOURCE_MAP = {
     "policy": {"list": YOUTH_POLICY_URL, "detail": YOUTH_POLICY_URL},
-    "space": {"list": YOUTH_SPACE_LIST_PATH, "detail": YOUTH_SPACE_DETAIL_PATH},
+    "center": {"list": YOUTH_CENTER_URL, "detail": YOUTH_CENTER_URL},
     "content": {"list": YOUTH_CONTENT_URL, "detail": YOUTH_CONTENT_URL},
 }
 
@@ -62,10 +63,32 @@ class YouthDataService:
                 "raw": item,
             }
 
-        uid = str(item.get("bizId") or item.get("id") or item.get("idx") or "")
-        title = str(item.get("polyBizSjnm") or item.get("title") or item.get("name") or "")
-        summary = str(item.get("polyItcnCn") or item.get("summary") or item.get("desc") or "")
-        region = str(item.get("zipCd") or item.get("region") or item.get("rgnNm") or "")
+        if source == "center":
+            uid = str(item.get("cntrSn") or item.get("plcSn") or item.get("id") or "")
+            title = str(item.get("cntrNm") or item.get("title") or item.get("name") or "")
+            addr = str(item.get("cntrAddr") or "").strip()
+            daddr = str(item.get("cntrDaddr") or "").strip()
+            summary = (addr + " " + daddr).strip() or str(item.get("summary") or item.get("desc") or "")
+            region = str(
+                item.get("stdgCtpvCdNm")
+                or item.get("stdgSggCdNm")
+                or item.get("region")
+                or item.get("rgnNm")
+                or ""
+            )
+            return {
+                "id": uid,
+                "source": source,
+                "title": title,
+                "summary": summary,
+                "region": region,
+                "raw": item,
+            }
+
+        uid = str(item.get("id") or item.get("idx") or "")
+        title = str(item.get("title") or item.get("name") or "")
+        summary = str(item.get("summary") or item.get("desc") or "")
+        region = str(item.get("region") or item.get("rgnNm") or "")
         return {
             "id": uid,
             "source": source,
@@ -79,7 +102,7 @@ class YouthDataService:
         if isinstance(payload, list):
             return [x for x in payload if isinstance(x, dict)]
         if isinstance(payload, dict):
-            for key in ("youthContentList", "youthPolicyList", "result", "data", "list", "items"):
+            for key in ("youthCenterList", "youthContentList", "youthPolicyList", "result", "data", "list", "items"):
                 value = payload.get(key)
                 if isinstance(value, list):
                     return [x for x in value if isinstance(x, dict)]
@@ -122,6 +145,34 @@ class YouthDataService:
             "rtnType": YOUTH_CONTENT_DEFAULT_RTN_TYPE,
         }
 
+    def _center_list_params(
+        self,
+        page_num: int = 1,
+        ctpv_cd: str | None = None,
+        sgg_cd: str | None = None,
+        plc_type: str | None = None,
+    ) -> dict[str, Any]:
+        params: dict[str, Any] = {
+            "pageNum": page_num,
+            "pageSize": YOUTH_CENTER_DEFAULT_PAGE_SIZE,
+            "pageType": 1,
+            "rtnType": YOUTH_CENTER_DEFAULT_RTN_TYPE,
+        }
+        if ctpv_cd:
+            params["ctpvCd"] = ctpv_cd
+        if sgg_cd:
+            params["sggCd"] = sgg_cd
+        if plc_type:
+            params["plcType"] = plc_type
+        return params
+
+    def _center_detail_attempts(self, plc_sn: str) -> list[dict[str, Any]]:
+        return [
+            {"pageType": 2, "plcSn": plc_sn, "rtnType": YOUTH_CENTER_DEFAULT_RTN_TYPE},
+            {"plcSn": plc_sn, "rtnType": YOUTH_CENTER_DEFAULT_RTN_TYPE},
+            {"pageType": 2, "plcSn": plc_sn},
+        ]
+
     def _fetch_all_pages(
         self,
         endpoint: str,
@@ -155,13 +206,14 @@ class YouthDataService:
 
         if source == "policy":
             items = self._fetch_all_pages(endpoint, lambda p: self._policy_list_params(p))
+        elif source == "center":
+            items = self._fetch_all_pages(endpoint, lambda p: self._center_list_params(p))
         elif source == "content":
-            # 안정화: 콘텐츠 403 반복 상황에서 과도한 다중 페이지 호출 방지
+            # Stabilization: avoid excessive paging when content endpoint is unstable
             payload = self.client.get(endpoint, params=self._content_list_params(1))
             items = self._extract_list(payload)
         else:
-            payload = self.client.get(endpoint, params={"pageIndex": 1, "display": 100})
-            items = self._extract_list(payload)
+            raise YouthApiError(f"unsupported source: {source}")
 
         normalized = [self._normalize_item(source, x) for x in items]
         self.store.set(f"snapshot:{source}", normalized)
@@ -170,8 +222,7 @@ class YouthDataService:
 
     def sync_all(self) -> dict[str, Any]:
         results = []
-        # 안정화: space(legacy) 타임아웃으로 앱 헬스 영향 주는 반복 실패 차단
-        for source in ("policy", "content"):
+        for source in ("policy", "center", "content"):
             try:
                 results.append(self.sync_source(source))
             except Exception as exc:
@@ -222,7 +273,6 @@ class YouthDataService:
             payload = self.client.get(endpoint, params=self._policy_detail_params(item_id))
 
         elif source == "content":
-            # content detail 400 대응: 파라미터 조합 fallback
             attempts = [
                 {"pageType": "2", "pstSn": item_id, "rtnType": YOUTH_CONTENT_DEFAULT_RTN_TYPE},
                 {"pstSn": item_id, "rtnType": YOUTH_CONTENT_DEFAULT_RTN_TYPE},
@@ -240,7 +290,6 @@ class YouthDataService:
                     last_exc = exc
 
             if payload is None:
-                # API 상세가 계속 실패하면 목록 snapshot raw 데이터로 폴백
                 snapshot = self.store.get("snapshot:content", max_age_seconds=None) or []
                 for row in snapshot:
                     if str(row.get("id")) == str(item_id):
@@ -253,8 +302,32 @@ class YouthDataService:
 
                 raise last_exc if last_exc else YouthApiError("content detail failed")
 
+        elif source == "center":
+            payload = None
+            last_exc: Exception | None = None
+
+            for params in self._center_detail_attempts(item_id):
+                try:
+                    payload = self.client.get(endpoint, params=params)
+                    break
+                except Exception as exc:
+                    last_exc = exc
+
+            if payload is None:
+                snapshot = self.store.get("snapshot:center", max_age_seconds=None) or []
+                for row in snapshot:
+                    if str(row.get("id")) == str(item_id):
+                        detail = dict(row.get("raw") or {})
+                        detail["id"] = item_id
+                        detail["source"] = source
+                        detail["fallback"] = "snapshot_raw"
+                        self.store.set(cache_key, detail)
+                        return detail
+
+                raise last_exc if last_exc else YouthApiError("center detail failed")
+
         else:
-            payload = self.client.get(endpoint, params={"id": item_id, "bizId": item_id})
+            raise YouthApiError(f"unsupported source: {source}")
 
         detail = payload if isinstance(payload, dict) else {"raw": payload}
         detail["id"] = item_id

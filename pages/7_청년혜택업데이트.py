@@ -1,11 +1,11 @@
-import streamlit as st
+﻿import streamlit as st
 
-from finfit_youth.service import YouthDataService
 from finfit_youth.scheduler import ensure_scheduler_started
+from finfit_youth.service import YouthDataService
 
 st.set_page_config(page_title="청년 혜택", page_icon="🎁", layout="wide")
 
-st.title("🎁 온통청년 실시간 정책/공간/콘텐츠")
+st.title("🎁 온통청년 실시간 정책/청년센터/콘텐츠")
 st.caption("목록/검색은 캐시 데이터, 상세는 실시간 조회(단기 캐시) 방식으로 동작합니다.")
 
 service = YouthDataService()
@@ -15,8 +15,8 @@ if "youth_scheduler" not in st.session_state:
 left, right = st.columns([2, 1])
 
 with left:
-    source_label = st.selectbox("데이터 구분", ["정책", "공간", "콘텐츠"], index=0)
-    source_map = {"정책": "policy", "공간": "space", "콘텐츠": "content"}
+    source_label = st.selectbox("데이터 구분", ["정책", "청년센터", "콘텐츠"], index=0)
+    source_map = {"정책": "policy", "청년센터": "center", "콘텐츠": "content"}
     source = source_map[source_label]
 
     query = st.text_input("검색어", placeholder="예: 취업, 주거, 금융")
@@ -38,8 +38,10 @@ with left:
                 st.success(f"{source_label} 동기화 완료: {result['count']}건")
             except Exception as e:
                 msg = str(e)
-                if source == "content" and "403" in msg:
+                if source == "content" and ("403" in msg or "400" in msg):
                     st.error("동기화 실패: 콘텐츠 API 키 권한 또는 파라미터(apiKeyNm/pageType/pstSn/rtnType)를 확인해주세요.")
+                elif source == "center" and ("403" in msg or "400" in msg):
+                    st.error("동기화 실패: 청년센터 API 키 권한 또는 파라미터(apiKeyNm/pageType/plcSn/rtnType)를 확인해주세요.")
                 else:
                     st.error(f"동기화 실패: {e}")
                 st.stop()
@@ -47,7 +49,7 @@ with left:
 with right:
     st.info(
         "운영 안내\n\n"
-        "- 정책/콘텐츠 API 키를 각각 설정하세요(`YOUTH_API_KEY`, `YOUTH_CONTENT_API_KEY`)\n"
+        "- 정책/청년센터/콘텐츠 API 키를 각각 설정하세요(`YOUTH_API_KEY`, `YOUTH_CENTER_API_KEY`, `YOUTH_CONTENT_API_KEY`)\n"
         "- 30분 주기 자동 동기화\n"
         "- 외부 API 오류 시 직전 스냅샷 폴백"
     )
@@ -70,15 +72,35 @@ for item in items:
     summary = item.get("summary") or "요약 정보 없음"
     region = item.get("region") or "지역 정보 없음"
     item_id = item.get("id") or ""
+    raw = item.get("raw") if isinstance(item.get("raw"), dict) else {}
 
     with st.expander(f"{title} ({region})"):
         st.write(summary)
+
+        if source == "center":
+            tel = raw.get("cntrTelno") or "전화번호 정보 없음"
+            addr = " ".join(
+                x for x in [str(raw.get("cntrAddr") or "").strip(), str(raw.get("cntrDaddr") or "").strip()] if x
+            ) or "주소 정보 없음"
+            url = raw.get("cntrUrlAddr")
+
+            st.caption(f"전화: {tel}")
+            st.caption(f"주소: {addr}")
+            if url:
+                st.markdown(f"센터 URL: [{url}]({url})")
+
         if item_id:
             if st.button("상세 실시간 조회", key=f"detail-{source}-{item_id}"):
                 try:
                     detail = service.get_detail(source=source, item_id=item_id)
                     st.json(detail)
                 except Exception as e:
-                    st.error(f"상세 조회 실패: {e}")
+                    msg = str(e)
+                    if source == "content" and ("403" in msg or "400" in msg):
+                        st.error("상세 조회 실패: 콘텐츠 API 권한 또는 상세 파라미터(pstSn/pageType/rtnType)를 확인해주세요.")
+                    elif source == "center" and ("403" in msg or "400" in msg):
+                        st.error("상세 조회 실패: 청년센터 API 권한 또는 상세 파라미터(plcSn/pageType/rtnType)를 확인해주세요.")
+                    else:
+                        st.error(f"상세 조회 실패: {e}")
         else:
             st.caption("상세 조회를 위한 식별자가 없어 목록 데이터만 표시합니다.")

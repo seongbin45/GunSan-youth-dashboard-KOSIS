@@ -1,4 +1,4 @@
-import os
+﻿import os
 
 try:
     import streamlit as st
@@ -51,9 +51,10 @@ def _safe_path(v: str, default: str) -> str:
 
 YOUTH_API_BASE_URL = _safe_base_url(_secret("YOUTH_API_BASE_URL", "https://www.youthcenter.go.kr"))
 
-# policy / content keys are intentionally separated
+# Separate keys by source
 YOUTH_API_KEY = _secret("YOUTH_API_KEY", "")
 YOUTH_CONTENT_API_KEY = _secret("YOUTH_CONTENT_API_KEY", "")
+YOUTH_CENTER_API_KEY = _secret("YOUTH_CENTER_API_KEY", "")
 
 YOUTH_POLICY_URL = _safe_url(
     _secret("YOUTH_POLICY_URL", "https://www.youthcenter.go.kr/go/ythip/getPlcy"),
@@ -63,19 +64,22 @@ YOUTH_CONTENT_URL = _safe_url(
     _secret("YOUTH_CONTENT_URL", "https://www.youthcenter.go.kr/go/ythip/getContent"),
     "https://www.youthcenter.go.kr/go/ythip/getContent",
 )
+YOUTH_CENTER_URL = _safe_url(
+    _secret("YOUTH_CENTER_URL", "https://www.youthcenter.go.kr/go/ythip/getSpace"),
+    "https://www.youthcenter.go.kr/go/ythip/getSpace",
+)
 
 YOUTH_POLICY_DEFAULT_PAGE_SIZE = int(_secret("YOUTH_POLICY_DEFAULT_PAGE_SIZE", "100"))
 YOUTH_POLICY_DEFAULT_RTN_TYPE = _secret("YOUTH_POLICY_DEFAULT_RTN_TYPE", "json")
 YOUTH_CONTENT_DEFAULT_PAGE_SIZE = int(_secret("YOUTH_CONTENT_DEFAULT_PAGE_SIZE", "100"))
 YOUTH_CONTENT_DEFAULT_RTN_TYPE = _secret("YOUTH_CONTENT_DEFAULT_RTN_TYPE", "json")
+YOUTH_CENTER_DEFAULT_PAGE_SIZE = int(_secret("YOUTH_CENTER_DEFAULT_PAGE_SIZE", "100"))
+YOUTH_CENTER_DEFAULT_RTN_TYPE = _secret("YOUTH_CENTER_DEFAULT_RTN_TYPE", "json")
 
-# legacy paths (space uses legacy for now)
+# Legacy paths kept only for policy/content compatibility
 YOUTH_POLICY_LIST_PATH = _safe_path(_secret("YOUTH_POLICY_LIST_PATH", "/opi/youthPlcyList.do"), "/opi/youthPlcyList.do")
-YOUTH_SPACE_LIST_PATH = _safe_path(_secret("YOUTH_SPACE_LIST_PATH", "/opi/youthSpaceList.do"), "/opi/youthSpaceList.do")
 YOUTH_CONTENT_LIST_PATH = _safe_path(_secret("YOUTH_CONTENT_LIST_PATH", "/opi/youthContentList.do"), "/opi/youthContentList.do")
-
 YOUTH_POLICY_DETAIL_PATH = _safe_path(_secret("YOUTH_POLICY_DETAIL_PATH", "/opi/youthPlcyDtl.do"), "/opi/youthPlcyDtl.do")
-YOUTH_SPACE_DETAIL_PATH = _safe_path(_secret("YOUTH_SPACE_DETAIL_PATH", "/opi/youthSpaceDtl.do"), "/opi/youthSpaceDtl.do")
 YOUTH_CONTENT_DETAIL_PATH = _safe_path(_secret("YOUTH_CONTENT_DETAIL_PATH", "/opi/youthContentDtl.do"), "/opi/youthContentDtl.do")
 
 CACHE_DB_PATH = _secret("YOUTH_CACHE_DB_PATH", "youth_cache.db")

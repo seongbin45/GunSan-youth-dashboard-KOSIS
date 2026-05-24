@@ -1,4 +1,4 @@
-from __future__ import annotations
+﻿from __future__ import annotations
 
 import json
 import time
@@ -14,6 +14,7 @@ from .config import (
     HTTP_TIMEOUT_SECONDS,
     YOUTH_API_BASE_URL,
     YOUTH_API_KEY,
+    YOUTH_CENTER_API_KEY,
     YOUTH_CONTENT_API_KEY,
 )
 from .rate_limit import SimpleRateLimiter
@@ -88,6 +89,7 @@ class YouthApiClient:
 
         is_content = "/go/ythip/getContent" in endpoint
         is_policy = "/go/ythip/getPlcy" in endpoint
+        is_center = "/go/ythip/getSpace" in endpoint
 
         if is_content:
             content_key = (YOUTH_CONTENT_API_KEY or "").strip()
@@ -99,6 +101,12 @@ class YouthApiClient:
             if not self.api_key:
                 raise YouthApiError("YOUTH_API_KEY is not set")
             query.setdefault("apiKeyNm", self.api_key)
+            query.pop("openApiVlak", None)
+        elif is_center:
+            center_key = (YOUTH_CENTER_API_KEY or "").strip()
+            if not center_key:
+                raise YouthApiError("YOUTH_CENTER_API_KEY is not set")
+            query.setdefault("apiKeyNm", center_key)
             query.pop("openApiVlak", None)
         else:
             if not self.api_key:
@@ -115,7 +123,7 @@ class YouthApiClient:
                 response = requests.get(endpoint, params=query, timeout=HTTP_TIMEOUT_SECONDS)
 
                 if response.status_code == 403:
-                    key_mode = "apiKeyNm" if (is_content or is_policy) else "openApiVlak"
+                    key_mode = "apiKeyNm" if (is_content or is_policy or is_center) else "openApiVlak"
                     raise YouthApiError(f"request failed: 403 (endpoint={endpoint}, auth_param={key_mode})")
                 if response.status_code >= 500:
                     raise YouthApiError(f"upstream {response.status_code} (endpoint={endpoint})")
