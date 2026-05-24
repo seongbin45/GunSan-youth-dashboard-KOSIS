@@ -39,20 +39,41 @@ class YouthDataService:
             title = str(item.get("pstTtl") or item.get("title") or item.get("name") or "")
             summary = str(item.get("pstWholCn") or item.get("summary") or item.get("desc") or "")
             region = str(item.get("pstSeCd") or item.get("region") or item.get("rgnNm") or "")
-            return {"id": uid, "source": source, "title": title, "summary": summary, "region": region, "raw": item}
+            return {
+                "id": uid,
+                "source": source,
+                "title": title,
+                "summary": summary,
+                "region": region,
+                "raw": item,
+            }
 
         if source == "policy":
             uid = str(item.get("plcyNo") or item.get("id") or item.get("idx") or "")
             title = str(item.get("plcyNm") or item.get("title") or item.get("name") or "")
             summary = str(item.get("plcyExplnCn") or item.get("summary") or item.get("desc") or "")
             region = str(item.get("zipCd") or item.get("region") or item.get("rgnNm") or "")
-            return {"id": uid, "source": source, "title": title, "summary": summary, "region": region, "raw": item}
+            return {
+                "id": uid,
+                "source": source,
+                "title": title,
+                "summary": summary,
+                "region": region,
+                "raw": item,
+            }
 
         uid = str(item.get("bizId") or item.get("id") or item.get("idx") or "")
         title = str(item.get("polyBizSjnm") or item.get("title") or item.get("name") or "")
         summary = str(item.get("polyItcnCn") or item.get("summary") or item.get("desc") or "")
         region = str(item.get("zipCd") or item.get("region") or item.get("rgnNm") or "")
-        return {"id": uid, "source": source, "title": title, "summary": summary, "region": region, "raw": item}
+        return {
+            "id": uid,
+            "source": source,
+            "title": title,
+            "summary": summary,
+            "region": region,
+            "raw": item,
+        }
 
     def _extract_list(self, payload: Any) -> list[dict[str, Any]]:
         if isinstance(payload, list):
@@ -183,7 +204,13 @@ class YouthDataService:
         total = len(rows)
         start = max((page - 1) * size, 0)
         end = start + size
-        return {"source": source, "items": rows[start:end], "total": total, "page": page, "size": size}
+        return {
+            "source": source,
+            "items": rows[start:end],
+            "total": total,
+            "page": page,
+            "size": size,
+        }
 
     def get_detail(self, source: str, item_id: str) -> dict[str, Any]:
         cache_key = f"detail:{source}:{item_id}"
