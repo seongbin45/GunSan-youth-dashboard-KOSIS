@@ -156,7 +156,9 @@ class YouthDataService:
         if source == "policy":
             items = self._fetch_all_pages(endpoint, lambda p: self._policy_list_params(p))
         elif source == "content":
-            items = self._fetch_all_pages(endpoint, lambda p: self._content_list_params(p))
+            # 안정화: 콘텐츠 403 반복 상황에서 과도한 다중 페이지 호출 방지
+            payload = self.client.get(endpoint, params=self._content_list_params(1))
+            items = self._extract_list(payload)
         else:
             payload = self.client.get(endpoint, params={"pageIndex": 1, "display": 100})
             items = self._extract_list(payload)
@@ -168,8 +170,8 @@ class YouthDataService:
 
     def sync_all(self) -> dict[str, Any]:
         results = []
-        # keep source-level isolation so one source failure does not break others
-        for source in ("policy", "space", "content"):
+        # 안정화: space(legacy) 타임아웃으로 앱 헬스 영향 주는 반복 실패 차단
+        for source in ("policy", "content"):
             try:
                 results.append(self.sync_source(source))
             except Exception as exc:
