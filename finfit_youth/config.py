@@ -51,11 +51,10 @@ def _safe_path(v: str, default: str) -> str:
 
 YOUTH_API_BASE_URL = _safe_base_url(_secret("YOUTH_API_BASE_URL", "https://www.youthcenter.go.kr"))
 
-# Separate keys: policy and content
+# policy / content keys are intentionally separated
 YOUTH_API_KEY = _secret("YOUTH_API_KEY", "")
 YOUTH_CONTENT_API_KEY = _secret("YOUTH_CONTENT_API_KEY", "")
 
-# New API endpoints
 YOUTH_POLICY_URL = _safe_url(
     _secret("YOUTH_POLICY_URL", "https://www.youthcenter.go.kr/go/ythip/getPlcy"),
     "https://www.youthcenter.go.kr/go/ythip/getPlcy",
@@ -65,13 +64,12 @@ YOUTH_CONTENT_URL = _safe_url(
     "https://www.youthcenter.go.kr/go/ythip/getContent",
 )
 
-# New API defaults
 YOUTH_POLICY_DEFAULT_PAGE_SIZE = int(_secret("YOUTH_POLICY_DEFAULT_PAGE_SIZE", "100"))
 YOUTH_POLICY_DEFAULT_RTN_TYPE = _secret("YOUTH_POLICY_DEFAULT_RTN_TYPE", "json")
 YOUTH_CONTENT_DEFAULT_PAGE_SIZE = int(_secret("YOUTH_CONTENT_DEFAULT_PAGE_SIZE", "100"))
 YOUTH_CONTENT_DEFAULT_RTN_TYPE = _secret("YOUTH_CONTENT_DEFAULT_RTN_TYPE", "json")
 
-# Legacy paths (kept for compatibility, especially space source)
+# legacy paths (space uses legacy for now)
 YOUTH_POLICY_LIST_PATH = _safe_path(_secret("YOUTH_POLICY_LIST_PATH", "/opi/youthPlcyList.do"), "/opi/youthPlcyList.do")
 YOUTH_SPACE_LIST_PATH = _safe_path(_secret("YOUTH_SPACE_LIST_PATH", "/opi/youthSpaceList.do"), "/opi/youthSpaceList.do")
 YOUTH_CONTENT_LIST_PATH = _safe_path(_secret("YOUTH_CONTENT_LIST_PATH", "/opi/youthContentList.do"), "/opi/youthContentList.do")
