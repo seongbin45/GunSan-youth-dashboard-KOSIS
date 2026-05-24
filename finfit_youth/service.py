@@ -38,7 +38,7 @@ class YouthDataService:
             uid = str(item.get("pstSn") or item.get("id") or item.get("idx") or "")
             title = str(item.get("pstTtl") or item.get("title") or item.get("name") or "")
             summary = str(item.get("pstWholCn") or item.get("summary") or item.get("desc") or "")
-            region = str(item.get("pstSeCd") or item.get("region") or item.get("rgnNm") or "")
+            region = str(item.get("pstSeNm") or item.get("pstSeCd") or item.get("region") or item.get("rgnNm") or "")
             return {
                 "id": uid,
                 "source": source,
@@ -79,7 +79,7 @@ class YouthDataService:
         if isinstance(payload, list):
             return [x for x in payload if isinstance(x, dict)]
         if isinstance(payload, dict):
-            for key in ("result", "data", "list", "youthPolicyList", "youthContentList", "items"):
+            for key in ("youthContentList", "youthPolicyList", "result", "data", "list", "items"):
                 value = payload.get(key)
                 if isinstance(value, list):
                     return [x for x in value if isinstance(x, dict)]
@@ -140,7 +140,6 @@ class YouthDataService:
                 break
 
             all_items.extend(items)
-
             page_size = int(params.get("pageSize", 100))
             if len(items) < page_size:
                 break
@@ -169,6 +168,7 @@ class YouthDataService:
 
     def sync_all(self) -> dict[str, Any]:
         results = []
+        # keep source-level isolation so one source failure does not break others
         for source in ("policy", "space", "content"):
             try:
                 results.append(self.sync_source(source))
@@ -204,13 +204,7 @@ class YouthDataService:
         total = len(rows)
         start = max((page - 1) * size, 0)
         end = start + size
-        return {
-            "source": source,
-            "items": rows[start:end],
-            "total": total,
-            "page": page,
-            "size": size,
-        }
+        return {"source": source, "items": rows[start:end], "total": total, "page": page, "size": size}
 
     def get_detail(self, source: str, item_id: str) -> dict[str, Any]:
         cache_key = f"detail:{source}:{item_id}"
