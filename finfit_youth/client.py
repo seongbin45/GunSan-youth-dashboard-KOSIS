@@ -86,15 +86,20 @@ class YouthApiClient:
 
         query = dict(params or {})
 
-        if "/go/ythip/getContent" in endpoint:
+        is_content = "/go/ythip/getContent" in endpoint
+        is_policy = "/go/ythip/getPlcy" in endpoint
+
+        if is_content:
             content_key = (YOUTH_CONTENT_API_KEY or "").strip()
             if not content_key:
                 raise YouthApiError("YOUTH_CONTENT_API_KEY is not set")
             query.setdefault("apiKeyNm", content_key)
-        elif "/go/ythip/getPlcy" in endpoint:
+            query.pop("openApiVlak", None)
+        elif is_policy:
             if not self.api_key:
                 raise YouthApiError("YOUTH_API_KEY is not set")
             query.setdefault("apiKeyNm", self.api_key)
+            query.pop("openApiVlak", None)
         else:
             if not self.api_key:
                 raise YouthApiError("YOUTH_API_KEY is not set")
@@ -108,11 +113,17 @@ class YouthApiClient:
             self.rate_limiter.acquire()
             try:
                 response = requests.get(endpoint, params=query, timeout=HTTP_TIMEOUT_SECONDS)
+
+                if response.status_code == 403:
+                    key_mode = "apiKeyNm" if (is_content or is_policy) else "openApiVlak"
+                    raise YouthApiError(f"request failed: 403 (endpoint={endpoint}, auth_param={key_mode})")
                 if response.status_code >= 500:
-                    raise YouthApiError(f"upstream {response.status_code}")
+                    raise YouthApiError(f"upstream {response.status_code} (endpoint={endpoint})")
                 if response.status_code >= 400:
-                    raise YouthApiError(f"request failed: {response.status_code}")
+                    raise YouthApiError(f"request failed: {response.status_code} (endpoint={endpoint})")
+
                 return self._parse_response(response)
+
             except Exception as exc:
                 last_error = exc
                 if attempt >= HTTP_MAX_RETRIES:
