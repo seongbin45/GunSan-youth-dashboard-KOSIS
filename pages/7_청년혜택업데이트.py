@@ -1,12 +1,10 @@
 import streamlit as st
 
-from finfit_youth import config
-st.write("DEBUG BASE_URL:", repr(config.YOUTH_API_BASE_URL))
-st.write("DEBUG POLICY_PATH:", repr(config.YOUTH_POLICY_LIST_PATH))
 from finfit_youth.service import YouthDataService
 from finfit_youth.scheduler import ensure_scheduler_started
 
 st.set_page_config(page_title="청년 혜택", page_icon="🎁", layout="wide")
+
 st.title("🎁 온통청년 실시간 정책/공간/콘텐츠")
 st.caption("목록/검색은 캐시 데이터, 상세는 실시간 조회(단기 캐시) 방식으로 동작합니다.")
 
@@ -22,9 +20,15 @@ with left:
     source = source_map[source_label]
 
     query = st.text_input("검색어", placeholder="예: 취업, 주거, 금융")
-    page = st.number_input("페이지 개수", min_value=1, value=1, step=1)
+
     size_label = st.selectbox("목록 개수", [10, 20, 30, 50, 100, "Max"], index=2)
     size = 9999 if size_label == "Max" else int(size_label)
+
+    if size_label == "Max":
+        page = 1
+        st.caption("Max 선택 시 페이지는 1로 고정됩니다.")
+    else:
+        page = st.number_input("페이지", min_value=1, value=1, step=1)
 
     refresh_clicked = st.button("지금 동기화")
     if refresh_clicked:
@@ -33,13 +37,17 @@ with left:
                 result = service.sync_source(source)
                 st.success(f"{source_label} 동기화 완료: {result['count']}건")
             except Exception as e:
-                st.error(f"동기화 실패: {e}")
+                msg = str(e)
+                if source == "content" and "403" in msg:
+                    st.error("동기화 실패: 콘텐츠 API 키 권한 또는 파라미터(apiKeyNm/pageType/pstSn/rtnType)를 확인해주세요.")
+                else:
+                    st.error(f"동기화 실패: {e}")
                 st.stop()
 
 with right:
     st.info(
         "운영 안내\n\n"
-        "- API 키는 환경변수로 설정하세요(`YOUTH_API_KEY`)\n"
+        "- 정책/콘텐츠 API 키를 각각 설정하세요(`YOUTH_API_KEY`, `YOUTH_CONTENT_API_KEY`)\n"
         "- 30분 주기 자동 동기화\n"
         "- 외부 API 오류 시 직전 스냅샷 폴백"
     )
