@@ -612,14 +612,14 @@ def load_data():
        
     except Exception as e:
         # 오류 해결 2: 에러가 나도 tables 변수를 안전하게 사용하도록 구조를 통일했습니다.
-        pop_df = pd.DataFrame()
-        house_df = pd.DataFrame()
-        wage_df = pd.DataFrame()
-        health_df = pd.DataFrame()
-        difficulty_df = None
-        room_df = pd.DataFrame()
-        saving_df = pd.DataFrame() # [수정 사항] 누락되었던 saving_df를 여기에 추가하여 초기화합니다!
-        job_df = pd.DataFrame({"DB 내 실제 테이블 목록": tables})
+        pop_df = pd.DataFrame() # tables 변수를 활용한 pop_df 초기화
+        house_df = pd.DataFrame() # tables 변수를 활용한 house_df 초기화
+        wage_df = pd.DataFrame() # tables 변수를 활용한 wage_df 초기화
+        health_df = pd.DataFrame() # tables 변수를 활용한 health_df 초기화
+        difficulty_df = None # tables 변수를 활용한 difficulty_df 초기화
+        room_df = pd.DataFrame() # tables 변수를 활용한 room_df 초기화
+        saving_df = pd.DataFrame() # [수정 사항] 기존에 누락되었던 saving_df를 여기에 추가하여 초기화합니다!
+        job_df = pd.DataFrame({"DB 내 실제 테이블 목록": tables}) # tables 변수를 활용한 job_df 초기화
 
     conn.close() 
     # 🌟 함수가 끝날 때 총 8개의 덩어리를 밖으로 뱉어줍니다!
