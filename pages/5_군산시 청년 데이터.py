@@ -63,15 +63,16 @@ def load_data():
         health_df = pd.DataFrame()
         difficulty_df = None
         room_df = pd.DataFrame()
+        saving_df = pd.DataFrame()
         job_df = pd.DataFrame({"DB 내 실제 테이블 목록": tables})
 
     conn.close() 
     # 🌟 함수가 끝날 때 총 8개의 덩어리를 밖으로 뱉어줍니다!
-    return pop_df, house_df, wage_df, health_df, difficulty_df, room_df, job_df, saving_df
+    return pop_df, house_df, wage_df, health_df, difficulty_df, room_df, saving_df, job_df
 
 try:
     # 🌟 밖에서도 8개의 변수로 똑같이 쪼개서 받아줍니다!
-    pop_df, house_df, wage_df, health_df, difficulty_df, room_df, job_df, saving_df = load_data()
+    pop_df, house_df, wage_df, health_df, difficulty_df, room_df, saving_df, job_df = load_data()
     
     # 📌 1 & 2번 영역
     col1, col2 = st.columns(2)
