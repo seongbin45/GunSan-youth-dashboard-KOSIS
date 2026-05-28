@@ -768,7 +768,7 @@ try:
             st.plotly_chart(fig6, width='stretch', key="fig6")
             
             # 6. 원본 데이터도 접이식(Expander)으로 깔끔하게 넣어주기
-            with st.expander("🔍 군산시 원본 데이터 표 보기"):
+            with st.expander("🔍 군산시 데이터 표 보기"):
                 st.dataframe(gunsan_data[valid_cols], width='stretch')
                 
         else:
@@ -781,10 +781,9 @@ try:
 
 
     # 📌 6-1번 영역 (전북특별자치도 취업의 어려움 사회조사 - 원본 데이터)
-    st.write("---")
     st.subheader("🎯 6. 전북특별자치도 청년 취업의 어려움 (2022)")
 
-    with st.expander("📋 전북특별자치도 취업의 어려움 사회조사 (2022)"):
+    with st.expander("🔍 전체 원본 데이터 표 보기"):
         if difficulty_df is not None:
             st.info("💡 공공데이터 포털에서 직접 수집하여 등록한 로컬 DB 기반 데이터입니다.")
             # 데이터프레임을 스트림릿 화면에 깔끔한 표로 보여줍니다.
