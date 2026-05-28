@@ -26,9 +26,9 @@ with left:
 
     if size_label == "Max":
         page = 1
-        st.caption("Max 선택 시 페이지는 1로 고정됩니다.")
+        st.caption("Max 선택 시 페이지 번호는 1로 고정됩니다.")
     else:
-        page = st.number_input("페이지", min_value=1, value=1, step=1)
+        page = st.number_input("현재 화면의 페이지 번호", min_value=1, value=1, step=1)
 
     refresh_clicked = st.button("지금 동기화")
     if refresh_clicked:
