@@ -781,8 +781,6 @@ try:
 
 
     # 📌 6-1번 영역 (전북특별자치도 취업의 어려움 사회조사 - 원본 데이터)
-    st.subheader("🎯 6. 전북특별자치도 청년 취업의 어려움 (2022)")
-
     with st.expander("🔍 전체 원본 데이터 표 보기"):
         if difficulty_df is not None:
             st.info("💡 공공데이터 포털에서 직접 수집하여 등록한 로컬 DB 기반 데이터입니다.")
