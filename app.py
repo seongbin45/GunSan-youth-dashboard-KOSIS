@@ -38,7 +38,7 @@ with col1:
     st.subheader("📋 기본 정보 입력")
     income = st.number_input(
         "월 소득 / 용돈 (원)",
-        min_value=1000, max_value=10000000,
+        min_value=10000, max_value=10000000,
         value=st.session_state.income, step=100000,
         format="%d"
     )
