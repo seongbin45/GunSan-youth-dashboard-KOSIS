@@ -90,7 +90,7 @@ try:
         fig1 = px.pie(pie_data, values='인구수', names='구분', 
                       title="군산시 전체 인구 대비 청년 비율",
                       color_discrete_sequence=['#FF6B6B', '#CCD1D1'])
-        st.plotly_chart(fig1, use_container_width=True, key="fig1")
+        st.plotly_chart(fig1, width='stretch', key="fig1")
 
     with col2:
         st.subheader("🏠 2. 청년 주택 소유 비율 (%)")
@@ -105,7 +105,7 @@ try:
                       labels={'C1_NM': '구분', 'DT': '소유 비율(%)'},
                       color='C1_NM', color_discrete_sequence=px.colors.qualitative.Pastel)
         fig2.update_traces(texttemplate='%{text}%', textposition='outside')
-        st.plotly_chart(fig2, use_container_width=True, key="fig2")
+        st.plotly_chart(fig2, width='stretch', key="fig2")
 
     st.write("---")
     
@@ -122,7 +122,7 @@ try:
                       title=f"{latest_wage_year}년 소득 구간별 인구",
                       labels={'C2_NM': '소득 구간', 'DT': '인구(천명)'},
                       barmode='group')
-        st.plotly_chart(fig3, use_container_width=True, key="fig3")
+        st.plotly_chart(fig3, width='stretch', key="fig3")
 
     with col4:
         st.subheader("🍺 4. 청년 건강 지표 (%)")
@@ -134,7 +134,7 @@ try:
                       title=f"{latest_health_year}년 생활 건강 지표 비교",
                       labels={'C2_NM': '지표 구분', 'DT': '비율(%)'},
                       barmode='group', color_discrete_sequence=px.colors.qualitative.Set2)
-        st.plotly_chart(fig4, use_container_width=True, key="fig4")
+        st.plotly_chart(fig4, width='stretch', key="fig4")
 
     # 📌 5번 영역
     st.write("---")
@@ -157,7 +157,7 @@ try:
                   labels={'지표': '지표 종류', 'DT': '수치(%)'},
                   color='지표', color_discrete_sequence=px.colors.qualitative.Safe)
     fig5.update_traces(texttemplate='%{text}%', textposition='outside')
-    st.plotly_chart(fig5, use_container_width=True, key="fig5")
+    st.plotly_chart(fig5, width='stretch', key="fig5")
 
     # 📌 6번 영역 (취업의 어려움)
     st.write("---")
@@ -205,16 +205,16 @@ try:
             fig6.update_traces(texttemplate='%{text}%', textposition='outside')
             fig6.update_layout(yaxis={'categoryorder':'total ascending'})  # 높은 순으로 정렬
             
-            st.plotly_chart(fig6, use_container_width=True, key="fig6")
+            st.plotly_chart(fig6, width='stretch', key="fig6")
             
             # 6. 원본 데이터도 접이식(Expander)으로 깔끔하게 넣어주기
             with st.expander("🔍 군산시 원본 데이터 표 보기"):
-                st.dataframe(gunsan_data[valid_cols], use_container_width=True)
+                st.dataframe(gunsan_data[valid_cols], width='stretch')
                 
         else:
             st.warning("⚠️ 데이터 내에서 '군산시' 행을 찾지 못했습니다. 원본 표의 '특성별2' 컬럼에 '군산시'가 맞는지 확인해 주세요.")
             # 찾지 못했을 땐 그냥 원본 표 보여주기
-            st.dataframe(difficulty_df, use_container_width=True)
+            st.dataframe(difficulty_df, width='stretch')
             
     else:
         st.warning("⚠️ DB에서 '취업의 어려움 사회조사' 테이블을 불러오지 못했습니다.")
@@ -265,13 +265,13 @@ try:
             )
             fig7.update_traces(texttemplate='%{text}개', textposition='outside')
             fig7.update_layout(yaxis={'categoryorder':'total ascending'})
-            st.plotly_chart(fig7, use_container_width=True, key="fig7")
+            st.plotly_chart(fig7, width='stretch', key="fig7")
             
         else:
             st.warning("⚠️ 동네를 구분할 수 있는 컬럼을 찾지 못했습니다.")
             
         with st.expander("🔍 군산시 원룸 및 오피스텔 원본 표 보기"):
-            st.dataframe(room_df, use_container_width=True)
+            st.dataframe(room_df, width='stretch')
     else:
         st.warning("⚠️ DB에서 '원룸 및 오피스텔 현황' 테이블을 불러오지 못했습니다.")
 
@@ -317,11 +317,11 @@ try:
             
             # 차트 안팎으로 퍼센트와 이름 예쁘게 표시
             fig8.update_traces(textinfo='percent+label', textfont_size=15, pull=[0.05, 0])
-            st.plotly_chart(fig8, use_container_width=True, key="fig8")
+            st.plotly_chart(fig8, width='stretch', key="fig8")
             
             # 표도 숨겨서 놔두기
             with st.expander("🔍 연령별 취업자 원본 표 보기"):
-                st.dataframe(recent_job_df, use_container_width=True)
+                st.dataframe(recent_job_df, width='stretch')
                 
         except Exception as e:
             st.error(f"데이터를 차트로 그리는 중 문제가 발생했습니다: {e}")
@@ -364,11 +364,11 @@ try:
             
             # 원본 데이터도 하단에 얌전히 묻어두기
             with st.expander("🔍 원본 데이터 표 보기"):
-                st.dataframe(saving_df, use_container_width=True)
+                st.dataframe(saving_df, width='stretch')
                 
         except Exception as e:
             st.error(f"데이터를 불러오는 중 문제가 발생했습니다: {e}")
-            st.dataframe(saving_df, use_container_width=True)
+            st.dataframe(saving_df, width='stretch')
             
     else:
         st.warning("⚠️ DB에서 '청년도약계좌' 테이블을 불러오지 못했습니다.")
