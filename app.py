@@ -696,7 +696,7 @@ try:
         st.plotly_chart(fig4, width='stretch', key="fig4")
 
 
-     st.write("---")
+    st.write("---")
 
     st.subheader("📊 5. 군산시 청년(18~39세) 생활 지표 요약")
 
