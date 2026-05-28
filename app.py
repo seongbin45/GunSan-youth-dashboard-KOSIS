@@ -618,11 +618,12 @@ def load_data():
         health_df = pd.DataFrame()
         difficulty_df = None
         room_df = pd.DataFrame()
+        saving_df = pd.DataFrame() # [수정 사항] 누락되었던 saving_df를 여기에 추가하여 초기화합니다!
         job_df = pd.DataFrame({"DB 내 실제 테이블 목록": tables})
 
     conn.close() 
     # 🌟 함수가 끝날 때 총 8개의 덩어리를 밖으로 뱉어줍니다!
-    return pop_df, house_df, wage_df, health_df, difficulty_df, room_df, job_df, saving_df
+    return pop_df, house_df, wage_df, health_df, difficulty_df, room_df, saving_df, job_df
 
 try:
     # 🌟 밖에서도 8개의 변수로 똑같이 쪼개서 받아줍니다!
