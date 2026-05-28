@@ -21,7 +21,7 @@ with left:
 
     query = st.text_input("검색어", placeholder="예: 취업, 주거, 금융")
 
-    size_label = st.selectbox("목록 개수", [10, 20, 30, 50, 100, "Max"], index=2)
+    size_label = st.selectbox("한 화면에 표시할 목록 개수", [10, 20, 30, 50, 100, "Max"], index=2)
     size = 9999 if size_label == "Max" else int(size_label)
 
     if size_label == "Max":
