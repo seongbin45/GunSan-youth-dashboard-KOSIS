@@ -822,6 +822,20 @@ try:
     else:
         st.warning("⚠️ DB에서 '취업의 어려움 사회조사' 테이블을 불러오지 못했습니다.")
 
+
+    
+    st.write("---")
+    st.subheader("📋 6. 전북특별자치도 취업의 어려움 사회조사")
+    
+    if difficulty_df is not None:
+        st.info("💡 공공데이터 포털에서 직접 수집하여 등록한 로컬 DB 기반 데이터입니다.")
+        # 데이터프레임을 스트림릿 화면에 깔끔한 표로 보여줍니다.
+        st.dataframe(difficulty_df, use_container_width=True)
+    else:
+        st.warning("⚠️ DB에서 '취업의 어려움 사회조사' 테이블을 불러오지 못했습니다. 테이블 명칭을 확인해 주세요.")
+
+    
+
 # 📌 7번 영역 (원룸 및 오피스텔 분포 - 정밀화 버전)
     st.write("---")
     st.subheader("🏠 7. 군산시 읍면동별 원룸 및 오피스텔 분포")
