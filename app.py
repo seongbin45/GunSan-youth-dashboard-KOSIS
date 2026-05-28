@@ -889,23 +889,7 @@ try:
     else:
         st.warning("⚠️ DB에서 '연령별취업자' 테이블을 불러오지 못했습니다.")
 
-# 📌 9. 군산시 청년도약계좌 가입 현황
-    st.write("---")
-    st.subheader("💰 9. 군산시 청년도약계좌 가입 현황")
-    
-    if 'saving_df' in locals() and saving_df is not None and not saving_df.empty:
-        # DB에 테이블을 못 찾았을 때의 방어 코드
-        if "DB 내 실제 테이블 목록" in saving_df.columns:
-            st.warning("⚠️ '청년도약계좌' 관련 테이블을 찾지 못했습니다. 아래 목록 중 진짜 이름이 무엇인지 확인해 주세요!")
-            st.dataframe(saving_df, use_container_width=True)
-        else:
-            st.info("💡 군산시 청년들의 자산 형성을 돕는 청년도약계좌 가입 현황 데이터입니다.")
-            with st.expander("🔍 청년도약계좌 원본 표 보기"):
-                st.dataframe(saving_df, use_container_width=True)
-            st.success("👍 9번 데이터도 성공적으로 로드되었습니다! 표의 형태를 확인한 후 알맞은 그래프로 바꿔드릴게요.")
-    else:
-        st.warning("⚠️ DB에서 '청년도약계좌' 테이블을 불러오지 못했습니다.")
-    
+
 # 📌 9. 군산시 청년도약계좌 취급은행 현황 (최종 UI 개선 버전)
     st.write("---")
     st.subheader("💰 9. 청년도약계좌 취급은행 현황")
