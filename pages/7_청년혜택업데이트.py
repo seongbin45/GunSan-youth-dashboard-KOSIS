@@ -26,7 +26,7 @@ with left:
 
     if size_label == "Max":
         page = 1
-        st.caption("Max 선택 시 페이지 번호는 1개로 고정됩니다.")
+        st.caption("Max 선택 시 페이지는 1개로 고정됩니다.")
     else:
         page = st.number_input("페이지 번호", min_value=1, value=1, step=1)
 
