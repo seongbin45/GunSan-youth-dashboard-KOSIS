@@ -695,6 +695,50 @@ try:
                       barmode='group', color_discrete_sequence=px.colors.qualitative.Set2)
         st.plotly_chart(fig4, width='stretch', key="fig4")
 
+
+     st.write("---")
+
+    st.subheader("📊 5. 군산시 청년(18~39세) 생활 지표 요약")
+
+    
+
+    house_trend = house_df[(house_df['C1_NM'].str.contains("18~39세")) & (house_df['C2_NM'].str.contains("비율"))]
+
+    health_trend = health_df[health_df['C1_NM'].str.contains("18~39세")]
+
+
+
+    house_trend['지표'] = '주택 소유 비율'
+
+    health_trend['지표'] = health_trend['C2_NM']
+
+    
+
+    combined_summary = pd.concat([
+
+        house_trend[['DT', '지표']],
+
+        health_trend[['DT', '지표']]
+
+    ])
+
+    combined_summary['DT'] = pd.to_numeric(combined_summary['DT'])
+
+
+
+    fig5 = px.bar(combined_summary, x='지표', y='DT', text='DT',
+
+                  title="2024년 군산시 청년 주요 지표 모아보기",
+
+                  labels={'지표': '지표 종류', 'DT': '수치(%)'},
+
+                  color='지표', color_discrete_sequence=px.colors.qualitative.Safe)
+
+    fig5.update_traces(texttemplate='%{text}%', textposition='outside')
+
+    st.plotly_chart(fig5, use_container_width=True)
+
+
     # 📌 5번 영역
     st.write("---")
     st.subheader("📊 5. 군산시 청년(18~39세) 생활 지표 요약")
