@@ -627,7 +627,7 @@ def load_data():
 
 try:
     # 🌟 밖에서도 8개의 변수로 똑같이 쪼개서 받아줍니다!
-    pop_df, house_df, wage_df, health_df, difficulty_df, room_df, job_df, saving_df = load_data()
+    pop_df, house_df, wage_df, health_df, difficulty_df, room_df, saving_df, job_df = load_data()
     
     # 📌 1 & 2번 영역
     col1, col2 = st.columns(2)
