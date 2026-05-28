@@ -696,49 +696,6 @@ try:
         st.plotly_chart(fig4, width='stretch', key="fig4")
 
 
-    st.write("---")
-
-    st.subheader("📊 5. 군산시 청년(18~39세) 생활 지표 요약")
-
-    
-
-    house_trend = house_df[(house_df['C1_NM'].str.contains("18~39세")) & (house_df['C2_NM'].str.contains("비율"))]
-
-    health_trend = health_df[health_df['C1_NM'].str.contains("18~39세")]
-
-
-
-    house_trend['지표'] = '주택 소유 비율'
-
-    health_trend['지표'] = health_trend['C2_NM']
-
-    
-
-    combined_summary = pd.concat([
-
-        house_trend[['DT', '지표']],
-
-        health_trend[['DT', '지표']]
-
-    ])
-
-    combined_summary['DT'] = pd.to_numeric(combined_summary['DT'])
-
-
-
-    fig5 = px.bar(combined_summary, x='지표', y='DT', text='DT',
-
-                  title="2024년 군산시 청년 주요 지표 모아보기",
-
-                  labels={'지표': '지표 종류', 'DT': '수치(%)'},
-
-                  color='지표', color_discrete_sequence=px.colors.qualitative.Safe)
-
-    fig5.update_traces(texttemplate='%{text}%', textposition='outside')
-
-    st.plotly_chart(fig5, use_container_width=True)
-
-
     # 📌 5번 영역
     st.write("---")
     st.subheader("📊 5. 군산시 청년(18~39세) 생활 지표 요약")
@@ -823,19 +780,20 @@ try:
         st.warning("⚠️ DB에서 '취업의 어려움 사회조사' 테이블을 불러오지 못했습니다.")
 
 
-# 📌 6-1번 영역 (전북특별자치도 취업의 어려움 사회조사 - 원본 데이터)
+    # 📌 6-1번 영역 (전북특별자치도 취업의 어려움 사회조사 - 원본 데이터)
     st.write("---")
-    st.subheader("📋 전북특별자치도 취업의 어려움 사회조사")
-    
-    if difficulty_df is not None:
-        st.info("💡 공공데이터 포털에서 직접 수집하여 등록한 로컬 DB 기반 데이터입니다.")
-        # 데이터프레임을 스트림릿 화면에 깔끔한 표로 보여줍니다.
-        st.dataframe(difficulty_df, width='stretch')
-    else:
-        st.warning("⚠️ DB에서 '취업의 어려움 사회조사' 테이블을 불러오지 못했습니다. 테이블 명칭을 확인해 주세요.")
+    st.subheader("📋 전북특별자치도 취업의 어려움 사회조사 (2022)")
+
+    with st.expander("📌 청년미래적금 (중앙정부 - 2026년 신설)"):
+        if difficulty_df is not None:
+            st.info("💡 공공데이터 포털에서 직접 수집하여 등록한 로컬 DB 기반 데이터입니다.")
+            # 데이터프레임을 스트림릿 화면에 깔끔한 표로 보여줍니다.
+            st.dataframe(difficulty_df, width='stretch')
+        else:
+            st.warning("⚠️ DB에서 '취업의 어려움 사회조사' 테이블을 불러오지 못했습니다. 테이블 명칭을 확인해 주세요.")
 
 
-# 📌 7번 영역 (원룸 및 오피스텔 분포 - 정밀화 버전)
+    # 📌 7번 영역 (원룸 및 오피스텔 분포 - 정밀화 버전)
     st.write("---")
     st.subheader("🏠 7. 군산시 읍면동별 원룸 및 오피스텔 분포")
     
