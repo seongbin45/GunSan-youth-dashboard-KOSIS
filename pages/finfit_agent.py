@@ -205,6 +205,28 @@ def run_google(user_message, key, model="gemini-1.5-flash"):
 TOOL_LABELS={"check_benefit_eligibility":"🔍 혜택 자격 확인","get_gunsan_youth_stats":"📊 군산 통계 조회","calculate_savings_plan":"💰 저축 계획 계산"}
 
 with st.sidebar:
+    # --- [여기에 임시 테스트 코드 추가] ---
+    if st.sidebar.button("🔍 내 구글 API 모델 목록 확인하기"):
+        import google.generativeai as genai
+        try:
+            # Streamlit secrets에서 키를 가져와 설정합니다.
+            genai.configure(api_key=st.secrets["GOOGLE_API_KEY"])
+            
+            available_models = []
+            for m in genai.list_models():
+                # 텍스트 생성(generateContent)을 지원하는 모델만 걸러냅니다.
+                if 'generateContent' in m.supported_generation_methods:
+                    # 모델 이름에서 'models/' 부분을 제외하고 깔끔하게 저장합니다.
+                    clean_name = m.name.replace('models/', '')
+                    available_models.append(clean_name)
+            
+            # 사이드바에 화면에 목록을 출력합니다.
+            st.sidebar.success("사용 가능한 모델 목록:")
+            st.sidebar.write(available_models)
+        except Exception as e:
+            st.sidebar.error(f"목록을 불러오는 중 오류 발생: {e}")
+    # ----------------------------------
+    
     st.header("⚙️ 설정")
     provider_options=[]
     if GOOGLE_OK and KEYS["Google"]:        provider_options.append("🔵 Google (Gemini)")
