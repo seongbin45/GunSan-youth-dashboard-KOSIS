@@ -230,7 +230,7 @@ with st.sidebar:
     if "OpenAI" in provider:
         model_selected=st.selectbox("모델",["gpt-4o","gpt-4o-mini","gpt-4-turbo"])
     elif "Google" in provider:
-    model_selected=st.selectbox("모델",["gemini-1.5-pro-latest","gemini-2.0-flash-exp","gemini-1.5-flash-latest"])
+        model_selected=st.selectbox("모델",["gemini-1.5-pro-latest","gemini-2.0-flash-exp","gemini-1.5-flash-latest"])
 
     st.divider()
     st.markdown("**🔧 사용 가능한 도구**")
