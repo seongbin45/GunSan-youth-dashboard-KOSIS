@@ -207,14 +207,14 @@ TOOL_LABELS={"check_benefit_eligibility":"🔍 혜택 자격 확인","get_gunsan
 with st.sidebar:
     st.header("⚙️ 설정")
     provider_options=[]
-    if ANTHROPIC_OK and KEYS["Anthropic"]: provider_options.append("🟣 Anthropic (Claude)")
-    if OPENAI_OK and KEYS["OpenAI"]:       provider_options.append("🟢 OpenAI (GPT-4o)")
     if GOOGLE_OK and KEYS["Google"]:        provider_options.append("🔵 Google (Gemini)")
-
+    if OPENAI_OK and KEYS["OpenAI"]:       provider_options.append("🟢 OpenAI (GPT-4o)")
+    if ANTHROPIC_OK and KEYS["Anthropic"]: provider_options.append("🟣 Anthropic (Claude)")
+    
     missing=[]
-    if not (ANTHROPIC_OK and KEYS["Anthropic"]): missing.append("ANTHROPIC_API_KEY")
-    if not (OPENAI_OK and KEYS["OpenAI"]):        missing.append("OPENAI_API_KEY")
     if not (GOOGLE_OK and KEYS["Google"]):         missing.append("GOOGLE_API_KEY")
+    if not (OPENAI_OK and KEYS["OpenAI"]):        missing.append("OPENAI_API_KEY")
+    if not (ANTHROPIC_OK and KEYS["Anthropic"]): missing.append("ANTHROPIC_API_KEY")
     if missing:
         with st.expander("⚠️ 미설정 키"):
             st.markdown("아래 키가 `secrets.toml`에 없습니다:")
