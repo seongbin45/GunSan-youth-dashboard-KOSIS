@@ -298,6 +298,10 @@ if user_input:
     with st.chat_message("assistant"):
         with st.spinner(f"🤖 {provider.split('(')[0].strip()} Agent 분석 중..."):
             try:
+                if "Anthropic" in provider:
+                    answer,steps=run_anthropic(user_input,KEYS["Anthropic"])
+                elif "OpenAI" in provider:
+                    answer,steps=run_openai(user_input,KEYS["OpenAI"],model_selected)
                 elif "Google" in provider:
                     answer,steps=run_google(user_input,KEYS["Google"],model_selected)
                 else:
