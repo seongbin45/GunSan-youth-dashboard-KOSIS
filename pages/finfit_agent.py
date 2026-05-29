@@ -183,7 +183,7 @@ def run_openai(user_message,key,model="gpt-4o"):
         else:
             return choice.message.content or "",tool_steps
 
-def run_google(user_message, key, model="gemini-3.5-flash"):
+def run_google(user_message, key, model="gemini-1.5-flash"):
     _genai.configure(api_key=key)
     gem_model=_genai.GenerativeModel(model_name=model,system_instruction=SYSTEM_PROMPT,tools=[_genai.protos.Tool(function_declarations=_google_declarations())])
     chat=gem_model.start_chat(enable_automatic_function_calling=False)
@@ -230,7 +230,7 @@ with st.sidebar:
     if "OpenAI" in provider:
         model_selected=st.selectbox("모델",["gpt-4o","gpt-4o-mini","gpt-4-turbo"])
     elif "Google" in provider:
-        model_selected=st.selectbox("모델", ["gemini-3.5-flash", "gemini-3.1-pro", "gemini-2.5-flash"])
+        model_selected = st.selectbox("모델", ["gemini-1.5-flash", "gemini-1.5-pro", "gemini-2.0-flash-exp"])
 
     st.divider()
     st.markdown("**🔧 사용 가능한 도구**")
