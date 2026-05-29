@@ -3,7 +3,7 @@ import pandas as pd
 import sqlite3  # 👈 이 녀석이 빠져 있어서 에러가 났던 겁니다!
 import plotly.express as px
 
-st.set_page_config(page_title="청년 머니 플래너", page_icon="💰", layout="wide")
+st.set_page_config(page_title="FinFit", page_icon="💰", layout="wide")
 
 # ── 세션 초기화 ──────────────────────────────────────────────────────────────
 if "income" not in st.session_state:
