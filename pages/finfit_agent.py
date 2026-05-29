@@ -247,6 +247,7 @@ with st.sidebar:
         st.rerun()
 
     st.divider()
+    st.markdown("**👨‍💻 관리자 도구**")
     # --- [여기에 임시 테스트 코드 추가] ---
     if st.sidebar.button("🔍 [개발 유지 보수] 현시점 사용 가능한 구글 API 모델 목록 확인하기"):
         import google.generativeai as genai
