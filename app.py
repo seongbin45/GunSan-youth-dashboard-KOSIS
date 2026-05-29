@@ -28,8 +28,8 @@ LEVELS = {
 st.session_state.LEVELS = LEVELS
 
 # ── 메인 화면 ─────────────────────────────────────────────────────────────────
-st.title("💰 청년 머니 플래너")
-st.markdown("#### 사회초년생을 위한 저축·소비 습관 계획 서비스")
+st.title("💰 FinFit")
+st.markdown("#### 금융 미경험 청년을 위한 AI 기반 정부혜택 자동 매칭 플랫폼")
 st.divider()
 
 col1, col2 = st.columns([1, 1], gap="large")
