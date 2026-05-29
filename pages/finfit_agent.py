@@ -248,7 +248,7 @@ with st.sidebar:
 
     st.divider()
     # --- [여기에 임시 테스트 코드 추가] ---
-    if st.sidebar.button("🔍 [개발 유지 보수를 위한] 내 구글 API 모델 목록 확인하기"):
+    if st.sidebar.button("🔍 [개발 유지 보수] 내 구글 API 모델 목록 확인하기"):
         import google.generativeai as genai
         try:
             # Streamlit secrets에서 키를 가져와 설정합니다.
