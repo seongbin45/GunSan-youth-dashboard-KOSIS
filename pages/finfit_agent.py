@@ -246,6 +246,7 @@ with st.sidebar:
         st.session_state["chat_history"]=[]
         st.rerun()
 
+    st.divider()
     # --- [여기에 임시 테스트 코드 추가] ---
     if st.sidebar.button("🔍 [개발 유지 보수를 위한] 내 구글 API 모델 목록 확인하기"):
         import google.generativeai as genai
@@ -267,6 +268,7 @@ with st.sidebar:
         except Exception as e:
             st.sidebar.error(f"목록을 불러오는 중 오류 발생: {e}")
     # ----------------------------------
+    st.divider()
 
 if "chat_history" not in st.session_state:
     st.session_state.chat_history=[]
