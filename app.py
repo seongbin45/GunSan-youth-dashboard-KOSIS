@@ -28,7 +28,7 @@ LEVELS = {
 st.session_state.LEVELS = LEVELS
 
 # ── 메인 화면 ─────────────────────────────────────────────────────────────────
-st.title("💰 FinFit - 머니 플레너")
+st.title("💰 FinFit - 머니 플래너")
 st.markdown("#### 금융 미경험 청년을 위한 AI 기반 정부혜택 자동 매칭 플랫폼")
 st.divider()
 
