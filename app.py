@@ -219,7 +219,7 @@ with col1:
     # 카드 전체를 클릭하면 해당 페이지로 이동하도록 <a> 태그로 감싸기
     # 디자인 유지를 위해 스타일(텍스트 데코레이션 제거, 색상 유지)을 부여합니다.
     st.markdown("""
-    <a href="pages/4_군산시민_맞춤_혜택_찾기" target="_self" style="text-decoration: none; color: inherit;">
+    <a href="pages/4_군산시민_맞춤_혜택_찾기.py" target="_self" style="text-decoration: none; color: inherit;">
         <div class="feature-card card-red">
             <div class="card-icon">🎁</div>
             <div class="card-title">내 혜택 찾기</div>
@@ -245,7 +245,7 @@ with col1:
 with col2:
     # col2도 똑같이 전체 클릭 기능을 넣고 싶다면 아래처럼 <a> 태그로 감싸주면 됩니다.
     st.markdown("""
-    <a href="pages/6_금융용어" target="_self" style="text-decoration: none; color: inherit;">
+    <a href="pages/6_금융용어.py" target="_self" style="text-decoration: none; color: inherit;">
         <div class="feature-card card-teal">
             <div class="card-icon">📚</div>
             <div class="card-title">금융 용어</div>
@@ -269,7 +269,7 @@ with col2:
 
 with col3:
     st.markdown("""
-    <a href="pages/0_FinFit_Agent" target="_self" style="text-decoration: none; color: inherit;">
+    <a href="pages/0_FinFit_Agent.py" target="_self" style="text-decoration: none; color: inherit;">
         <div class="feature-card card-mint">
             <div class="card-icon">🤖</div>
             <div class="card-title">AI 금융 상담</div>
