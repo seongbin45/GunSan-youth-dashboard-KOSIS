@@ -1,6 +1,8 @@
 import streamlit as st
 import gspread
+import json
 from datetime import datetime
+
 
 st.set_page_config(page_title="FinFit", page_icon="💙", layout="wide")
 
@@ -372,17 +374,18 @@ st.divider()
 
 
 
-# 1. gspread를 이용한 구글 시트 직접 인증 함수
+# gspread 인증 함수 (JSON 문자열 기반 복원)
 def get_gspread_client():
-    # secrets.toml의 [gspread] 내부 설정을 딕셔너리로 읽어옴
-    credentials = dict(st.secrets["gspread"])
-    # 🔴 private_key 문자열 내의 이스케이프 문자(\\n) 처리 보정
-    credentials["private_key"] = credentials["private_key"].replace("\\n", "\n")
+    # Secrets에서 통째로 저장된 JSON 문자열을 가져옴
+    json_string = st.secrets["gspread_json"]
+    
+    # 문자열을 파이썬 딕셔너리로 변환
+    credentials = json.loads(json_string)
     
     # 구글 서비스 계정 인증 수행
     gc = gspread.service_account_from_dict(credentials)
     return gc
-
+    
 # UI 안내 문구 출력
 st.markdown("### 📱 서비스 의견 공유")
 st.markdown("""
