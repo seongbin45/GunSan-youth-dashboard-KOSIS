@@ -262,7 +262,7 @@ with col2:
 
 with col3:
     st.markdown("""
-    <a href="pages/0_FinFit_Agent.py" target="_self" style="text-decoration: none; color: inherit;">
+    <a href="/?page=ai" target="_self" style="text-decoration: none; color: inherit;">
         <div class="feature-card card-mint">
             <div class="card-icon">🤖</div>
             <div class="card-title">AI 금융 상담</div>
