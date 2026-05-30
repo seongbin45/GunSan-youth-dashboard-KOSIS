@@ -336,7 +336,7 @@ with col1:
             <div class="card-icon">📒</div>
             <div class="card-title">가계부</div>
             <div class="card-description">
-                내역만 입력하면<br/>
+                내역을 입력만 하면<br/>
                 수입·지출 기록 및 월별 자동 분석
             </div>
             <div class="card-features">
@@ -467,8 +467,8 @@ with col3:
             <div class="card-title">저축단계 상세 가이드</div>
             <div class="card-description">
                 "단계별 상세 가이드 및 팁"<br/>
-                "내가 받을 수 있는 혜택이 뭐야?"<br/>
-                "자연어로 물어보면 AI가 즉답
+                "몇 개월 후 도달 금액 확인 가능"<br/>
+                실제 행동을 코칭해줍니다
             </div>
             <div class="card-features">
                 <span class="card-features-title">이런 자료들을 얻을 수 있어요</span>
