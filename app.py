@@ -362,7 +362,7 @@ st.divider()
 
 st.markdown("""
 <div class="footer">
-    <p>💡 FinFit은 군산시청 · 군산시 창업지원센터 · 국립군산대학교와 함께 만들었습니다</p>
+    <p>💡 저희 서비스는 더 나은 경험을 드리기 위해 열심히 준비 중입니다. 소중한 의견을 남겨주시면 서비스 개선에 큰 도움이 됩니다.</p>
     <p>🔒 개인정보 보호 | 📞 문의: 010-4666-9672 | 📧 choiseongbin45@gmail.com</p>
 </div>
 """, unsafe_allow_html=True)
