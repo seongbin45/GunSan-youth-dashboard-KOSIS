@@ -195,7 +195,7 @@ st.markdown("""
 st.divider()
 
 # 세 가지 기능 카드
-col1, col2, col3, col4 = st.columns(3, gap="large")
+col1, col2, col3, col4 = st.columns(4, gap="large")
 
 with col1:
     st.markdown("""
