@@ -1,6 +1,6 @@
 import streamlit as st
 
-st.set_page_config(page_title="FinFit", page_icon="💚", layout="wide")
+st.set_page_config(page_title="FinFit", page_icon="💙", layout="wide")
 
 # 주소창의 흔적을 감지해서 페이지를 이동시키는 네비게이터 역할을 합니다.
 if "page" in st.query_params:
