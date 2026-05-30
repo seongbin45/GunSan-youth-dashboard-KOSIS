@@ -471,7 +471,7 @@ with col3:
                 "자연어로 물어보면 AI가 즉답
             </div>
             <div class="card-features">
-                <span class="card-features-title">이런 조언을 얻을 수 있어요</span>
+                <span class="card-features-title">이런 자료를 얻을 수 있어요</span>
                 <div class="feature-item">저축 단계별 가이드 제공</div>
                 <div class="feature-item">몇 개월 후 저축 목표 시뮬레이션</div>
                 <div class="feature-item">전체 저축 단계 비교 그래프</div>
