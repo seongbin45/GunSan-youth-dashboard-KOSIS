@@ -246,8 +246,19 @@ with st.sidebar:
     model_selected=None
     if "OpenAI" in provider:
         model_selected=st.selectbox("모델",["gpt-4o","gpt-4o-mini","gpt-4-turbo"])
+
     elif "Google" in provider:
-        model_selected = st.selectbox("모델", ["gemini-3.5-flash", "gemini-2.5-pro", "gemini-2.0-flash"])
+    # 1. 등록된 구글 API 키를 가져옵니다.
+    google_key = KEYS["Google"]
+    
+    # 2. 동적으로 사용 가능한 모델 목록을 불러옵니다.
+    google_models = get_dynamic_google_models(google_key)
+    
+    # 3. 불러온 목록을 그대로 선택지(selectbox)에 넣습니다.
+    model_selected = st.selectbox("모델", google_models)
+
+    #elif "Google" in provider:
+        #model_selected = st.selectbox("모델", ["gemini-3.5-flash", "gemini-2.5-pro", "gemini-2.0-flash"])
     
     st.divider()
     st.markdown("**🔧 사용 가능한 도구**")
