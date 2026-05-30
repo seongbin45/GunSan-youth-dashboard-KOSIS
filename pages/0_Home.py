@@ -461,10 +461,10 @@ with col2:
 
 with col3:
     st.markdown("""
-    <a href="/?page=ai" target="_self" style="text-decoration: none; color: inherit;">
+    <a href="/?page=Savings_Step_Setting_Guide" target="_self" style="text-decoration: none; color: inherit;">
         <div class="feature-card card-blue">
-            <div class="card-icon">🤖</div>
-            <div class="card-title">AI 금융 상담</div>
+            <div class="card-icon">🎯</div>
+            <div class="card-title">저축단계 상세 가이드</div>
             <div class="card-description">
                 "전세금 대출은 언제까지 나올까?"<br/>
                 "내가 받을 수 있는 혜택이 뭐야?"<br/>
@@ -480,8 +480,8 @@ with col3:
     </a>
     """, unsafe_allow_html=True)
     
-    if st.button("AI와 상담하기 →", key="btn_ai", use_container_width=True):
-        st.switch_page("pages/2_AI와_대화하기.py")
+    if st.button("바로 확인해보기 →", key="btn_ai", use_container_width=True):
+        st.switch_page("pages/Savings_Step_Setting_Guide.py")
         
 
 st.divider()
