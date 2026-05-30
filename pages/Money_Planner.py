@@ -322,18 +322,14 @@ col1, col2, col3 = st.columns(3, gap="large")
 with col1:
     # 카드 전체를 <a> 태그로 감싸고 주소 뒤에 ?page=benefit이 붙도록 만듭니다.
     cols = st.columns(4)
-    pages = [
-    ("📒 가계부",        "수입·지출 기록 및 월별 분석")
-    ]
     st.markdown("""
-    <a href="/?page=benefit" target="_self" style="text-decoration: none; color: inherit;">
-        <div class="feature-card card-red">
-            <div class="card-icon">🎁</div>
-            <div class="card-title">내 혜택 찾기</div>
+    <a href="/?page=Household_Ledger" target="_self" style="text-decoration: none; color: inherit;">
+        <div class="feature-card card-yellow">
+            <div class="card-icon">📒</div>
+            <div class="card-title">가계부</div>
             <div class="card-description">
-                나이, 소득, 지역만 입력하면<br/>
-                정부·군산시에서 나에게 주는<br/>
-                금융 지원과 대출을 자동 추천
+                내역만 입력하면<br/>
+                수입·지출 기록 및 월별 분석
             </div>
             <div class="card-features">
                 <span class="card-features-title">이런 정보를 얻을 수 있어요</span>
@@ -346,8 +342,8 @@ with col1:
     """, unsafe_allow_html=True)
     
     # 이 버튼이 클릭되면 안전하게 st.switch_page가 작동합니다.
-    if st.button("지금 혜택 찾아보기 →", key="btn_benefit", use_container_width=True):
-        st.switch_page("pages/4_군산시민 맞춤 혜택 찾기.py")
+    if st.button("지금 입력해보기 →", key="btn_benefit", use_container_width=True):
+        st.switch_page("pages/Household_Ledger.py")
 
 with col2:
     # col2도 똑같이 전체 클릭 기능을 넣고 싶다면 아래처럼 <a> 태그로 감싸주면 됩니다.
