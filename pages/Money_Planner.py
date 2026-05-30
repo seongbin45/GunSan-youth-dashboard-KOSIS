@@ -315,8 +315,8 @@ for col, (title, desc) in zip(cols, pages):
 st.write("---")
 
 
-# 여러개의 기능 카드
-col1, col2, col3, col4, col5, col6 = st.columns(6, gap="large")
+# 기능 카드
+col1, col2, col3 = st.columns(3, gap="large")
 
 with col1:
     # 카드 전체를 <a> 태그로 감싸고 주소 뒤에 ?page=Household_Ledger이 붙도록 만듭니다.
@@ -392,33 +392,17 @@ with col3:
     
     if st.button("AI와 상담하기 →", key="btn_ai", use_container_width=True):
         st.switch_page("pages/2_AI와_대화하기.py")
+        
 
-with col4:
-    st.markdown("""
-    <a href="/?page=finance" target="_self" style="text-decoration: none; color: inherit;">
-        <div class="feature-card card-mint">
-            <div class="card-icon">📚</div>
-            <div class="card-title">금융 용어</div>
-            <div class="card-description">
-                CMA, ETF, 청년도약계좌,<br/>
-                전세대출... 경제 신문에 나오는<br/>
-                어려운 용어를 쉽게 설명해줍니다
-            </div>
-            <div class="card-features">
-                <span class="card-features-title">이 정도는 꼭 알아야 해요</span>
-                <div class="feature-item">30개 금융 개념 정리</div>
-                <div class="feature-item">실생활 예시로 이해</div>
-                <div class="feature-item">개념 + 행동 가이드</div>
-            </div>
-        </div>
-    </a>
-    """, unsafe_allow_html=True)
-    
-    if st.button("금융 용어 배우기 →", key="btn_finance", use_container_width=True):
-        st.switch_page("pages/5_금융용어.py")
+st.divider()
 
-with col5:
-    # 카드 전체를 <a> 태그로 감싸고 주소 뒤에 ?page=benefit이 붙도록 만듭니다.
+
+# 기능 카드
+col1, col2, col3 = st.columns(3, gap="large")
+
+with col1:
+    # 카드 전체를 <a> 태그로 감싸고 주소 뒤에 ?page=Household_Ledger이 붙도록 만듭니다.
+    cols = st.columns(4)
     st.markdown("""
     <a href="/?page=Household_Ledger" target="_self" style="text-decoration: none; color: inherit;">
         <div class="feature-card card-yellow">
@@ -442,7 +426,32 @@ with col5:
     if st.button("지금 입력해보기 →", key="btn_benefit", use_container_width=True):
         st.switch_page("pages/Household_Ledger.py")
 
-with col6:
+with col2:
+    # col2도 똑같이 전체 클릭 기능을 넣고 싶다면 아래처럼 <a> 태그로 감싸주면 됩니다.
+    st.markdown("""
+    <a href="/?page=finance" target="_self" style="text-decoration: none; color: inherit;">
+        <div class="feature-card card-mint">
+            <div class="card-icon">📚</div>
+            <div class="card-title">금융 용어</div>
+            <div class="card-description">
+                CMA, ETF, 청년도약계좌,<br/>
+                전세대출... 경제 신문에 나오는<br/>
+                어려운 용어를 쉽게 설명해줍니다
+            </div>
+            <div class="card-features">
+                <span class="card-features-title">이 정도는 꼭 알아야 해요</span>
+                <div class="feature-item">30개 금융 개념 정리</div>
+                <div class="feature-item">실생활 예시로 이해</div>
+                <div class="feature-item">개념 + 행동 가이드</div>
+            </div>
+        </div>
+    </a>
+    """, unsafe_allow_html=True)
+    
+    if st.button("금융 용어 배우기 →", key="btn_finance", use_container_width=True):
+        st.switch_page("pages/5_금융용어.py")
+
+with col3:
     st.markdown("""
     <a href="/?page=ai" target="_self" style="text-decoration: none; color: inherit;">
         <div class="feature-card card-lavender">
