@@ -337,7 +337,7 @@ with col1:
             <div class="card-title">가계부</div>
             <div class="card-description">
                 내역만 입력하면<br/>
-                수입·지출 기록 및 월별 분석
+                수입·지출 기록 및 월별 자동 분석
             </div>
             <div class="card-features">
                 <span class="card-features-title">이런 것들을 얻을 수 있어요</span>
