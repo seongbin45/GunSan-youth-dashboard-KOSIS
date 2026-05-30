@@ -302,7 +302,7 @@ with st.sidebar:
     for ex in examples:
         if st.button(ex,key=ex,use_container_width=True): st.session_state["prefill"]=ex
     st.write("---")
-    st.markdown("**💬 대화 기록 지우기**")
+    st.markdown("**📑🔙 대화 기록 지우기**")
     if st.button("🗑️ 대화 초기화",use_container_width=True):
         st.session_state["chat_history"]=[]
         st.rerun()
