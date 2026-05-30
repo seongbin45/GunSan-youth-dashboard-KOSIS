@@ -447,7 +447,7 @@ with col2:
                 모든 정책을 한 화면에 보여줍니다
             </div>
             <div class="card-features">
-                <span class="card-features-title">많은 사이트들을 볼 수 있어요</span>
+                <span class="card-features-title">실시간으로 정부 사이트들을 볼 수 있어요</span>
                 <div class="feature-item">업데이트중입니다...</div>
                 <div class="feature-item">업데이트중입니다...</div>
                 <div class="feature-item">업데이트중입니다...</div>
@@ -466,15 +466,15 @@ with col3:
             <div class="card-icon">🎯</div>
             <div class="card-title">저축단계 상세 가이드</div>
             <div class="card-description">
-                "전세금 대출은 언제까지 나올까?"<br/>
+                "단계별 상세 가이드 및 팁"<br/>
                 "내가 받을 수 있는 혜택이 뭐야?"<br/>
                 "자연어로 물어보면 AI가 즉답
             </div>
             <div class="card-features">
                 <span class="card-features-title">AI가 도와줄 수 있어요</span>
-                <div class="feature-item">50개 청년 정책 데이터 학습</div>
-                <div class="feature-item">실시간 금융 계산</div>
-                <div class="feature-item">군산시 맞춤 정보</div>
+                <div class="feature-item">업데이트중입니다...</div>
+                <div class="feature-item">업데이트중입니다...</div>
+                <div class="feature-item">업데이트중입니다...</div>
             </div>
         </div>
     </a>
