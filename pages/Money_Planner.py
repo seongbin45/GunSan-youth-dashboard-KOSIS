@@ -147,6 +147,24 @@ st.markdown("""
     .card-blue {
         border-left-color: #579BB1;
     }
+
+    .card-pastel-milk {
+        border-left-color: #AEC6CF;
+    }
+    
+    .card-pastel-powder {
+        border-left-color: #B0C4DE;
+    }
+    
+    .card-pastel-ice {
+        border-left-color: #BCEEFA;
+    }
+    
+
+    .card-pastel-fog {
+        border-left-color: #C1D3DB;
+    }
+
     
     .card-lavender {
         border-left-color: #A7BBC7;
