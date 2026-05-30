@@ -405,12 +405,13 @@ with col1:
     cols = st.columns(4)
     st.markdown("""
     <a href="/?page=Household_Ledger" target="_self" style="text-decoration: none; color: inherit;">
-        <div class="feature-card card-yellow">
-            <div class="card-icon">📒</div>
-            <div class="card-title">가계부</div>
+        <div class="feature-card card-red">
+            <div class="card-icon">🎁</div>
+            <div class="card-title">군산 시민 혜택 찾기</div>
             <div class="card-description">
-                내역만 입력하면<br/>
-                수입·지출 기록 및 월별 분석
+                나이, 소득, 지역만 입력하면<br/>
+                군산시에서 나에게 주는<br/>
+                금융 지원과 대출을 자동 추천
             </div>
             <div class="card-features">
                 <span class="card-features-title">이런 정보를 얻을 수 있어요</span>
