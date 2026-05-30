@@ -291,19 +291,19 @@ with col2:
         """, unsafe_allow_html=True)
 
 st.divider()
-st.markdown("#### 🗺️ 왼쪽 사이드바에서 기능을 선택하세요")
+st.markdown("#### 🗺️ 아래에서 기능을 선택하세요")
 cols = st.columns(4)
-pages = [
-    ("📒 가계부",        "수입·지출 기록 및 월별 분석"),
-    ("🎯 저축단계 상세", "단계별 상세 가이드 및 팁"),
-    ("🎁 청년 혜택",     "국가 청년 금융 지원 정보"),
-    ("📚 금융 용어",     "꼭 알아야 할 금융 개념 정리"),
-]
-for col, (title, desc) in zip(cols, pages):
-    with col:
-        st.info(f"**{title}**\n\n{desc}")
+#pages = [
+    #("📒 가계부",        "수입·지출 기록 및 월별 분석"),
+    #("🎯 저축단계 상세", "단계별 상세 가이드 및 팁"),
+    #("🎁 청년 혜택",     "국가 청년 금융 지원 정보"),
+    #("📚 금융 용어",     "꼭 알아야 할 금융 개념 정리"),
+#]
+#for col, (title, desc) in zip(cols, pages):
+    #with col:
+        #st.info(f"**{title}**\n\n{desc}")
 
-st.write("---")
+#st.write("---")
 
 
 # 기능 카드
