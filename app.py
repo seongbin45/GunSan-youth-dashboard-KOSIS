@@ -7,6 +7,7 @@ st.subheader("청년이 받아야 할 혜택을, AI가 먼저 찾아줍니다")
 
 col1, col2, col3 = st.columns(3)
 with col1:
+    st.info(f"**📒 가계부**\n\n수입·지출 기록 및 월별 분석")
     st.page_link("pages/4_군산시민 맞춤 혜택 찾기.py", label="내 혜택 찾기", icon="🎁")
     st.caption("나이·소득·지역 입력하면 맞춤 혜택 바로 추천")
 with col2:
