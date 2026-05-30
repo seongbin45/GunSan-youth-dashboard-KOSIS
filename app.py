@@ -216,55 +216,52 @@ st.divider()
 col1, col2, col3 = st.columns(3, gap="large")
 
 with col1:
-    # 1. 전체를 감싸는 div 추가 (CSS 적용을 위함)
-    st.markdown('<div class="card-container">', unsafe_allow_html=True)
-    
-    # 2. 기존 HTML 카드 디자인 render
+    # 카드 전체를 클릭하면 해당 페이지로 이동하도록 <a> 태그로 감싸기
+    # 디자인 유지를 위해 스타일(텍스트 데코레이션 제거, 색상 유지)을 부여합니다.
     st.markdown("""
-    <div class="feature-card card-red">
-        <div class="card-icon">🎁</div>
-        <div class="card-title">내 혜택 찾기</div>
-        <div class="card-description">
-            나이, 소득, 지역만 입력하면<br/>
-            정부·군산시에서 나에게 주는<br/>
-            금융 지원과 대출을 자동 추천
+    <a href="/4_군산시민_맞춤_혜택_찾기" target="_self" style="text-decoration: none; color: inherit;">
+        <div class="feature-card card-red">
+            <div class="card-icon">🎁</div>
+            <div class="card-title">내 혜택 찾기</div>
+            <div class="card-description">
+                나이, 소득, 지역만 입력하면<br/>
+                정부·군산시에서 나에게 주는<br/>
+                금융 지원과 대출을 자동 추천
+            </div>
+            <div class="card-features">
+                <span class="card-features-title">이런 정보를 얻을 수 있어요</span>
+                <div class="feature-item">50개 이상 청년 정책 매칭</div>
+                <div class="feature-item">연 최대 1,000만원 이상 지원액</div>
+                <div class="feature-item">신청 방법과 기한 안내</div>
+            </div>
         </div>
-        <div class="card-features">
-            <span class="card-features-title">이런 정보를 얻을 수 있어요</span>
-            <div class="feature-item">50개 이상 청년 정책 매칭</div>
-            <div class="feature-item">연 최대 1,000만원 이상 지원액</div>
-            <div class="feature-item">신청 방법과 기한 안내</div>
-        </div>
-    </div>
+    </a>
     """, unsafe_allow_html=True)
-
-    # 3. HTML 카드 위에 투명한 버튼 얹기 & 클릭 이벤트 처리
-    # (key 값은 고유하게 설정해야 오류가 나지 않습니다)
-    if st.button("", key="goto_gunsan_benefits"):
-        st.switch_page("pages/4_군산시민 맞춤 혜택 찾기.py")
-        
-    st.markdown('</div>', unsafe_allow_html=True)
     
+    # 하단 버튼 (이제 레이아웃이 깨지지 않고 정상적으로 카드의 정중앙 하단에 위치합니다)
     if st.button("지금 혜택 찾아보기 →", key="btn_benefit", use_container_width=True):
         st.switch_page("pages/4_군산시민 맞춤 혜택 찾기.py")
 
 with col2:
+    # col2도 똑같이 전체 클릭 기능을 넣고 싶다면 아래처럼 <a> 태그로 감싸주면 됩니다.
     st.markdown("""
-    <div class="feature-card card-teal">
-        <div class="card-icon">📚</div>
-        <div class="card-title">금융 용어</div>
-        <div class="card-description">
-            CMA, ETF, 청년도약계좌,<br/>
-            전세대출... 경제 신문에 나오는<br/>
-            어려운 용어를 쉽게 설명해줍니다
+    <a href="/6_금융용어" target="_self" style="text-decoration: none; color: inherit;">
+        <div class="feature-card card-teal">
+            <div class="card-icon">📚</div>
+            <div class="card-title">금융 용어</div>
+            <div class="card-description">
+                CMA, ETF, 청년도약계좌,<br/>
+                전세대출... 경제 신문에 나오는<br/>
+                어려운 용어를 쉽게 설명해줍니다
+            </div>
+            <div class="card-features">
+                <span class="card-features-title">이 정도는 꼭 알아야 해요</span>
+                <div class="feature-item">30개 금융 개념 정리</div>
+                <div class="feature-item">실생활 예시로 이해</div>
+                <div class="feature-item">개념 + 행동 가이드</div>
+            </div>
         </div>
-        <div class="card-features">
-            <span class="card-features-title">이 정도는 꼭 알아야 해요</span>
-            <div class="feature-item">30개 금융 개념 정리</div>
-            <div class="feature-item">실생활 예시로 이해</div>
-            <div class="feature-item">개념 + 행동 가이드</div>
-        </div>
-    </div>
+    </a>
     """, unsafe_allow_html=True)
     
     if st.button("금융 용어 배우기 →", key="btn_finance", use_container_width=True):
@@ -272,21 +269,23 @@ with col2:
 
 with col3:
     st.markdown("""
-    <div class="feature-card card-mint">
-        <div class="card-icon">🤖</div>
-        <div class="card-title">AI 금융 상담</div>
-        <div class="card-description">
-            "전세금 대출은 언제까지 나올까?"<br/>
-            "내가 받을 수 있는 혜택이 뭐야?"<br/>
-            자연어로 물어보면 AI가 즉답
+    <a href="/0_FinFit_Agent" target="_self" style="text-decoration: none; color: inherit;">
+        <div class="feature-card card-mint">
+            <div class="card-icon">🤖</div>
+            <div class="card-title">AI 금융 상담</div>
+            <div class="card-description">
+                "전세금 대출은 언제까지 나올까?"<br/>
+                "내가 받을 수 있는 혜택이 뭐야?"<br/>
+                "자연어로 물어보면 AI가 즉답
+            </div>
+            <div class="card-features">
+                <span class="card-features-title">AI가 도와줄 수 있어요</span>
+                <div class="feature-item">50개 청년 정책 데이터 학습</div>
+                <div class="feature-item">실시간 금융 계산</div>
+                <div class="feature-item">군산시 맞춤 정보</div>
+            </div>
         </div>
-        <div class="card-features">
-            <span class="card-features-title">AI가 도와줄 수 있어요</span>
-            <div class="feature-item">50개 청년 정책 데이터 학습</div>
-            <div class="feature-item">실시간 금융 계산</div>
-            <div class="feature-item">군산시 맞춤 정보</div>
-        </div>
-    </div>
+    </a>
     """, unsafe_allow_html=True)
     
     if st.button("AI와 상담하기 →", key="btn_ai", use_container_width=True):
