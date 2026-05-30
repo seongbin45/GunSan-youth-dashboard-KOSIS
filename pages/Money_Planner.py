@@ -392,10 +392,9 @@ with col3:
     
     if st.button("AI와 상담하기 →", key="btn_ai_agent", use_container_width=True):
         st.switch_page("pages/2_AI와_대화하기.py")
-        
 
-st.divider()
 
+#st.divider()
 
 # 기능 카드
 col1, col2, col3 = st.columns(3, gap="large")
