@@ -412,7 +412,7 @@ with col1:
     cols = st.columns(4)
     st.markdown("""
     <a href="/?page=Government_Backed_Benefits" target="_self" style="text-decoration: none; color: inherit;">
-        <div class="feature-card card-pastel-ice">
+        <div class="feature-card card-blue">
             <div class="card-icon">🎁</div>
             <div class="card-title">군산 시민 혜택 찾기</div>
             <div class="card-description">
@@ -462,7 +462,7 @@ with col2:
 with col3:
     st.markdown("""
     <a href="/?page=ai" target="_self" style="text-decoration: none; color: inherit;">
-        <div class="feature-card card-blue">
+        <div class="feature-card card-pastel-ice">
             <div class="card-icon">🤖</div>
             <div class="card-title">AI 금융 상담</div>
             <div class="card-description">
