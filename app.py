@@ -236,8 +236,8 @@ with col1:
     </a>
     """, unsafe_allow_html=True)
     
-     # 이 버튼이 클릭되면 안전하게 st.switch_page가 작동합니다.
-     if st.button("지금 혜택 찾아보기 →", key="btn_benefit", use_container_width=True):
+    # 이 버튼이 클릭되면 안전하게 st.switch_page가 작동합니다.
+    if st.button("지금 혜택 찾아보기 →", key="btn_benefit", use_container_width=True):
         st.switch_page("pages/4_군산시민 맞춤 혜택 찾기.py")
 
 with col2:
