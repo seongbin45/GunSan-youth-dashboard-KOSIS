@@ -372,11 +372,6 @@ st.markdown("""
 st.divider()
 
 
-import streamlit as st
-from streamlit_gsheets import GSheetsConnection
-import pandas as pd
-from datetime import datetime
-
 # 1. 구글 시트 연결 초기화
 conn = st.connection("gsheets", type=GSheetsConnection)
 
@@ -424,5 +419,5 @@ if st.button("의견 남기기", use_container_width=True):
             """)
             
         except Exception as e:
-            st.error(f"데이터 저장 중 오류가 발생했습니다: {e}")
+            st.error(f"데이터 저장 중 오류가 발생했습니다. 의견 남기기 버튼을 다시 한번만 눌러주세요🙏: {e}")
 
