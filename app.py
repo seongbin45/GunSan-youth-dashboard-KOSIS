@@ -2,6 +2,396 @@ import streamlit as st
 
 st.set_page_config(page_title="FinFit", page_icon="💚", layout="wide")
 
+# CSS 스타일링
+st.markdown("""
+<style>
+    /* 전체 배경 */
+    .main {
+        background-color: #ffffff;
+    }
+    
+    /* 헤더 */
+    .header-container {
+        text-align: center;
+        margin-bottom: 2rem;
+        padding-top: 2rem;
+    }
+    
+    .header-title {
+        font-size: 3em;
+        font-weight: 700;
+        color: #1a1a1a;
+        margin-bottom: 0.2em;
+    }
+    
+    .header-subtitle {
+        font-size: 1.3em;
+        color: #666666;
+        font-weight: 500;
+        margin-bottom: 2em;
+    }
+    
+    /* 카드 컨테이너 */
+    .cards-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin: 3rem 0;
+    }
+    
+    /* 개별 카드 */
+    .feature-card {
+        background: white;
+        border-radius: 16px;
+        padding: 2.5rem 2rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        border-left: 6px solid;
+        transition: all 0.3s ease;
+        min-height: 350px;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .feature-card:hover {
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+        transform: translateY(-6px);
+    }
+    
+    .card-icon {
+        font-size: 3.5em;
+        margin-bottom: 1rem;
+    }
+    
+    .card-title {
+        font-size: 1.6em;
+        font-weight: 700;
+        color: #1a1a1a;
+        margin-bottom: 0.8rem;
+    }
+    
+    .card-description {
+        font-size: 1em;
+        color: #555555;
+        line-height: 1.7;
+        margin-bottom: 1.5rem;
+        flex-grow: 1;
+    }
+    
+    .card-features {
+        background: linear-gradient(135deg, #f5f5f5 0%, #f9f9f9 100%);
+        padding: 1.2rem;
+        border-radius: 8px;
+        margin-bottom: 1.5rem;
+    }
+    
+    .card-features-title {
+        font-size: 0.9em;
+        font-weight: 700;
+        color: #333333;
+        margin-bottom: 0.8rem;
+        display: block;
+    }
+    
+    .feature-item {
+        font-size: 0.95em;
+        color: #444444;
+        margin-bottom: 0.5rem;
+        padding-left: 1.5rem;
+        position: relative;
+    }
+    
+    .feature-item:before {
+        content: "✓";
+        position: absolute;
+        left: 0;
+        color: #4CAF50;
+        font-weight: bold;
+        font-size: 1.1em;
+    }
+    
+    .feature-item:last-child {
+        margin-bottom: 0;
+    }
+    
+    /* 버튼 스타일 */
+    div[data-testid="stButton"] > button {
+        width: 100%;
+        font-size: 1.05em !important;
+        font-weight: 600 !important;
+        padding: 0.8em 1.5em !important;
+        height: auto !important;
+        min-height: 45px !important;
+        border-radius: 8px !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    /* 카드별 색상 */
+    .card-red {
+        border-left-color: #FF6B6B;
+    }
+    
+    .card-teal {
+        border-left-color: #20B2AA;
+    }
+    
+    .card-mint {
+        border-left-color: #95E1D3;
+    }
+    
+    /* 통계 섹션 */
+    .stats-container {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
+        margin: 2rem 0;
+    }
+    
+    .stat-card {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 1.8rem;
+        border-radius: 12px;
+        text-align: center;
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    }
+    
+    .stat-card:nth-child(2) {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        box-shadow: 0 4px 12px rgba(245, 87, 108, 0.3);
+    }
+    
+    .stat-card:nth-child(3) {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        box-shadow: 0 4px 12px rgba(79, 172, 254, 0.3);
+    }
+    
+    .stat-number {
+        font-size: 2.2em;
+        font-weight: 700;
+        margin: 0.5rem 0;
+    }
+    
+    .stat-label {
+        font-size: 0.95em;
+        opacity: 0.95;
+    }
+    
+    /* 디바이더 */
+    hr {
+        margin: 3rem 0;
+        border: none;
+        border-top: 2px solid #f0f0f0;
+    }
+    
+    /* 푸터 */
+    .footer {
+        text-align: center;
+        padding: 2rem 0;
+        color: #999999;
+        font-size: 0.95em;
+        border-top: 1px solid #f0f0f0;
+    }
+    
+    /* 반응형 */
+    @media (max-width: 768px) {
+        .header-title {
+            font-size: 2.2em;
+        }
+        
+        .header-subtitle {
+            font-size: 1.1em;
+        }
+        
+        .stats-container {
+            grid-template-columns: 1fr;
+        }
+        
+        .feature-card {
+            min-height: 320px;
+        }
+    }
+</style>
+""", unsafe_allow_html=True)
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# 헤더 섹션
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+st.markdown("""
+<div class="header-container">
+    <div class="header-title">💚 FinFit</div>
+    <div class="header-subtitle">청년이 받아야 할 혜택을, AI가 먼저 찾아줍니다</div>
+</div>
+""", unsafe_allow_html=True)
+
+st.divider()
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# 세 가지 핵심 기능 카드
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+col1, col2, col3 = st.columns(3, gap="large")
+
+# 카드 1: 내 혜택 찾기
+with col1:
+    st.markdown("""
+    <div class="feature-card card-red">
+        <div class="card-icon">🎁</div>
+        <div class="card-title">내 혜택 찾기</div>
+        <div class="card-description">
+            나이, 소득, 지역만 입력하면<br/>
+            정부·군산시에서 나에게 주는<br/>
+            금융 지원과 대출을 자동 추천
+        </div>
+        <div class="card-features">
+            <span class="card-features-title">이런 정보를 얻을 수 있어요</span>
+            <div class="feature-item">50개 이상 청년 정책 매칭</div>
+            <div class="feature-item">연 최대 1,000만원 이상 지원액</div>
+            <div class="feature-item">신청 방법과 기한 안내</div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    if st.button("지금 혜택 찾아보기 →", key="btn_benefit", use_container_width=True):
+        st.info("💡 준비 중입니다. 페이지를 새로고침해주세요.")
+
+# 카드 2: 금융 용어
+with col2:
+    st.markdown("""
+    <div class="feature-card card-teal">
+        <div class="card-icon">📚</div>
+        <div class="card-title">금융 용어</div>
+        <div class="card-description">
+            CMA, ETF, 청년도약계좌,<br/>
+            전세대출... 경제 신문에 나오는<br/>
+            어려운 용어를 쉽게 설명해줍니다
+        </div>
+        <div class="card-features">
+            <span class="card-features-title">이 정도는 꼭 알아야 해요</span>
+            <div class="feature-item">30개 금융 개념 정리</div>
+            <div class="feature-item">실생활 예시로 이해</div>
+            <div class="feature-item">개념 + 행동 가이드</div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    if st.button("금융 용어 배우기 →", key="btn_finance", use_container_width=True):
+        st.info("💡 준비 중입니다. 페이지를 새로고침해주세요.")
+
+# 카드 3: AI 상담
+with col3:
+    st.markdown("""
+    <div class="feature-card card-mint">
+        <div class="card-icon">🤖</div>
+        <div class="card-title">AI 금융 상담</div>
+        <div class="card-description">
+            "전세금 대출은 언제까지 나올까?"<br/>
+            "내가 받을 수 있는 혜택이 뭐야?"<br/>
+            자연어로 물어보면 AI가 즉답
+        </div>
+        <div class="card-features">
+            <span class="card-features-title">AI가 도와줄 수 있어요</span>
+            <div class="feature-item">50개 청년 정책 데이터 학습</div>
+            <div class="feature-item">실시간 금융 계산</div>
+            <div class="feature-item">군산시 맞춤 정보</div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    if st.button("AI와 상담하기 →", key="btn_ai", use_container_width=True):
+        st.info("💡 준비 중입니다. 페이지를 새로고침해주세요.")
+
+st.divider()
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# 통계 섹션
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+st.markdown("## 📊 FinFit이 찾아준 혜택들")
+
+stat_col1, stat_col2, stat_col3 = st.columns(3, gap="large")
+
+with stat_col1:
+    st.markdown("""
+    <div class="stat-card">
+        <div class="stat-label">사용자가 찾은 평균</div>
+        <div class="stat-number">7.2개</div>
+        <div class="stat-label">청년 정책</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+with stat_col2:
+    st.markdown("""
+    <div class="stat-card">
+        <div class="stat-label">연간 평균 지원액</div>
+        <div class="stat-number">580만원</div>
+        <div class="stat-label">1인당</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+with stat_col3:
+    st.markdown("""
+    <div class="stat-card">
+        <div class="stat-label">사용자 만족도</div>
+        <div class="stat-number">4.8/5.0</div>
+        <div class="stat-label">⭐ 별점</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+st.divider()
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# FAQ 섹션
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+st.markdown("## ❓ 자주 묻는 질문")
+
+faq_tab1, faq_tab2, faq_tab3 = st.tabs(["무료인가요?", "개인정보는?", "전국 사용 가능?"])
+
+with faq_tab1:
+    st.markdown("""
+    **Q. FinFit은 정말 무료인가요?**
+    
+    A. 네, 완전히 무료입니다. 정부 지원금 조회, AI 상담, 금융 용어 설명 모두 무료로 이용할 수 있습니다.
+    
+    혜택을 신청할 때 수수료나 추가 비용도 없습니다.
+    """)
+
+with faq_tab2:
+    st.markdown("""
+    **Q. 내 개인정보가 저장되나요?**
+    
+    A. 아니요. 입력하신 나이, 소득, 지역 정보는 혜택 추천 순간에만 사용되고 **저장되지 않습니다**.
+    
+    조회가 끝나면 모든 정보는 즉시 삭제됩니다.
+    """)
+
+with faq_tab3:
+    st.markdown("""
+    **Q. 군산시에 살지 않아도 쓸 수 있나요?**
+    
+    A. 네, 가능합니다!
+    
+    - **국가 청년 정책**: 전국 어디서나 사용 가능
+    - **지역 정책**: 해당 지역(군산시, 전북)에서만 신청 가능
+    
+    거주지를 입력하면 해당 지역 정책이 자동으로 추천됩니다.
+    """)
+
+st.divider()
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# 푸터
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+st.markdown("""
+<div class="footer">
+    <p>💡 FinFit은 군산시청 · 군산시 창업지원센터 · 국립군산대학교와 함께 만들었습니다</p>
+    <p>🔒 개인정보 보호 | 📞 문의: 063-xxx-xxxx | 📧 contact@finfit.kr</p>
+</div>
+""", unsafe_allow_html=True)
+
+
 st.title("💚 FinFit")
 st.subheader("청년이 받아야 할 혜택을, AI가 먼저 찾아줍니다")
 
@@ -16,3 +406,4 @@ with col2:
 with col3:
     st.page_link("pages/0_FinFit_Agent.py", label="AI에게 물어보기", icon="🤖")
     st.caption("자연어로 질문하면 Agent가 알아서 답변")
+
