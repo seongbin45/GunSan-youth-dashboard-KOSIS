@@ -331,10 +331,10 @@ with col1:
                 수입·지출 기록 및 월별 분석
             </div>
             <div class="card-features">
-                <span class="card-features-title">이런 정보를 얻을 수 있어요</span>
-                <div class="feature-item">50개 이상 청년 정책 매칭</div>
-                <div class="feature-item">연 최대 1,000만원 이상 지원액</div>
-                <div class="feature-item">신청 방법과 기한 안내</div>
+                <span class="card-features-title">이런 것들을 얻을 수 있어요</span>
+                <div class="feature-item">고정비, 식비, 여가 등 정보</div>
+                <div class="feature-item">구글 시트에 데이터 자동 동기화</div>
+                <div class="feature-item">구글 시트 데이터 초기화 가능</div>
             </div>
         </div>
     </a>
@@ -400,10 +400,9 @@ with col3:
 col1, col2, col3 = st.columns(3, gap="large")
 
 with col1:
-    # 카드 전체를 <a> 태그로 감싸고 주소 뒤에 ?page=Household_Ledger이 붙도록 만듭니다.
     cols = st.columns(4)
     st.markdown("""
-    <a href="/?page=Household_Ledger" target="_self" style="text-decoration: none; color: inherit;">
+    <a href="/?page=Government_Backed_Benefits" target="_self" style="text-decoration: none; color: inherit;">
         <div class="feature-card card-red">
             <div class="card-icon">🎁</div>
             <div class="card-title">군산 시민 혜택 찾기</div>
@@ -423,8 +422,8 @@ with col1:
     """, unsafe_allow_html=True)
     
     # 이 버튼이 클릭되면 안전하게 st.switch_page가 작동합니다.
-    if st.button("지금 입력해보기 →", key="btn_Savings_Step_Setting_Guid_For", use_container_width=True):
-        st.switch_page("pages/Household_Ledger.py")
+    if st.button("지금 혜택 찾아보기 →", key="btn_Savings_Step_Setting_Guid_For", use_container_width=True):
+        st.switch_page("pages/3_정부 지원 혜택 목록.py")
 
 with col2:
     # col2도 똑같이 전체 클릭 기능을 넣고 싶다면 아래처럼 <a> 태그로 감싸주면 됩니다.
