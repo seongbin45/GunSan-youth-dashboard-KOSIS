@@ -177,7 +177,7 @@ with col2:
     
     st.divider()
     
-col1 = st.columns([1, 1], gap="large")
+col1 = st.columns([1], gap="large")
 
 with col1:    
     st.markdown("""
