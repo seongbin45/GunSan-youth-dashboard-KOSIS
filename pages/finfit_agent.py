@@ -267,13 +267,17 @@ with st.sidebar:
     if not provider_options:
         st.error("사용 가능한 API Key가 없습니다.\nsecrets.toml 설정 후 재시작하세요.")
         st.stop()
-
-    
+ 
     provider=st.selectbox("AI Provider",provider_options)
     model_selected=None
     if "OpenAI" in provider:
         model_selected=st.selectbox("모델",["gpt-4o","gpt-4o-mini","gpt-4-turbo"])
-
+    elif "Groq" in provider:
+        model_selected=st.selectbox("모델",["llama-3.3-70b-versatile","llama-3.1-8b-instant","gemma2-9b-it"])
+        st.caption("⚡ Groq는 완전 무료입니다. (분당 요청수 제한 있음)")
+    elif "Mistral" in provider:
+        model_selected=st.selectbox("모델",["mistral-small-latest","open-mistral-7b","mistral-large-latest"])
+        st.caption("🌊 mistral-small / open-mistral-7b 는 무료 tier입니다.")
     elif "Google" in provider:
         # 1. 등록된 구글 API 키를 가져옵니다.
         google_key = KEYS["Google"]
@@ -286,16 +290,7 @@ with st.sidebar:
 
     #elif "Google" in provider:
         #model_selected = st.selectbox("모델", ["gemini-3.5-flash", "gemini-2.5-pro", "gemini-2.0-flash"])
-    
-    elif "Groq" in provider:
-        model_selected=st.selectbox("모델",["llama-3.3-70b-versatile","llama-3.1-8b-instant","gemma2-9b-it"])
-        st.caption("⚡ Groq는 완전 무료입니다. (분당 요청수 제한 있음)")
-        
-    elif "Mistral" in provider:
-        model_selected=st.selectbox("모델",["mistral-small-latest","open-mistral-7b","mistral-large-latest"])
-        st.caption("🌊 mistral-small / open-mistral-7b 는 무료 tier입니다.")
-
-    
+     
     st.divider()
     st.markdown("**🔧 사용 가능한 도구**")
     st.markdown("🔍 `check_benefit_eligibility` — 청년 혜택 자격 확인")
@@ -368,6 +363,12 @@ if user_input:
                     answer,steps=run_openai(user_input,KEYS["OpenAI"],model_selected)
                 elif "Google" in provider:
                     answer,steps=run_google(user_input,KEYS["Google"],model_selected)
+                elif "Groq" in provider:
+                    answer,steps=run_openai(user_input,KEYS["Groq"],model_selected,
+                                            base_url="https://api.groq.com/openai/v1")
+                elif "Mistral" in provider:
+                    answer,steps=run_openai(user_input,KEYS["Mistral"],model_selected,
+                                            base_url="https://api.mistral.ai/v1")
                 else:
                     answer,steps="Provider를 선택할 수 없습니다.",[]
                 if steps:
