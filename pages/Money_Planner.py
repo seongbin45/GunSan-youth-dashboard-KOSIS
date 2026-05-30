@@ -122,11 +122,12 @@ col1, col2, col3 = st.columns(3, gap="large")
 
 with col1:
     # 카드 전체를 <a> 태그로 감싸고 주소 뒤에 ?page=benefit이 붙도록 만듭니다.
-    st.markdown("""
-    <a href="/?page=benefit" target="_self" style="text-decoration: none; color: inherit;">
+    cols = st.columns(4)
     pages = [
     ("📒 가계부",        "수입·지출 기록 및 월별 분석")
     ]
+    st.markdown("""
+    <a href="/?page=benefit" target="_self" style="text-decoration: none; color: inherit;">
     """, unsafe_allow_html=True)
     
     # 이 버튼이 클릭되면 안전하게 st.switch_page가 작동합니다.
