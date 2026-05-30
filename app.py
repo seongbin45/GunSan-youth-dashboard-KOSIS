@@ -1,4 +1,7 @@
 import streamlit as st
+from streamlit_gsheets import GSheetsConnection
+import pandas as pd
+from datetime import datetime
 
 st.set_page_config(page_title="FinFit", page_icon="💙", layout="wide")
 
@@ -366,8 +369,18 @@ st.markdown("""
     <p>🔒 개인정보 보호 | 📞 문의: 010-4666-9672 | 📧 choiseongbin45@gmail.com</p>
 """)
 
+st.divider()
 
-# 1. 안내 문구 출력 (모바일 가독성 최적화 줄바꿈)
+
+import streamlit as st
+from streamlit_gsheets import GSheetsConnection
+import pandas as pd
+from datetime import datetime
+
+# 1. 구글 시트 연결 초기화
+conn = st.connection("gsheets", type=GSheetsConnection)
+
+# 안내 문구 출력
 st.markdown("### 📱 서비스 의견 공유")
 st.markdown("""
 **저희 서비스는 더 나은 경험을 드리기 위해  
@@ -377,28 +390,39 @@ st.markdown("""
 서비스 개선에 큰 도움이 됩니다!
 """)
 
-# 2. 의견 입력 창 (사용자가 여러 줄 적을 수 있도록 text_area 사용)
+# 의견 입력 창
 user_feedback = st.text_area(
     "의견을 자유롭게 적어주세요 👇", 
     placeholder="예: 이런 기능이 추가되면 좋겠어요 / 이 부분이 사용하기 조금 불편해요"
 )
 
-# 3. 의견 남기기 버튼 (CTA)
+# 의견 남기기 버튼 (CTA)
 if st.button("의견 남기기", use_container_width=True):
-    # 입력값이 비어있는지 확인
     if user_feedback.strip() == "":
         st.warning("내용을 입력한 후 버튼을 눌러주세요! ⚠️")
     else:
-        # TODO: 데이터베이스(DB)나 구글 시트 등에 user_feedback을 저장하는 로직이 들어갈 자리입니다.
-        
-        # 4. 제출 성공 시 감사 완료 메시지 출력 (풍선 효과 포함)
-        st.balloons()
-        st.success("""
-        🎉 **소중한 의견이 도착했어요!**  
-        
-        보내주신 다정한 말씀과 조언은  
-        서비스 개선에 적극 반영하겠습니다.  
-        앞으로도 많은 기대 부탁드려요! 🙏
-        """)
-
+        try:
+            # 2. 기존 구글 시트 데이터 불러오기
+            existing_data = conn.read(ttl=0) # ttl=0으로 설정해야 실시간으로 반영됩니다.
+            
+            # 3. 새 데이터 생성 (작성 시간, 피드백 내용)
+            current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            new_row = pd.DataFrame([{"Date": current_time, "Feedback": user_feedback}])
+            
+            # 4. 기존 데이터와 새 데이터 병합 후 구글 시트에 업데이트
+            updated_data = pd.concat([existing_data, new_row], ignore_index=True)
+            conn.update(data=updated_data)
+            
+            # 5. 제출 성공 완료 메시지 및 시각 효과
+            st.balloons()
+            st.success("""
+            🎉 **소중한 의견이 도착했어요!**  
+            
+            보내주신 다정한 말씀과 조언은  
+            서비스 개선에 적극 반영하겠습니다.  
+            앞으로도 많은 기대 부탁드려요! 🙏
+            """)
+            
+        except Exception as e:
+            st.error(f"데이터 저장 중 오류가 발생했습니다: {e}")
 
