@@ -8,3 +8,5 @@ pytest>=8.0.0
 anthropic
 openai
 google-generativeai
+st-gsheets-connection
+
