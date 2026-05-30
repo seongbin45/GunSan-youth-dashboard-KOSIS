@@ -72,7 +72,7 @@ for _, row in filtered.iterrows():
 
 st.divider()
 st.caption("📌 지원 내용은 정부 정책 변경에 따라 달라질 수 있습니다. 반드시 공식 사이트에서 최신 정보를 확인하세요.")
-
+st.divider()
 
 
 st.set_page_config(page_title="청년 혜택", page_icon="🎁", layout="wide")
