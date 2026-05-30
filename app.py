@@ -10,7 +10,7 @@ if "page" in st.query_params:
     if target == "benefit":
         st.switch_page("pages/4_군산시민 맞춤 혜택 찾기.py")
     elif target == "finance":
-        st.switch_page("pages/6_금융용어.py")
+        st.switch_page("pages/5_금융용어.py")
     elif target == "ai":
         st.switch_page("pages/0_AI와_대화하기.py")
 
@@ -258,7 +258,7 @@ with col2:
     """, unsafe_allow_html=True)
     
     if st.button("금융 용어 배우기 →", key="btn_finance", use_container_width=True):
-        st.switch_page("pages/6_금융용어.py")
+        st.switch_page("pages/5_금융용어.py")
 
 with col3:
     st.markdown("""
