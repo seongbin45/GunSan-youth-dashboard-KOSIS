@@ -199,7 +199,7 @@ st.markdown("""
 # 헤더
 st.markdown("""
 <div class="header-container">
-    <div class="header-title">💚 FinFit</div>
+    <div class="header-title">💙 FinFit</div>
     <div class="header-subtitle">청년이 받아야 할 혜택을, AI가 먼저 찾아줍니다</div>
 </div>
 """, unsafe_allow_html=True)
