@@ -1,6 +1,5 @@
 import streamlit as st
-from streamlit_gsheets import GSheetsConnection
-import pandas as pd
+import gspread
 from datetime import datetime
 
 st.set_page_config(page_title="FinFit", page_icon="💙", layout="wide")
@@ -372,10 +371,19 @@ st.markdown("""
 st.divider()
 
 
-# 1. 구글 시트 연결 초기화
-conn = st.connection("gsheets", type=GSheetsConnection)
 
-# 안내 문구 출력
+# 1. gspread를 이용한 구글 시트 직접 인증 함수
+def get_gspread_client():
+    # secrets.toml의 [gspread] 내부 설정을 딕셔너리로 읽어옴
+    credentials = dict(st.secrets["gspread"])
+    # 🔴 private_key 문자열 내의 이스케이프 문자(\\n) 처리 보정
+    credentials["private_key"] = credentials["private_key"].replace("\\n", "\n")
+    
+    # 구글 서비스 계정 인증 수행
+    gc = gspread.service_account_from_dict(credentials)
+    return gc
+
+# UI 안내 문구 출력
 st.markdown("### 📱 서비스 의견 공유")
 st.markdown("""
 **저희 서비스는 더 나은 경험을 드리기 위해  
@@ -397,18 +405,16 @@ if st.button("의견 남기기", use_container_width=True):
         st.warning("내용을 입력한 후 버튼을 눌러주세요! ⚠️")
     else:
         try:
-            # 2. 기존 구글 시트 데이터 불러오기
-            existing_data = conn.read(ttl=0) # ttl=0으로 설정해야 실시간으로 반영됩니다.
+            # 2. 구글 인증 및 시트 열기
+            gc = get_gspread_client()
+            sh = gc.open_by_key(st.secrets["spreadsheet_id"])
+            worksheet = sh.get_worksheet(0) # 첫 번째 탭 선택
             
-            # 3. 새 데이터 생성 (작성 시간, 피드백 내용)
+            # 3. 데이터 추가 (Date, Feedback 컬럼 순서대로 매핑되어 들어감)
             current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            new_row = pd.DataFrame([{"Date": current_time, "Feedback": user_feedback}])
+            worksheet.append_row([current_time, user_feedback])
             
-            # 4. 기존 데이터와 새 데이터 병합 후 구글 시트에 업데이트
-            updated_data = pd.concat([existing_data, new_row], ignore_index=True)
-            conn.update(data=updated_data)
-            
-            # 5. 제출 성공 완료 메시지 및 시각 효과
+            # 4. 제출 성공 완료 메시지 및 시각 효과
             st.balloons()
             st.success("""
             🎉 **소중한 의견이 도착했어요!**  
@@ -417,6 +423,8 @@ if st.button("의견 남기기", use_container_width=True):
             서비스 개선에 적극 반영하겠습니다.  
             앞으로도 많은 기대 부탁드려요! 🙏
             """)
+            
+
             
         except Exception as e:
             st.error(f"데이터 저장 중 오류가 발생했습니다. 의견 남기기 버튼을 다시 한번만 눌러주세요🙏: {e}")
