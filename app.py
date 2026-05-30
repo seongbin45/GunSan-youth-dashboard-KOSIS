@@ -15,8 +15,6 @@ if "page" in st.query_params:
         st.switch_page("pages/2_AI와_대화하기.py")
     elif target == "Household_Ledger":
         st.switch_page("pages/Household_Ledger.py")
-    elif target == "finances":
-        st.switch_page("pages/5_금융용어.py")
     elif target == "Savings_Step_Setting_Guide":
         st.switch_page("pages/Savings_Step_Setting_Guide.py")
     elif target == "Government_Backed_Benefits":
