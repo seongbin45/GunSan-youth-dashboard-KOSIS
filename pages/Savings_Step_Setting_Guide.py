@@ -199,7 +199,7 @@ st.markdown("""
 소중한 의견을 들려주시면,  
 서비스 개선에 큰 도움이 됩니다!  
 
-🔒 개인정보 보호 | 📧 문의: choiseongbin45@gmail.com
+🔒 개인정보 보호 | 📧 : choiseongbin45@gmail.com
 """)
 
 # 의견 입력 창
