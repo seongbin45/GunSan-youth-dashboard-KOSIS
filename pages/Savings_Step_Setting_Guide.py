@@ -169,32 +169,32 @@ with col2:
         </div>
         """, unsafe_allow_html=True)
 
+    
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# 푸터
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    
 st.write("---")
 
-    # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-    # 푸터
-    # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# 1. ⚠️ 핵심 개선점: 캐싱 추가 (55분마다 한 번만 구글 인증 수행)
+@st.cache_resource(ttl=3300)
+def get_gspread_client():
+    # Secrets에서 통째로 저장된 JSON 문자열을 가져옴
+    json_string = st.secrets["gspread_json"]
     
-    st.write("---")
+    # 문자열을 파이썬 딕셔너리로 변환
+    credentials = json.loads(json_string)
+    
+    # 구글 서비스 계정 인증 수행
+    gc = gspread.service_account_from_dict(credentials)
+    return gc
 
-    # 1. ⚠️ 핵심 개선점: 캐싱 추가 (55분마다 한 번만 구글 인증 수행)
-    @st.cache_resource(ttl=3300)
-    def get_gspread_client():
-        # Secrets에서 통째로 저장된 JSON 문자열을 가져옴
-        json_string = st.secrets["gspread_json"]
-        
-        # 문자열을 파이썬 딕셔너리로 변환
-        credentials = json.loads(json_string)
-        
-        # 구글 서비스 계정 인증 수행
-        gc = gspread.service_account_from_dict(credentials)
-        return gc
-
-    st.markdown("""
-    <div class="footer">
-        <p>💌 저희는 더 나은 경험을 드리기 위해 꾸준히 준비 중입니다. 소중한 의견을 들려주시면 서비스 개선에 큰 도움이 됩니다.</p>
-        <p>🔒 개인정보 보호 | 📞 문의: 010-4666-9672 | 📧 choiseongbin45@gmail.com</p>
-    </div>
-    """, unsafe_allow_html=True)
+st.markdown("""
+<div class="footer">
+    <p>💌 저희는 더 나은 경험을 드리기 위해 꾸준히 준비 중입니다. 소중한 의견을 들려주시면 서비스 개선에 큰 도움이 됩니다.</p>
+    <p>🔒 개인정보 보호 | 📞 문의: 010-4666-9672 | 📧 choiseongbin45@gmail.com</p>
+</div>
+""", unsafe_allow_html=True)
     
 
