@@ -484,7 +484,6 @@ with col3:
         st.switch_page("pages/Savings_Step_Setting_Guide.py")
         
 
-st.divider()
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 # 푸터
@@ -497,5 +496,4 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-st.divider()
 
