@@ -301,9 +301,11 @@ with st.sidebar:
     examples=["나 25살 취준생, 군산 거주 무주택이야. 받을 수 있는 혜택 다 알려줘.","월급 230만원인데 저축 어떻게 해야 해?","군산시 청년 취업 상황 어때?","창업하려는 26살인데 혜택이랑 저축 계획 같이 알려줘."]
     for ex in examples:
         if st.button(ex,key=ex,use_container_width=True): st.session_state["prefill"]=ex
+    st.write("---")
     if st.button("🗑️ 대화 초기화",use_container_width=True):
         st.session_state["chat_history"]=[]
         st.rerun()
+    st.write("---")
 
     ### --- [여기에 임시 테스트 코드 추가] ---
     #st.divider()
