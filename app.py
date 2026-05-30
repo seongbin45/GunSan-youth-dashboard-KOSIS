@@ -195,7 +195,7 @@ st.markdown("""
 st.divider()
 
 # 세 가지 기능 카드
-col1, col2, col3, col4 = st.columns(4, gap="large")
+col1, col2, col3 = st.columns(3, gap="large")
 
 with col1:
     st.markdown("""
@@ -297,27 +297,6 @@ with stat_col3:
     </div>
     """, unsafe_allow_html=True)
 
-with col4:
-    st.markdown("""
-    <div class="feature-card card-red">
-        <div class="card-icon">🎁</div>
-        <div class="card-title">내 혜택 찾기</div>
-        <div class="card-description">
-            나이, 소득, 지역만 입력하면<br/>
-            정부·군산시에서 나에게 주는<br/>
-            금융 지원과 대출을 자동 추천
-        </div>
-        <div class="card-features">
-            <span class="card-features-title">이런 정보를 얻을 수 있어요</span>
-            <div class="feature-item">50개 이상 청년 정책 매칭</div>
-            <div class="feature-item">연 최대 1,000만원 이상 지원액</div>
-            <div class="feature-item">신청 방법과 기한 안내</div>
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
-    
-    if st.button("지금 혜택 찾아보기 →", key="btn_benefit", use_container_width=True):
-        st.switch_page("pages/Archive/1_가계부.py")
 
 st.divider()
 
