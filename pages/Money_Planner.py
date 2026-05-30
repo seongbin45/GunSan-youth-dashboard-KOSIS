@@ -443,7 +443,7 @@ with col2:
             <div class="card-title">정부 지원 혜택</div>
             <div class="card-description">
                 국가 청년 금융 지원 정보<br/>
-                실시간 동기화<br/>
+                정부 사이트 실시간 동기화<br/>
                 모든 정책을 한 화면에 보여줍니다
             </div>
             <div class="card-features">
