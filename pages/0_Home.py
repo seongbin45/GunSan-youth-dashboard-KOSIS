@@ -448,9 +448,9 @@ with col2:
             </div>
             <div class="card-features">
                 <span class="card-features-title">이 정도는 꼭 알아야 해요</span>
-                <div class="feature-item">30개 금융 개념 정리</div>
-                <div class="feature-item">실생활 예시로 이해</div>
-                <div class="feature-item">개념 + 행동 가이드</div>
+                <div class="feature-item">업데이트중입니다...</div>
+                <div class="feature-item">업데이트중입니다...</div>
+                <div class="feature-item">업데이트중입니다...</div>
             </div>
         </div>
     </a>
