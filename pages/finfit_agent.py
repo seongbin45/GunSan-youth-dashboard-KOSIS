@@ -351,7 +351,8 @@ for msg in st.session_state.chat_history:
         st.markdown(msg["content"])
 
 prefill=st.session_state.pop("prefill","")
-user_input=st.chat_input("질문하세요. 예) 나 25살 취준생인데 받을 수 있는 혜택 알려줘") or prefill
+user_input=st.chat_input("""여기에 질문을 적어주세요./
+예) 나 25살 취준생인데 받을 수 있는 혜택 알려줘""") or prefill
 
 if user_input:
     with st.chat_message("user"):
