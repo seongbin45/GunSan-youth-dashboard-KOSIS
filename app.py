@@ -4,6 +4,24 @@ st.set_page_config(page_title="FinFit", page_icon="💚", layout="wide")
 
 st.markdown("""
 <style>
+    /* 카드 전체를 감싸는 컨테이너 위치 설정 */
+    .card-container {
+        position: relative;
+        cursor: pointer;
+    }
+    
+    /* Streamlit 버튼을 카드 크기만큼 키우고 투명하게 만들기 */
+    .card-container .stButton > button {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0; /* 완전히 투명하게 설정 */
+        z-index: 10; /* HTML 카드보다 위에 오도록 설정 */
+        cursor: pointer;
+    }
+
     .main {
         background-color: #ffffff;
     }
@@ -198,6 +216,10 @@ st.divider()
 col1, col2, col3 = st.columns(3, gap="large")
 
 with col1:
+    # 1. 전체를 감싸는 div 추가 (CSS 적용을 위함)
+    st.markdown('<div class="card-container">', unsafe_allow_html=True)
+    
+    # 2. 기존 HTML 카드 디자인 render
     st.markdown("""
     <div class="feature-card card-red">
         <div class="card-icon">🎁</div>
@@ -215,6 +237,13 @@ with col1:
         </div>
     </div>
     """, unsafe_allow_html=True)
+
+    # 3. HTML 카드 위에 투명한 버튼 얹기 & 클릭 이벤트 처리
+    # (key 값은 고유하게 설정해야 오류가 나지 않습니다)
+    if st.button("", key="goto_gunsan_benefits"):
+        st.switch_page("pages/4_군산시민 맞춤 혜택 찾기.py")
+        
+    st.markdown('</div>', unsafe_allow_html=True)
     
     if st.button("지금 혜택 찾아보기 →", key="btn_benefit", use_container_width=True):
         st.switch_page("pages/4_군산시민 맞춤 혜택 찾기.py")
