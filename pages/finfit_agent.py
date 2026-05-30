@@ -1,6 +1,23 @@
 import streamlit as st
 import json
 import pandas as pd
+import google.generativeai as genai
+
+# 한 번 불러온 목록은 24시간(86400초) 동안 기억하여 앱 속도를 빠르게 유지합니다.
+@st.cache_data(show_spinner=False, ttl=86400)
+def get_dynamic_google_models(api_key):
+    try:
+        genai.configure(api_key=api_key)
+        available_models = []
+        for m in genai.list_models():
+            # 텍스트 생성용 모델만 필터링합니다.
+            if 'generateContent' in m.supported_generation_methods:
+                clean_name = m.name.replace('models/', '')
+                available_models.append(clean_name)
+        return available_models
+    except Exception:
+        # 만약 네트워크 오류 등으로 실패할 경우를 대비한 안전 장치(Fallback)입니다.
+        return ["gemini-1.5-flash", "gemini-1.5-pro"]
 
 try:
     import anthropic as _anthropic
