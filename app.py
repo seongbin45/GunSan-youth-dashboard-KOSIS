@@ -4,24 +4,6 @@ st.set_page_config(page_title="FinFit", page_icon="💚", layout="wide")
 
 st.markdown("""
 <style>
-    /* 카드 전체를 감싸는 컨테이너 위치 설정 */
-    .card-container {
-        position: relative;
-        cursor: pointer;
-    }
-    
-    /* Streamlit 버튼을 카드 크기만큼 키우고 투명하게 만들기 */
-    .card-container .stButton > button {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        opacity: 0; /* 완전히 투명하게 설정 */
-        z-index: 10; /* HTML 카드보다 위에 오도록 설정 */
-        cursor: pointer;
-    }
-
     .main {
         background-color: #ffffff;
     }
