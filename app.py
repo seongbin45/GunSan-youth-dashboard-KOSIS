@@ -198,24 +198,23 @@ st.divider()
 col1, col2, col3 = st.columns(3, gap="large")
 
 with col1:
+    # 💡 카드를 누르면 하단의 '지금 혜택 찾아보기' 버튼을 대신 클릭해주는 코드입니다.
     st.markdown("""
-    <div class="feature-card card-red" style="cursor: pointer;" onclick="window.parent.document.querySelectorAll('button').forEach(btn => { if(btn.innerText.includes('지금 혜택 찾아보기')) btn.click(); })">
-        <div class="feature-card card-red">
-            <div class="card-icon">🎁</div>
-            <div class="card-title">내 혜택 찾기</div>
-            <div class="card-description">
-                나이, 소득, 지역만 입력하면<br/>
-                정부·군산시에서 나에게 주는<br/>
-                금융 지원과 대출을 자동 추천
-            </div>
-            <div class="card-features">
-                <span class="card-features-title">이런 정보를 얻을 수 있어요</span>
-                <div class="feature-item">50개 이상 청년 정책 매칭</div>
-                <div class="feature-item">연 최대 1,000만원 이상 지원액</div>
-                <div class="feature-item">신청 방법과 기한 안내</div>
-            </div>
+    <div class="feature-card card-red" onclick="window.parent.document.querySelectorAll('button').forEach(b => { if(b.innerText.includes('지금 혜택 찾아보기')) b.click(); })">
+        <div class="card-icon">🎁</div>
+        <div class="card-title">내 혜택 찾기</div>
+        <div class="card-description">
+            나이, 소득, 지역만 입력하면<br/>
+            정부·군산시에서 나에게 주는<br/>
+            금융 지원과 대출을 자동 추천
         </div>
-    </a>
+        <div class="card-features">
+            <span class="card-features-title">이런 정보를 얻을 수 있어요</span>
+            <div class="feature-item">50개 이상 청년 정책 매칭</div>
+            <div class="feature-item">연 최대 1,000만원 이상 지원액</div>
+            <div class="feature-item">신청 방법과 기한 안내</div>
+        </div>
+    </div>
     """, unsafe_allow_html=True)
     
     # 이 버튼이 클릭되면 안전하게 st.switch_page가 작동합니다.
