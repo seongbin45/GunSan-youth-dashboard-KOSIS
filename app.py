@@ -12,7 +12,7 @@ if "page" in st.query_params:
     elif target == "finance":
         st.switch_page("pages/5_금융용어.py")
     elif target == "ai":
-        st.switch_page("pages/0_AI와_대화하기.py")
+        st.switch_page("pages/2_AI와_대화하기.py")
 
 st.markdown("""
 <style>
@@ -282,7 +282,7 @@ with col3:
     """, unsafe_allow_html=True)
     
     if st.button("AI와 상담하기 →", key="btn_ai", use_container_width=True):
-        st.switch_page("pages/0_AI와_대화하기.py")
+        st.switch_page("pages/2_AI와_대화하기.py")
 
 st.divider()
 
