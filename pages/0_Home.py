@@ -474,7 +474,7 @@ with col3:
                 <span class="card-features-title">AI가 도와줄 수 있어요</span>
                 <div class="feature-item">저축 단계별 가이드 제공</div>
                 <div class="feature-item">몇 개월 후 저축 목표 시뮬레이션</div>
-                <div class="feature-item">전체 저축 단계 비교</div>
+                <div class="feature-item">전체 저축 단계 비교 그래프</div>
             </div>
         </div>
     </a>
