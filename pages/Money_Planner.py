@@ -412,7 +412,7 @@ with col1:
     cols = st.columns(4)
     st.markdown("""
     <a href="/?page=Government_Backed_Benefits" target="_self" style="text-decoration: none; color: inherit;">
-        <div class="feature-card card-blue">
+        <div class="feature-card card-peach">
             <div class="card-icon">🎁</div>
             <div class="card-title">군산 시민 혜택 찾기</div>
             <div class="card-description">
@@ -438,7 +438,7 @@ with col2:
     # col2도 똑같이 전체 클릭 기능을 넣고 싶다면 아래처럼 <a> 태그로 감싸주면 됩니다.
     st.markdown("""
     <a href="/?page=finance" target="_self" style="text-decoration: none; color: inherit;">
-        <div class="feature-card card-peach">
+        <div class="feature-card card-pastel-powder">
             <div class="card-icon">📚</div>
             <div class="card-title">금융 용어</div>
             <div class="card-description">
