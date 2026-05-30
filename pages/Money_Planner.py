@@ -393,7 +393,7 @@ with col3:
     if st.button("AI와 상담하기 →", key="btn_ai", use_container_width=True):
         st.switch_page("pages/2_AI와_대화하기.py")
 
-    with col4:
+with col4:
     st.markdown("""
     <a href="/?page=Household_Ledger" target="_self" style="text-decoration: none; color: inherit;">
         <div class="feature-card card-yellow">
@@ -417,7 +417,7 @@ with col3:
     if st.button("지금 입력해보기 →", key="btn_benefit", use_container_width=True):
         st.switch_page("pages/Household_Ledger.py")
 
-    with col5:
+with col5:
     # 카드 전체를 <a> 태그로 감싸고 주소 뒤에 ?page=benefit이 붙도록 만듭니다.
     st.markdown("""
     <a href="/?page=Household_Ledger" target="_self" style="text-decoration: none; color: inherit;">
@@ -442,7 +442,7 @@ with col3:
     if st.button("지금 입력해보기 →", key="btn_benefit", use_container_width=True):
         st.switch_page("pages/Household_Ledger.py")
 
-    with col6:
+with col6:
     st.markdown("""
     <a href="/?page=Household_Ledger" target="_self" style="text-decoration: none; color: inherit;">
         <div class="feature-card card-yellow">
