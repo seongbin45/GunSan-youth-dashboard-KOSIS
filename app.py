@@ -278,7 +278,7 @@ with col2:
     """, unsafe_allow_html=True)
 
     if st.button("금융 용어 배우기 →", key="btn_finance", use_container_width=True):
-        window.location.href = "pages/6_금융용어.py"
+        st.switch_page("pages/6_금융용어.py")
         st.page_link("pages/6_금융용어.py", label="금융 용어 배우기 →", icon="📚")
         st.caption("CMA, ETF, 청년도약계좌... 쉽게 설명해줌")
 
