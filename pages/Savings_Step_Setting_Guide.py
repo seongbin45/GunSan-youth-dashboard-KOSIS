@@ -95,8 +95,7 @@ LEVELS = {
     10: {"name":"생존형 저축",    "save":0.80, "fix":0.20, "leisure":0.00, "color":"#9C27B0"},
 }
 st.session_state.LEVELS = LEVELS
-        
-st.write("---")
+    
 
 # 전체 단계 비교표
 st.subheader("📊 전체 단계 비교")
