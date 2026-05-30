@@ -20,7 +20,7 @@ if "page" in st.query_params:
     
     if target == "Household_Ledger":
         st.switch_page("pages/Household_Ledger.py")
-    elif target == "finance":
+    elif target == "finances":
         st.switch_page("pages/5_금융용어.py")
     elif target == "Savings_Step_Setting_Guide":
         st.switch_page("pages/Savings_Step_Setting_Guide.py")
@@ -347,7 +347,7 @@ with col1:
 with col2:
     # col2도 똑같이 전체 클릭 기능을 넣고 싶다면 아래처럼 <a> 태그로 감싸주면 됩니다.
     st.markdown("""
-    <a href="/?page=finance" target="_self" style="text-decoration: none; color: inherit;">
+    <a href="/?page=finances" target="_self" style="text-decoration: none; color: inherit;">
         <div class="feature-card card-mint">
             <div class="card-icon">📚</div>
             <div class="card-title">금융 용어</div>
@@ -366,7 +366,7 @@ with col2:
     </a>
     """, unsafe_allow_html=True)
     
-    if st.button("금융 용어 배우기 →", key="btn_finance", use_container_width=True):
+    if st.button("금융 용어 배우기 →", key="btn_finances", use_container_width=True):
         st.switch_page("pages/5_금융용어.py")
 
 with col3:
