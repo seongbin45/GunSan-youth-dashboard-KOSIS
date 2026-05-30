@@ -106,7 +106,7 @@ for item in items:
         else:
             st.caption("상세 조회를 위한 식별자가 없어 목록 데이터만 표시합니다.")
 
-
+st.divider()
 st.set_page_config(page_title="청년 혜택 정보", page_icon="🎁", layout="wide")
 st.title("🎁 청년을 위한 국가 금융 지원")
 st.caption("2024~2025년 기준 / 자세한 내용은 각 공식 사이트에서 확인하세요")
