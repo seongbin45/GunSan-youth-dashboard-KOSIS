@@ -52,6 +52,8 @@ KEYS = {
     "Anthropic": _secret("ANTHROPIC_API_KEY"),
     "OpenAI":    _secret("OPENAI_API_KEY"),
     "Google":    _secret("GOOGLE_API_KEY"),
+    "Groq":    _secret("GROQ_API_KEY"),
+    "Mistral": _secret("MISTRAL_API_KEY"),
 }
 
 LEVELS = {
