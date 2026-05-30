@@ -16,7 +16,7 @@ if "expenses" not in st.session_state:
 # 주소창의 흔적을 감지해서 페이지를 이동시키는 네비게이터 역할을 합니다.
 if "page" in st.query_params:
     target = st.query_params["page"]
-    st.query_params.clear() # 무한 루프 방지를 위해 흔적 지우기
+    st.query_params.clear()  # 이동 후 주소창 깨끗하게 정리
     
     if target == "Household_Ledger":
         st.switch_page("pages/Household_Ledger.py")
