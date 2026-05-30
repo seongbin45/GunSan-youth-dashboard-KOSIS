@@ -13,6 +13,20 @@ if "level" not in st.session_state:
 if "expenses" not in st.session_state:
     st.session_state.expenses = []
 
+# 주소창의 흔적을 감지해서 페이지를 이동시키는 네비게이터 역할을 합니다.
+if "page" in st.query_params:
+    target = st.query_params["page"]
+    st.query_params.clear() # 무한 루프 방지를 위해 흔적 지우기
+    
+    if target == "Household_Ledger":
+        st.switch_page("pages/Household_Ledger.py")
+    elif target == "finance":
+        st.switch_page("pages/5_금융용어.py")
+    elif target == "Savings_Step_Setting_Guide":
+        st.switch_page("pages/Savings_Step_Setting_Guide.py")
+    elif target == "Government_Backed_Benefits":
+        st.switch_page("pages/3_정부 지원 혜택 목록.py")
+
 LEVELS = {
     1:  {"name":"여가 최우선",    "save":0.05, "fix":0.45, "leisure":0.50, "color":"#4CAF50"},
     2:  {"name":"여가 중심",      "save":0.10, "fix":0.50, "leisure":0.40, "color":"#8BC34A"},
