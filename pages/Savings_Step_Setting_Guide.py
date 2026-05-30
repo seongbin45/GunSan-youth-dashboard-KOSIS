@@ -212,7 +212,7 @@ user_feedback = st.text_area(
 )
 
 # 의견 남기기 버튼 (CTA)
-if st.button("의견 남기기", use_container_width=True):
+if st.button("피드백 남기기", use_container_width=True):
     if user_feedback.strip() == "":
         st.warning("내용을 입력한 후 버튼을 눌러주세요! ⚠️")
     else:
@@ -231,7 +231,7 @@ if st.button("의견 남기기", use_container_width=True):
             # 4. 제출 성공 완료 메시지 및 시각 효과
             st.balloons()
             st.success("""
-            🎉 **소중한 의견이 성공적으로 전달되었어요!**   
+            🎉 **소중한 피드백이 성공적으로 전달되었어요!**   
             보내주신 다정한 말씀과 조언은  
             서비스 개선에 적극 반영하겠습니다.  
             앞으로도 많은 기대 부탁드려요! 🙏
