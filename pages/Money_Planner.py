@@ -395,27 +395,27 @@ with col3:
 
 with col4:
     st.markdown("""
-    <a href="/?page=Household_Ledger" target="_self" style="text-decoration: none; color: inherit;">
-        <div class="feature-card card-yellow">
-            <div class="card-icon">📒</div>
-            <div class="card-title">가계부</div>
+    <a href="/?page=finance" target="_self" style="text-decoration: none; color: inherit;">
+        <div class="feature-card card-mint">
+            <div class="card-icon">📚</div>
+            <div class="card-title">금융 용어</div>
             <div class="card-description">
-                내역만 입력하면<br/>
-                수입·지출 기록 및 월별 분석
+                CMA, ETF, 청년도약계좌,<br/>
+                전세대출... 경제 신문에 나오는<br/>
+                어려운 용어를 쉽게 설명해줍니다
             </div>
             <div class="card-features">
-                <span class="card-features-title">이런 정보를 얻을 수 있어요</span>
-                <div class="feature-item">50개 이상 청년 정책 매칭</div>
-                <div class="feature-item">연 최대 1,000만원 이상 지원액</div>
-                <div class="feature-item">신청 방법과 기한 안내</div>
+                <span class="card-features-title">이 정도는 꼭 알아야 해요</span>
+                <div class="feature-item">30개 금융 개념 정리</div>
+                <div class="feature-item">실생활 예시로 이해</div>
+                <div class="feature-item">개념 + 행동 가이드</div>
             </div>
         </div>
     </a>
     """, unsafe_allow_html=True)
     
-    # 이 버튼이 클릭되면 안전하게 st.switch_page가 작동합니다.
-    if st.button("지금 입력해보기 →", key="btn_benefit", use_container_width=True):
-        st.switch_page("pages/Household_Ledger.py")
+    if st.button("금융 용어 배우기 →", key="btn_finance", use_container_width=True):
+        st.switch_page("pages/5_금융용어.py")
 
 with col5:
     # 카드 전체를 <a> 태그로 감싸고 주소 뒤에 ?page=benefit이 붙도록 만듭니다.
@@ -444,27 +444,28 @@ with col5:
 
 with col6:
     st.markdown("""
-    <a href="/?page=Household_Ledger" target="_self" style="text-decoration: none; color: inherit;">
-        <div class="feature-card card-yellow">
-            <div class="card-icon">📒</div>
-            <div class="card-title">가계부</div>
+    <a href="/?page=ai" target="_self" style="text-decoration: none; color: inherit;">
+        <div class="feature-card card-lavender">
+            <div class="card-icon">🤖</div>
+            <div class="card-title">AI 금융 상담</div>
             <div class="card-description">
-                내역만 입력하면<br/>
-                수입·지출 기록 및 월별 분석
+                "전세금 대출은 언제까지 나올까?"<br/>
+                "내가 받을 수 있는 혜택이 뭐야?"<br/>
+                "자연어로 물어보면 AI가 즉답
             </div>
             <div class="card-features">
-                <span class="card-features-title">이런 정보를 얻을 수 있어요</span>
-                <div class="feature-item">50개 이상 청년 정책 매칭</div>
-                <div class="feature-item">연 최대 1,000만원 이상 지원액</div>
-                <div class="feature-item">신청 방법과 기한 안내</div>
+                <span class="card-features-title">AI가 도와줄 수 있어요</span>
+                <div class="feature-item">50개 청년 정책 데이터 학습</div>
+                <div class="feature-item">실시간 금융 계산</div>
+                <div class="feature-item">군산시 맞춤 정보</div>
             </div>
         </div>
     </a>
     """, unsafe_allow_html=True)
     
-    # 이 버튼이 클릭되면 안전하게 st.switch_page가 작동합니다.
-    if st.button("지금 입력해보기 →", key="btn_benefit", use_container_width=True):
-        st.switch_page("pages/Household_Ledger.py")
+    if st.button("AI와 상담하기 →", key="btn_ai", use_container_width=True):
+        st.switch_page("pages/2_AI와_대화하기.py")
+        
 
 st.divider()
 
