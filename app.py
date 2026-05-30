@@ -2,6 +2,18 @@ import streamlit as st
 
 st.set_page_config(page_title="FinFit", page_icon="💚", layout="wide")
 
+# 주소창의 흔적을 감지해서 페이지를 이동시키는 네비게이터 역할을 합니다.
+if "page" in st.query_params:
+    target = st.query_params["page"]
+    st.query_params.clear() # 무한 루프 방지를 위해 흔적 지우기
+    
+    if target == "benefit":
+        st.switch_page("pages/4_군산시민 맞춤 혜택 찾기.py")
+    elif target == "finance":
+        st.switch_page("pages/6_금융용어.py")
+    elif target == "ai":
+        st.switch_page("pages/0_FinFit_Agent.py")
+
 st.markdown("""
 <style>
     .main {
@@ -199,24 +211,16 @@ col1, col2, col3 = st.columns(3, gap="large")
 
 with col1:
     # 💡 카드를 누르면 하단의 '지금 혜택 찾아보기' 버튼을 대신 클릭해주는 코드입니다.
-    st.markdown("""
-    <div class="feature-card card-red" onclick="window.parent.document.querySelectorAll('button').forEach(b => { if(b.innerText.includes('지금 혜택 찾아보기')) b.click(); })">
-        <div class="card-icon">🎁</div>
-        <div class="card-title">내 혜택 찾기</div>
-        <div class="card-description">
-            나이, 소득, 지역만 입력하면<br/>
-            정부·군산시에서 나에게 주는<br/>
-            금융 지원과 대출을 자동 추천
-        </div>
-        <div class="card-features">
-            <span class="card-features-title">이런 정보를 얻을 수 있어요</span>
-            <div class="feature-item">50개 이상 청년 정책 매칭</div>
-            <div class="feature-item">연 최대 1,000만원 이상 지원액</div>
-            <div class="feature-item">신청 방법과 기한 안내</div>
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
-    
+    with st.container(border=True):
+        st.title("🎁 내 혜택 찾기")
+        st.write("나이, 소득, 지역만 입력하면 정부·군산시에서 나에게 주는 금융 지원과 대출을 자동 추천")
+        
+        # 강조 박스 구역
+        st.info("**💡 이런 정보를 얻을 수 있어요**\n- 50개 이상 청년 정책 매칭\n- 연 최대 1,000만원 이상 지원액\n- 신청 방법과 기한 안내")
+        
+        # 버튼 배치 (너비를 카드에 맞게 꽉 채움)
+        if st.button("지금 혜택 찾아보기 →", key="btn_benefit", use_container_width=True):
+            st.switch_page("pages/4_군산시민 맞춤 혜택 찾기.py")
     # 이 버튼이 클릭되면 안전하게 st.switch_page가 작동합니다.
     if st.button("지금 혜택 찾아보기 →", key="btn_benefit", use_container_width=True):
         st.switch_page("pages/4_군산시민 맞춤 혜택 찾기.py")
