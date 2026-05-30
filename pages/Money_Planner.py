@@ -462,7 +462,7 @@ with col2:
 with col3:
     st.markdown("""
     <a href="/?page=ai" target="_self" style="text-decoration: none; color: inherit;">
-        <div class="feature-card card-pastel-milk">
+        <div class="feature-card card-blue">
             <div class="card-icon">🤖</div>
             <div class="card-title">AI 금융 상담</div>
             <div class="card-description">
