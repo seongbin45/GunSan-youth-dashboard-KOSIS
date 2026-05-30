@@ -364,8 +364,7 @@ st.markdown("""
 <div class="footer">
     <p>💌 저희 서비스는 더 나은 경험을 드리기 위해 꾸준히 준비 중입니다. 소중한 의견을 들려주시면 서비스 개선에 큰 도움이 됩니다.</p>
     <p>🔒 개인정보 보호 | 📞 문의: 010-4666-9672 | 📧 choiseongbin45@gmail.com</p>
-
-
+""")
 
 
 # 1. 안내 문구 출력 (모바일 가독성 최적화 줄바꿈)
@@ -401,8 +400,5 @@ if st.button("의견 남기기", use_container_width=True):
         서비스 개선에 적극 반영하겠습니다.  
         앞으로도 많은 기대 부탁드려요! 🙏
         """)
-
-</div>
-""", unsafe_allow_html=True)
 
 
