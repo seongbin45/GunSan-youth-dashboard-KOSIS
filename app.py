@@ -254,6 +254,8 @@ with col1:
     
     if st.button("지금 혜택 찾아보기 →", key="btn_benefit", use_container_width=True):
         st.info("💡 준비 중입니다. 페이지를 새로고침해주세요.")
+        st.page_link("pages/4_군산시민 맞춤 혜택 찾기.py", label="내 혜택 찾기", icon="🎁")
+        st.caption("나이·소득·지역 입력하면 맞춤 혜택 바로 추천")
 
 # 카드 2: 금융 용어
 with col2:
@@ -277,6 +279,8 @@ with col2:
     
     if st.button("금융 용어 배우기 →", key="btn_finance", use_container_width=True):
         st.info("💡 준비 중입니다. 페이지를 새로고침해주세요.")
+        st.page_link("pages/6_금융용어.py", label="금융 용어", icon="📚")
+        st.caption("CMA, ETF, 청년도약계좌... 쉽게 설명해줌")
 
 # 카드 3: AI 상담
 with col3:
@@ -300,6 +304,8 @@ with col3:
     
     if st.button("AI와 상담하기 →", key="btn_ai", use_container_width=True):
         st.info("💡 준비 중입니다. 페이지를 새로고침해주세요.")
+        st.page_link("pages/0_FinFit_Agent.py", label="AI에게 물어보기", icon="🤖")
+        st.caption("자연어로 질문하면 Agent가 알아서 답변")
 
 st.divider()
 
@@ -387,7 +393,7 @@ st.divider()
 st.markdown("""
 <div class="footer">
     <p>💡 FinFit은 군산시청 · 군산시 창업지원센터 · 국립군산대학교와 함께 만들었습니다</p>
-    <p>🔒 개인정보 보호 | 📞 문의: 063-xxx-xxxx | 📧 contact@finfit.kr</p>
+    <p>🔒 개인정보 보호 | 📞 문의: 010-4666-9672 | 📧 choiseongbin45@gmail.com</p>
 </div>
 """, unsafe_allow_html=True)
 
