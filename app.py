@@ -216,10 +216,8 @@ st.divider()
 col1, col2, col3 = st.columns(3, gap="large")
 
 with col1:
-    # 카드 전체를 클릭하면 해당 페이지로 이동하도록 <a> 태그로 감싸기
-    # 디자인 유지를 위해 스타일(텍스트 데코레이션 제거, 색상 유지)을 부여합니다.
     st.markdown("""
-    <a href="군산시민 맞춤 혜택 찾기" target="_self" style="text-decoration: none; color: inherit;">
+    <div class="feature-card card-red" style="cursor: pointer;" onclick="window.parent.document.querySelectorAll('button').forEach(btn => { if(btn.innerText.includes('지금 혜택 찾아보기')) btn.click(); })">
         <div class="feature-card card-red">
             <div class="card-icon">🎁</div>
             <div class="card-title">내 혜택 찾기</div>
@@ -238,8 +236,8 @@ with col1:
     </a>
     """, unsafe_allow_html=True)
     
-    # 하단 버튼 (이제 레이아웃이 깨지지 않고 정상적으로 카드의 정중앙 하단에 위치합니다)
-    if st.button("지금 혜택 찾아보기 →", key="btn_benefit", use_container_width=True):
+     # 이 버튼이 클릭되면 안전하게 st.switch_page가 작동합니다.
+     if st.button("지금 혜택 찾아보기 →", key="btn_benefit", use_container_width=True):
         st.switch_page("pages/4_군산시민 맞춤 혜택 찾기.py")
 
 with col2:
