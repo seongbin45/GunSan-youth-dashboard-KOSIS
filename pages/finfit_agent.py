@@ -185,8 +185,27 @@ def run_anthropic(user_message,key):
         else:
             return "".join(b.text for b in resp.content if hasattr(b,"text")),tool_steps
 
-def run_openai(user_message,key,model="gpt-4o"):
-    client=_OpenAI(api_key=key)
+def run_openai(user_message, key, model="gpt-4o", base_url=None):
+    # base_url 지정 시 Groq/Mistral 등 OpenAI 호환 Provider 재사용 가능
+    client = _OpenAI(api_key=key, base_url=base_url) if base_url else _OpenAI(api_key=key)
+    messages=[{"role":"system","content":SYSTEM_PROMPT},{"role":"user","content":user_message}]
+    tool_steps=[]
+    while True:
+        resp=client.chat.completions.create(model=model,messages=messages,tools=_openai_tools(),tool_choice="auto")
+        choice=resp.choices[0]
+        if choice.finish_reason=="tool_calls":
+            messages.append(choice.message)
+            for tc in choice.message.tool_calls:
+                inp=json.loads(tc.function.arguments)
+                out=execute_tool(tc.function.name,inp)
+                tool_steps.append({"tool":tc.function.name,"input":inp,"output":json.loads(out)})
+                messages.append({"role":"tool","tool_call_id":tc.id,"content":out})
+        else:
+            return choice.message.content or "",tool_steps
+
+def run_openai(user_message, key, model="gpt-4o", base_url=None):
+    # base_url 지정 시 Groq/Mistral 등 OpenAI 호환 Provider 재사용 가능
+    client = _OpenAI(api_key=key, base_url=base_url) if base_url else _OpenAI(api_key=key)
     messages=[{"role":"system","content":SYSTEM_PROMPT},{"role":"user","content":user_message}]
     tool_steps=[]
     while True:
@@ -229,11 +248,16 @@ with st.sidebar:
     if GOOGLE_OK and KEYS["Google"]:        provider_options.append("🔵 Google (Gemini)")
     ##if OPENAI_OK and KEYS["OpenAI"]:       provider_options.append("🟢 OpenAI (GPT-4o)")
     ##if ANTHROPIC_OK and KEYS["Anthropic"]: provider_options.append("🟣 Anthropic (Claude)")
+    if OPENAI_OK   and KEYS["Groq"]:       provider_options.append("⚡ Groq (무료)")
+    if OPENAI_OK   and KEYS["Mistral"]:    provider_options.append("🌊 Mistral (무료)")
     
     missing=[]
     if not (GOOGLE_OK and KEYS["Google"]):         missing.append("GOOGLE_API_KEY")
     ##if not (OPENAI_OK and KEYS["OpenAI"]):        missing.append("OPENAI_API_KEY")
     ##if not (ANTHROPIC_OK and KEYS["Anthropic"]): missing.append("ANTHROPIC_API_KEY")
+    if not KEYS["Groq"]:                          missing.append("GROQ_API_KEY    (무료: console.groq.com)")
+    if not KEYS["Mistral"]:                       missing.append("MISTRAL_API_KEY (무료tier: console.mistral.ai)")
+    
     if missing:
         with st.expander("⚠️ 미설정 키"):
             st.markdown("아래 키가 `secrets.toml`에 없습니다:")
@@ -244,6 +268,7 @@ with st.sidebar:
         st.error("사용 가능한 API Key가 없습니다.\nsecrets.toml 설정 후 재시작하세요.")
         st.stop()
 
+    
     provider=st.selectbox("AI Provider",provider_options)
     model_selected=None
     if "OpenAI" in provider:
@@ -261,6 +286,15 @@ with st.sidebar:
 
     #elif "Google" in provider:
         #model_selected = st.selectbox("모델", ["gemini-3.5-flash", "gemini-2.5-pro", "gemini-2.0-flash"])
+    
+    elif "Groq" in provider:
+        model_selected=st.selectbox("모델",["llama-3.3-70b-versatile","llama-3.1-8b-instant","gemma2-9b-it"])
+        st.caption("⚡ Groq는 완전 무료입니다. (분당 요청수 제한 있음)")
+        
+    elif "Mistral" in provider:
+        model_selected=st.selectbox("모델",["mistral-small-latest","open-mistral-7b","mistral-large-latest"])
+        st.caption("🌊 mistral-small / open-mistral-7b 는 무료 tier입니다.")
+
     
     st.divider()
     st.markdown("**🔧 사용 가능한 도구**")
