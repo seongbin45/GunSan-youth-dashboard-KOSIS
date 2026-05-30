@@ -457,7 +457,7 @@ with col2:
     """, unsafe_allow_html=True)
     
     if st.button("확인해 보러 가기 →", key="btn_finances", use_container_width=True):
-        st.switch_page("pages/3_정부 지원 혜택 목록")
+        st.switch_page("pages/3_정부 지원 혜택 목록.py")
 
 with col3:
     st.markdown("""
