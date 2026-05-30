@@ -253,7 +253,7 @@ with col1:
     """, unsafe_allow_html=True)
     
     if st.button("지금 혜택 찾아보기 →", key="btn_benefit", use_container_width=True):
-        st.info("💡 준비 중입니다. 페이지를 새로고침해주세요.")
+        st.switch_page("pages/4_군산시민 맞춤 혜택 찾기.py")
         st.page_link("pages/4_군산시민 맞춤 혜택 찾기.py", label="내 혜택 찾기", icon="🎁")
         st.caption("나이·소득·지역 입력하면 맞춤 혜택 바로 추천")
 
@@ -303,7 +303,7 @@ with col3:
     """, unsafe_allow_html=True)
     
     if st.button("AI와 상담하기 →", key="btn_ai", use_container_width=True):
-        st.info("💡 준비 중입니다. 페이지를 새로고침해주세요.")
+        st.switch_page("pages/0_FinFit_Agent.py")
         st.page_link("pages/0_FinFit_Agent.py", label="AI에게 물어보기", icon="🤖")
         st.caption("자연어로 질문하면 Agent가 알아서 답변")
 
