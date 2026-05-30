@@ -219,7 +219,7 @@ with col1:
     # 카드 전체를 클릭하면 해당 페이지로 이동하도록 <a> 태그로 감싸기
     # 디자인 유지를 위해 스타일(텍스트 데코레이션 제거, 색상 유지)을 부여합니다.
     st.markdown("""
-    <a href="pages/4_군산시민_맞춤_혜택_찾기.py" target="_self" style="text-decoration: none; color: inherit;">
+    <a href="4_군산시민_맞춤_혜택_찾기.py" target="_self" style="text-decoration: none; color: inherit;">
         <div class="feature-card card-red">
             <div class="card-icon">🎁</div>
             <div class="card-title">내 혜택 찾기</div>
