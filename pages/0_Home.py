@@ -447,7 +447,7 @@ with col2:
                 모든 정책을 한 화면에 보여줍니다
             </div>
             <div class="card-features">
-                <span class="card-features-title">이 정도는 꼭 알아야 해요</span>
+                <span class="card-features-title">많은 사이트들을 볼 수 있어요</span>
                 <div class="feature-item">업데이트중입니다...</div>
                 <div class="feature-item">업데이트중입니다...</div>
                 <div class="feature-item">업데이트중입니다...</div>
