@@ -423,7 +423,7 @@ with col1:
     """, unsafe_allow_html=True)
     
     # 이 버튼이 클릭되면 안전하게 st.switch_page가 작동합니다.
-    if st.button("지금 입력해보기 →", key="btn_benefit", use_container_width=True):
+    if st.button("지금 입력해보기 →", key="btn_Savings_Step_Setting_Guid", use_container_width=True):
         st.switch_page("pages/Household_Ledger.py")
 
 with col2:
