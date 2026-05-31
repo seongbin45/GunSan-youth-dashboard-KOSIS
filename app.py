@@ -326,7 +326,7 @@ with col2:
         """, unsafe_allow_html=True)
 
 st.divider()
-st.markdown("#### 🗺️ 아래에서 기능을 선택하세요")
+st.markdown("#### 🗺️ 아래에서 기능을 선택해주세요")
 cols = st.columns(4)
 #pages = [
     #("📒 가계부",        "수입·지출 기록 및 월별 분석"),
