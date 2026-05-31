@@ -511,7 +511,7 @@ with col3:
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 ### github.com 주소 뒤에 ?raw=true 추가
-github_image_url = "https://github.com/seongbin45/GunSan-youth-dashboard-KOSIS/blob/d9e01249d383e720157741b91654f7a12bd4aba7/tests/Image/%EC%A0%9C%EB%AA%A9%EC%9D%84%20%EC%9E%85%EB%A0%A5%ED%95%B4%EC%A3%BC%EC%84%B8%EC%9A%94.%20(8).png?raw=true"
+github_image_url = "https://github.com/seongbin45/GunSan-youth-dashboard-KOSIS/blob/9a0bf10dfd74407e81691b274a1b8e9f690e7104/tests/Image/%EC%A0%9C%EB%AA%A9%EC%9D%84%20%EC%9E%85%EB%A0%A5%ED%95%B4%EC%A3%BC%EC%84%B8%EC%9A%94.%20(7).png?raw=true"
 
 ### 스트림릿에 이미지 출력
 st.image(github_image_url, use_container_width=True)
