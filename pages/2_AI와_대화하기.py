@@ -38,7 +38,7 @@ except ImportError:
     GOOGLE_OK = False
 
 st.set_page_config(page_title="FinFit AI Agent", page_icon="🤖", layout="wide")
-st.title("🤖 FinFit AI Agent")
+st.title("♾️ FinFit AI Agent")
 st.markdown("**자연어로 물어보세요.** Agent가 필요한 정보를 스스로 판단하고 찾아드립니다.")
 st.divider()
 
