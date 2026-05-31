@@ -483,13 +483,12 @@ with col3:
             <div class="card-icon">🎯</div>
             <div class="card-title">저축단계 상세 가이드</div>
             <div class="card-description">
-                "단계별 상세 가이드 및 팁"<br/>
-                몇 개월 후 도달 금액을 확인할 수 있어요<br/>
+                몇 개월 후 도달 금액을 미리 확인할 수 있어요<br/>
                 실제 행동을 코칭해줍니다
             </div>
             <div class="card-features">
                 <span class="card-features-title">이런 자료들을 얻을 수 있어요</span>
-                <div class="feature-item">저축 단계별 팁</div>
+                <div class="feature-item">단계별 상세 가이드 및 팁</div>
                 <div class="feature-item">목표 금액 시뮬레이션</div>
                 <div class="feature-item">전체 단계 비교 그래프</div>
             </div>
