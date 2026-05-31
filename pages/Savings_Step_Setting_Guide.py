@@ -180,6 +180,12 @@ with col2:
     
 st.write("---")
 
+### github.com 주소 뒤에 ?raw=true 추가
+github_image_url = "https://github.com/seongbin45/GunSan-youth-dashboard-KOSIS/blob/9a0bf10dfd74407e81691b274a1b8e9f690e7104/tests/Image/%EC%A0%9C%EB%AA%A9%EC%9D%84%20%EC%9E%85%EB%A0%A5%ED%95%B4%EC%A3%BC%EC%84%B8%EC%9A%94.%20(7).png?raw=true"
+
+### 스트림릿에 이미지 출력
+st.image(github_image_url, use_container_width=True)
+
 # 1. ⚠️ 핵심 개선점: 캐싱 추가 (55분마다 한 번만 구글 인증 수행)
 @st.cache_resource(ttl=3300)
 def get_gspread_client():
