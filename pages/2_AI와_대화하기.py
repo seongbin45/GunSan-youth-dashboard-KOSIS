@@ -17,7 +17,7 @@ def get_dynamic_google_models(api_key):
         return available_models
     except Exception:
         # 만약 네트워크 오류 등으로 실패할 경우를 대비한 안전 장치(Fallback)입니다.
-        return ["gemini-3.5-flash", "gemini-2.5-pro"]
+        return ["gemini-2.5-pro", "gemini-3.5-flash"]
 
 try:
     import anthropic as _anthropic
