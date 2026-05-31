@@ -377,7 +377,7 @@ def get_gspread_client():
     return gc
     
 # UI 안내 문구 출력
-st.markdown("### 💌 서비스 의견 공유")
+st.markdown("### 💌 서비스 의견 남기기")
 st.markdown("""
 **저희는 더 나은 경험을 드리기 위해   
 꾸준히 준비 중입니다.**  
