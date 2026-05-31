@@ -1,9 +1,6 @@
 import streamlit as st
-import pandas as pd
-import sqlite3  # 👈 이 녀석이 빠져 있어서 에러가 났던 겁니다!
-import plotly.express as px
 
-st.set_page_config(page_title="FinFit", page_icon="💰", layout="wide")
+st.set_page_config(page_title="FinFit", page_icon="💚", layout="wide")
 
 # ── 세션 초기화 ──────────────────────────────────────────────────────────────
 if "income" not in st.session_state:
@@ -13,28 +10,22 @@ if "level" not in st.session_state:
 if "expenses" not in st.session_state:
     st.session_state.expenses = []
 
+LEVELS = {
+    1:  {"name":"여가 최우선",    "save":0.05, "fix":0.45, "leisure":0.50, "color":"#4CAF50"},
+    2:  {"name":"여가 중심",      "save":0.10, "fix":0.50, "leisure":0.40, "color":"#8BC34A"},
+    3:  {"name":"균형 여가형",    "save":0.15, "fix":0.55, "leisure":0.30, "color":"#CDDC39"},
+    4:  {"name":"생활 균형형",    "save":0.20, "fix":0.55, "leisure":0.25, "color":"#FFEB3B"},
+    5:  {"name":"균형형",         "save":0.25, "fix":0.55, "leisure":0.20, "color":"#FFC107"},
+    6:  {"name":"저축 균형형",    "save":0.30, "fix":0.55, "leisure":0.15, "color":"#FF9800"},
+    7:  {"name":"저축 집중형",    "save":0.40, "fix":0.50, "leisure":0.10, "color":"#FF5722"},
+    8:  {"name":"고강도 저축",    "save":0.50, "fix":0.45, "leisure":0.05, "color":"#F44336"},
+    9:  {"name":"극한 저축",      "save":0.65, "fix":0.35, "leisure":0.00, "color":"#E91E63"},
+    10: {"name":"생존형 저축",    "save":0.80, "fix":0.20, "leisure":0.00, "color":"#9C27B0"},
+}
 
+st.session_state.LEVELS = LEVELS
 
-# 주소창의 흔적을 감지해서 페이지를 이동시키는 네비게이터 역할을 합니다.
-if "page" in st.query_params:
-    target = st.query_params["page"]
-    st.query_params.clear() # 무한 루프 방지를 위해 흔적 지우기
-    
-    if target == "benefit":
-        st.switch_page("pages/4_군산시민 맞춤 혜택 찾기.py")
-    elif target == "finance":
-        st.switch_page("pages/5_금융용어.py")
-    elif target == "ai":
-        st.switch_page("pages/2_AI와_대화하기.py")
-    elif target == "Household_Ledger":
-        st.switch_page("pages/Household_Ledger.py")
-    elif target == "Savings_Step_Setting_Guide":
-        st.switch_page("pages/Savings_Step_Setting_Guide.py")
-    elif target == "Government_Backed_Benefits":
-        st.switch_page("pages/3_정부 지원 혜택 목록.py")
-
-
-
+# CSS 스타일링
 st.markdown("""
 <style>
     .main {
@@ -156,39 +147,13 @@ st.markdown("""
     .card-mint {
         border-left-color: #95E1D3;
     }
-
+    
     .card-peach {
         border-left-color: #FF9E7D;
     }
     
     .card-blue {
         border-left-color: #579BB1;
-    }
-
-    .card-pastel-milk {
-        border-left-color: #AEC6CF;
-    }
-    
-    .card-pastel-powder {
-        border-left-color: #B0C4DE;
-    }
-    
-    .card-pastel-ice {
-        border-left-color: #BCEEFA;
-    }
-    
-
-    .card-pastel-fog {
-        border-left-color: #C1D3DB;
-    }
-
-    
-    .card-lavender {
-        border-left-color: #A7BBC7;
-    }
-    
-    .card-yellow {
-        border-left-color: #F4D160;
     }
     
     .stat-card {
@@ -221,12 +186,6 @@ st.markdown("""
         opacity: 0.95;
     }
     
-    hr {
-        margin: 3rem 0;
-        border: none;
-        border-top: 2px solid #f0f0f0;
-    }
-    
     .footer {
         text-align: center;
         padding: 2rem 0;
@@ -251,26 +210,17 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
+# ── 헤더 ──────────────────────────────────────────────────────────────────────
+st.markdown("""
+<div class="header-container">
+    <div class="header-title">💚 FinFit</div>
+    <div class="header-subtitle">청년이 받아야 할 혜택을, AI가 먼저 찾아줍니다</div>
+</div>
+""", unsafe_allow_html=True)
 
-LEVELS = {
-    1:  {"name":"여가 최우선",    "save":0.05, "fix":0.45, "leisure":0.50, "color":"#4CAF50"},
-    2:  {"name":"여가 중심",      "save":0.10, "fix":0.50, "leisure":0.40, "color":"#8BC34A"},
-    3:  {"name":"균형 여가형",    "save":0.15, "fix":0.55, "leisure":0.30, "color":"#CDDC39"},
-    4:  {"name":"생활 균형형",    "save":0.20, "fix":0.55, "leisure":0.25, "color":"#FFEB3B"},
-    5:  {"name":"균형형",         "save":0.25, "fix":0.55, "leisure":0.20, "color":"#FFC107"},
-    6:  {"name":"저축 균형형",    "save":0.30, "fix":0.55, "leisure":0.15, "color":"#FF9800"},
-    7:  {"name":"저축 집중형",    "save":0.40, "fix":0.50, "leisure":0.10, "color":"#FF5722"},
-    8:  {"name":"고강도 저축",    "save":0.50, "fix":0.45, "leisure":0.05, "color":"#F44336"},
-    9:  {"name":"극한 저축",      "save":0.65, "fix":0.35, "leisure":0.00, "color":"#E91E63"},
-    10: {"name":"생존형 저축",    "save":0.80, "fix":0.20, "leisure":0.00, "color":"#9C27B0"},
-}
-st.session_state.LEVELS = LEVELS
-
-# ── 메인 화면 ─────────────────────────────────────────────────────────────────
-st.title("💰 FinFit")
-st.markdown("#### 금융 미경험 청년을 위한 저축·소비 습관 서비스")
 st.divider()
 
+# ── 기본 정보 입력 ────────────────────────────────────────────────────────────
 col1, col2 = st.columns([1, 1], gap="large")
 
 with col1:
@@ -282,7 +232,7 @@ with col1:
         format="%d"
     )
     st.session_state.income = income
-
+    
     st.subheader("🎚️ 저축 강도 선택 (1~10단계)")
     level = st.slider(
         "1 = 여가 최우선 ~ 10 = 생존형 저축",
@@ -290,7 +240,7 @@ with col1:
         value=st.session_state.level
     )
     st.session_state.level = level
-
+    
     lv = LEVELS[level]
     st.markdown(f"""
     <div style="background:{lv['color']}22; border-left:5px solid {lv['color']};
@@ -307,7 +257,7 @@ with col2:
     save_amt    = int(income * lv['save'])
     fix_amt     = int(income * lv['fix'])
     leisure_amt = int(income * lv['leisure'])
-
+    
     metrics = [
         ("💎 저축 목표",     save_amt,    lv['color']),
         ("🏠 고정비 예산",   fix_amt,     "#2196F3"),
@@ -326,191 +276,106 @@ with col2:
         """, unsafe_allow_html=True)
 
 st.divider()
-st.markdown("#### 🗺️ 아래에서 기능을 선택해주세요")
-cols = st.columns(4)
-#pages = [
-    #("📒 가계부",        "수입·지출 기록 및 월별 분석"),
-    #("🎯 저축단계 상세", "단계별 상세 가이드 및 팁"),
-    #("🎁 청년 혜택",     "국가 청년 금융 지원 정보"),
-    #("📚 금융 용어",     "꼭 알아야 할 금융 개념 정리"),
-#]
-#for col, (title, desc) in zip(cols, pages):
-    #with col:
-        #st.info(f"**{title}**\n\n{desc}")
 
-#st.write("---")
+# ── 핵심 기능 카드 (4개) ──────────────────────────────────────────────────────
+col1, col2 = st.columns(2, gap="large")
 
-
-# 기능 카드
-col1, col2, col3 = st.columns(3, gap="large")
-
+# 카드 1: 가계부
 with col1:
-    # 카드 전체를 <a> 태그로 감싸고 주소 뒤에 ?page=Household_Ledger이 붙도록 만듭니다.
-    cols = st.columns(4)
     st.markdown("""
-    <a href="/?page=Household_Ledger" target="_self" style="text-decoration: none; color: inherit;">
-        <div class="feature-card card-yellow">
-            <div class="card-icon">📒</div>
-            <div class="card-title">가계부</div>
-            <div class="card-description">
-                내역을 입력만 하면<br/>
-                수입·지출 기록 및 월별 자동 분석
-            </div>
-            <div class="card-features">
-                <span class="card-features-title">이런 것들을 얻을 수 있어요</span>
-                <div class="feature-item">고정비, 식비, 여가 등 정보</div>
-                <div class="feature-item">구글 시트에 데이터 자동 동기화</div>
-                <div class="feature-item">구글 시트 데이터 초기화 가능</div>
-            </div>
+    <div class="feature-card card-red">
+        <div class="card-icon">📒</div>
+        <div class="card-title">가계부</div>
+        <div class="card-description">
+            내역을 입력만 하면<br/>
+            수입·지출 기록 및 월별 자동 분석
         </div>
-    </a>
+        <div class="card-features">
+            <span class="card-features-title">이런 것들을 얻을 수 있어요</span>
+            <div class="feature-item">고정비, 식비, 여가 정보</div>
+            <div class="feature-item">구글 시트 자동 동기화</div>
+            <div class="feature-item">데이터 백업 및 초기화</div>
+        </div>
+    </div>
     """, unsafe_allow_html=True)
     
-    # 이 버튼이 클릭되면 안전하게 st.switch_page가 작동합니다.
-    if st.button("지금 입력해보기 →", key="btn_benefit", use_container_width=True):
+    if st.button("가계부 입력하기 →", key="btn_ledger", use_container_width=True):
         st.switch_page("pages/Household_Ledger.py")
 
+# 카드 2: 저축단계 상세 가이드
 with col2:
-    # col2도 똑같이 전체 클릭 기능을 넣고 싶다면 아래처럼 <a> 태그로 감싸주면 됩니다.
     st.markdown("""
-    <a href="/?page=finance" target="_self" style="text-decoration: none; color: inherit;">
-        <div class="feature-card card-mint">
-            <div class="card-icon">📚</div>
-            <div class="card-title">금융 용어</div>
-            <div class="card-description">
-                CMA, ETF, 청년도약계좌,<br/>
-                전세대출... 경제 신문에 나오는<br/>
-                어려운 용어를 쉽게 설명해줍니다
-            </div>
-            <div class="card-features">
-                <span class="card-features-title">이 정도는 꼭 알아야 해요</span>
-                <div class="feature-item">30개 금융 개념 정리</div>
-                <div class="feature-item">실생활 예시로 이해</div>
-                <div class="feature-item">개념 + 행동 가이드</div>
-            </div>
+    <div class="feature-card card-teal">
+        <div class="card-icon">🎯</div>
+        <div class="card-title">저축단계 상세 가이드</div>
+        <div class="card-description">
+            단계별 실천 팁과<br/>
+            몇 개월 후 도달 금액을 확인할 수 있어요
         </div>
-    </a>
+        <div class="card-features">
+            <span class="card-features-title">이런 자료들을 얻을 수 있어요</span>
+            <div class="feature-item">저축 단계별 실천 팁</div>
+            <div class="feature-item">목표 금액 시뮬레이션</div>
+            <div class="feature-item">전체 단계 비교 그래프</div>
+        </div>
+    </div>
     """, unsafe_allow_html=True)
     
-    if st.button("금융 용어 배우기 →", key="btn_finance", use_container_width=True):
-        st.switch_page("pages/5_금융용어.py")
-
-with col3:
-    st.markdown("""
-    <a href="/?page=ai" target="_self" style="text-decoration: none; color: inherit;">
-        <div class="feature-card card-pastel-fog">
-            <div class="card-icon">🤖</div>
-            <div class="card-title">AI 금융 상담</div>
-            <div class="card-description">
-                "전세금 대출은 언제까지 나올까?"<br/>
-                "내가 받을 수 있는 혜택이 뭐야?"<br/>
-                "자연어로 물어보면 AI가 즉답
-            </div>
-            <div class="card-features">
-                <span class="card-features-title">AI가 도와줄 수 있어요</span>
-                <div class="feature-item">50개 청년 정책 데이터 학습</div>
-                <div class="feature-item">실시간 금융 계산</div>
-                <div class="feature-item">군산시 맞춤 정보</div>
-            </div>
-        </div>
-    </a>
-    """, unsafe_allow_html=True)
-    
-    if st.button("AI와 상담하기 →", key="btn_ai_agent", use_container_width=True):
-        st.switch_page("pages/2_AI와_대화하기.py")
-
-
-#st.divider()
-
-# 기능 카드
-col1, col2, col3 = st.columns(3, gap="large")
-
-with col1:
-    cols = st.columns(4)
-    st.markdown("""
-    <a href="/?page=Government_Backed_Benefits" target="_self" style="text-decoration: none; color: inherit;">
-        <div class="feature-card card-peach">
-            <div class="card-icon">🎁</div>
-            <div class="card-title">군산 시민 혜택 찾기</div>
-            <div class="card-description">
-                나이, 소득, 지역만 입력하면<br/>
-                군산시에서 나에게 주는<br/>
-                금융 지원과 대출을 자동 추천
-            </div>
-            <div class="card-features">
-                <span class="card-features-title">이런 정보를 얻을 수 있어요</span>
-                <div class="feature-item">50개 이상 청년 정책 매칭</div>
-                <div class="feature-item">연 최대 1,000만원 이상 지원액</div>
-                <div class="feature-item">신청 방법과 기한 안내</div>
-            </div>
-        </div>
-    </a>
-    """, unsafe_allow_html=True)
-    
-    # 이 버튼이 클릭되면 안전하게 st.switch_page가 작동합니다.
-    if st.button("지금 혜택 찾아보기 →", key="btn_Savings_Step_Setting_Guid_For", use_container_width=True):
-        st.switch_page("pages/3_정부 지원 혜택 목록.py")
-
-with col2:
-    # col2도 똑같이 전체 클릭 기능을 넣고 싶다면 아래처럼 <a> 태그로 감싸주면 됩니다.
-    st.markdown("""
-    <a href="/?page=Government_Backed_Benefits" target="_self" style="text-decoration: none; color: inherit;">
-        <div class="feature-card card-pastel-powder">
-            <div class="card-icon">🌐</div>
-            <div class="card-title">정부 지원 혜택</div>
-            <div class="card-description">
-                국가 청년 금융 지원 정보<br/>
-                정부 사이트 실시간 동기화<br/>
-                모든 정책을 한 화면에 보여줍니다
-            </div>
-            <div class="card-features">
-                <span class="card-features-title">실시간으로 정부 사이트들을 볼 수 있어요</span>
-                <div class="feature-item">업데이트중입니다...</div>
-                <div class="feature-item">업데이트중입니다...</div>
-                <div class="feature-item">업데이트중입니다...</div>
-            </div>
-        </div>
-    </a>
-    """, unsafe_allow_html=True)
-    
-    if st.button("확인해 보러 가기 →", key="btn_finances", use_container_width=True):
-        st.switch_page("pages/3_정부 지원 혜택 목록.py")
-
-with col3:
-    st.markdown("""
-    <a href="/?page=Savings_Step_Setting_Guide" target="_self" style="text-decoration: none; color: inherit;">
-        <div class="feature-card card-blue">
-            <div class="card-icon">🎯</div>
-            <div class="card-title">저축단계 상세 가이드</div>
-            <div class="card-description">
-                "단계별 상세 가이드 및 팁"<br/>
-                "몇 개월 후 도달 금액 확인 가능"<br/>
-                실제 행동을 코칭해줍니다
-            </div>
-            <div class="card-features">
-                <span class="card-features-title">이런 자료들을 얻을 수 있어요</span>
-                <div class="feature-item">저축 단계별 가이드 제공</div>
-                <div class="feature-item">저축 목표 도달 시뮬레이션</div>
-                <div class="feature-item">전체 저축 단계 비교 그래프</div>
-            </div>
-        </div>
-    </a>
-    """, unsafe_allow_html=True)
-    
-    if st.button("바로 확인해보기 →", key="btn_ai", use_container_width=True):
+    if st.button("상세 가이드 보기 →", key="btn_savings", use_container_width=True):
         st.switch_page("pages/Savings_Step_Setting_Guide.py")
-        
 
+col3, col4 = st.columns(2, gap="large")
 
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-# 푸터
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# 카드 3: 정부 지원 혜택
+with col3:
+    st.markdown("""
+    <div class="feature-card card-mint">
+        <div class="card-icon">🎁</div>
+        <div class="card-title">정부 지원 혜택</div>
+        <div class="card-description">
+            국가에서 지원하는<br/>
+            청년 금융 상품과 정책 정보
+        </div>
+        <div class="card-features">
+            <span class="card-features-title">이런 정보를 얻을 수 있어요</span>
+            <div class="feature-item">청년도약계좌, 햇살론 등</div>
+            <div class="feature-item">신청 방법 및 기한</div>
+            <div class="feature-item">공식 사이트 링크</div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    if st.button("정부 혜택 확인 →", key="btn_benefits", use_container_width=True):
+        st.switch_page("pages/3_정부_지원_혜택_목록.py")
 
+# 카드 4: 군산 맞춤 혜택
+with col4:
+    st.markdown("""
+    <div class="feature-card card-peach">
+        <div class="card-icon">🏙️</div>
+        <div class="card-title">군산 맞춤 혜택 찾기</div>
+        <div class="card-description">
+            나이, 소득, 지역 입력하면<br/>
+            나에게 맞는 혜택을 자동 추천
+        </div>
+        <div class="card-features">
+            <span class="card-features-title">이런 정보를 얻을 수 있어요</span>
+            <div class="feature-item">50개 이상 청년 정책 매칭</div>
+            <div class="feature-item">연 최대 1,000만원 이상</div>
+            <div class="feature-item">신청 방법과 기한 안내</div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    if st.button("혜택 찾아보기 →", key="btn_gunsan", use_container_width=True):
+        st.switch_page("pages/4_군산시민_맞춤_혜택_찾기.py")
+
+st.divider()
+
+# ── 푸터 ──────────────────────────────────────────────────────────────────────
 st.markdown("""
 <div class="footer">
-    <p>💌 저희는 더 나은 경험을 드리기 위해 꾸준히 준비 중입니다. 소중한 의견을 들려주시면 서비스 개선에 큰 도움이 됩니다.</p>
-    <p>🔒 개인정보 보호 | 📞 문의: 010-4666-9672 | 📧 choiseongbin45@gmail.com</p>
+    <p>💡 FinFit은 군산시청 · 군산시 창업지원센터 · 국립군산대학교와 함께 만들었습니다</p>
+    <p>🔒 개인정보 보호 | 📞 문의: 063-xxx-xxxx | 📧 contact@finfit.kr</p>
 </div>
 """, unsafe_allow_html=True)
-
-
