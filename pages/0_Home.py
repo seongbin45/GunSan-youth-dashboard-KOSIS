@@ -390,7 +390,7 @@ st.markdown("""
 
 # 의견 입력 창
 user_feedback = st.text_area(
-    "의견을 자유롭게 적어주세요 👇", 
+    "자유롭게 적어주세요 👇", 
     placeholder="예: 이런 기능이 추가되면 좋겠어요 / 이 부분이 사용하기 조금 불편해요"
 )
 
