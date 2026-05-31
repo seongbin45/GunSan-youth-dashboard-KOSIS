@@ -177,4 +177,6 @@ for item in items:
         else:
             st.caption("상세 조회를 위한 식별자가 없어 목록 데이터만 표시합니다.")
 
-
+st.divider()
+st.caption("📌 정부 지원 사이트 목록은 온통청년 API를 사용하여, 30분 주기로 자동 동기화 됩니다.")
+st.divider()
