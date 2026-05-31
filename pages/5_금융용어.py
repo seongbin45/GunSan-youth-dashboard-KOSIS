@@ -53,7 +53,7 @@ for category, items in terms.items():
                 <b style="color:#333">{term}</b><br>
                 <span style="color:#555; font-size:0.9em">{desc}</span>
             </div>""", unsafe_allow_html=True)
-    st.divider()
+    #st.divider()
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
