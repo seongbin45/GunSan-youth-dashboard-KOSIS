@@ -503,17 +503,18 @@ with col3:
     
     if st.button("바로 확인해보기 →", key="btn_ai", use_container_width=True):
         st.switch_page("pages/Savings_Step_Setting_Guide.py")
-        
+
+st.divider()
 
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 # 푸터
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-# 기존 github.com 주소 뒤에 ?raw=true 추가
+### github.com 주소 뒤에 ?raw=true 추가
 github_image_url = "https://github.com/seongbin45/GunSan-youth-dashboard-KOSIS/blob/2ab6917c0e547dc2b59a1be6ac5a7ccddb3fdb15/tests/Image/%EC%A0%9C%EB%AA%A9%EC%9D%84%20%EC%9E%85%EB%A0%A5%ED%95%B4%EC%A3%BC%EC%84%B8%EC%9A%94.%20(2).png?raw=true"
 
-# 스트림릿에 이미지 출력
+### 스트림릿에 이미지 출력
 st.image(github_image_url, use_container_width=True)
 
 
