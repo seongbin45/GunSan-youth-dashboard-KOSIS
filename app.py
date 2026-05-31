@@ -520,7 +520,7 @@ st.markdown("""
 import streamlit as st
 
 # 2. 기존 github.com 주소 뒤에 ?raw=true 추가
-github_image_url = "https://github.com/seongbin45/GunSan-youth-dashboard-KOSIS/blob/6c3b2c888586971d750c6170acfc3d39641f358d/tests/Image/%EC%A0%9C%EB%AA%A9%EC%9D%84%20%EC%9E%85%EB%A0%A5%ED%95%B4%EC%A3%BC%EC%84%B8%EC%9A%94.%20(3).png?raw=true"
+github_image_url = "https://github.com/seongbin45/GunSan-youth-dashboard-KOSIS/blob/2ab6917c0e547dc2b59a1be6ac5a7ccddb3fdb15/tests/Image/%EC%A0%9C%EB%AA%A9%EC%9D%84%20%EC%9E%85%EB%A0%A5%ED%95%B4%EC%A3%BC%EC%84%B8%EC%9A%94.%20(2).png?raw=true"
 
 # 스트림릿에 이미지 출력
 st.image(github_image_url, caption="깃허브에서 가져온 이미지", use_container_width=True)
