@@ -380,7 +380,8 @@ with col2:
             <div class="card-description">
                 CMA, ETF, 청년도약계좌,<br/>
                 전세대출 등<br/>
-                경제 신문에 나오는 어려운 용어를<br/>
+                경제 신문에 나오는<br/> 
+                어려운 용어를<br/>
                 쉽게 설명해줍니다
             </div>
             <div class="card-features">
