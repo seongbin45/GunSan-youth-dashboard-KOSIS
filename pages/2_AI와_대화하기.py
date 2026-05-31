@@ -221,7 +221,7 @@ def run_openai(user_message, key, model="gpt-4o", base_url=None):
         else:
             return choice.message.content or "",tool_steps
 
-def run_google(user_message, key, model="gemini-3.5-flash"):
+def run_google(user_message, key, model="gemini-2.5-pro"):
     _genai.configure(api_key=key)
     gem_model=_genai.GenerativeModel(model_name=model,system_instruction=SYSTEM_PROMPT,tools=[_genai.protos.Tool(function_declarations=_google_declarations())])
     chat=gem_model.start_chat(enable_automatic_function_calling=False)
