@@ -55,8 +55,225 @@ for category, items in terms.items():
             </div>""", unsafe_allow_html=True)
     st.divider()
 
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+st.markdown("""
+<style>
+    .main {
+        background-color: #ffffff;
+    }
     
+    .header-container {
+        text-align: center;
+        margin-bottom: 2rem;
+        padding-top: 2rem;
+    }
     
+    .header-title {
+        font-size: 3em;
+        font-weight: 700;
+        color: #1a1a1a;
+        margin-bottom: 0.2em;
+    }
+    
+    .header-subtitle {
+        font-size: 1.3em;
+        color: #666666;
+        font-weight: 500;
+        margin-bottom: 2em;
+    }
+    
+    .feature-card {
+        background: white;
+        border-radius: 16px;
+        padding: 2.5rem 2rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        border-left: 6px solid;
+        transition: all 0.3s ease;
+        min-height: 350px;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .feature-card:hover {
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+        transform: translateY(-6px);
+    }
+    
+    .card-icon {
+        font-size: 3.5em;
+        margin-bottom: 1rem;
+    }
+    
+    .card-title {
+        font-size: 1.6em;
+        font-weight: 700;
+        color: #1a1a1a;
+        margin-bottom: 0.8rem;
+    }
+    
+    .card-description {
+        font-size: 1em;
+        color: #555555;
+        line-height: 1.7;
+        margin-bottom: 1.5rem;
+        flex-grow: 1;
+    }
+    
+    .card-features {
+        background: linear-gradient(135deg, #f5f5f5 0%, #f9f9f9 100%);
+        padding: 1.2rem;
+        border-radius: 8px;
+        margin-bottom: 1.5rem;
+    }
+    
+    .card-features-title {
+        font-size: 0.9em;
+        font-weight: 700;
+        color: #333333;
+        margin-bottom: 0.8rem;
+        display: block;
+    }
+    
+    .feature-item {
+        font-size: 0.95em;
+        color: #444444;
+        margin-bottom: 0.5rem;
+        padding-left: 1.5rem;
+        position: relative;
+    }
+    
+    .feature-item:before {
+        content: "✓";
+        position: absolute;
+        left: 0;
+        color: #4CAF50;
+        font-weight: bold;
+        font-size: 1.1em;
+    }
+    
+    .feature-item:last-child {
+        margin-bottom: 0;
+    }
+    
+    div[data-testid="stButton"] > button {
+        width: 100%;
+        font-size: 1.05em !important;
+        font-weight: 600 !important;
+        padding: 0.8em 1.5em !important;
+        height: auto !important;
+        min-height: 45px !important;
+        border-radius: 8px !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    .card-red {
+        border-left-color: #FF6B6B;
+    }
+    
+    .card-teal {
+        border-left-color: #20B2AA;
+    }
+    
+    .card-mint {
+        border-left-color: #95E1D3;
+    }
+
+    .card-peach {
+        border-left-color: #FF9E7D;
+    }
+    
+    .card-blue {
+        border-left-color: #579BB1;
+    }
+
+    .card-pastel-milk {
+        border-left-color: #AEC6CF;
+    }
+    
+    .card-pastel-powder {
+        border-left-color: #B0C4DE;
+    }
+    
+    .card-pastel-ice {
+        border-left-color: #BCEEFA;
+    }
+    
+
+    .card-pastel-fog {
+        border-left-color: #C1D3DB;
+    }
+
+    
+    .card-lavender {
+        border-left-color: #A7BBC7;
+    }
+    
+    .card-yellow {
+        border-left-color: #F4D160;
+    }
+    
+    .stat-card {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 1.8rem;
+        border-radius: 12px;
+        text-align: center;
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    }
+    
+    .stat-card:nth-child(2) {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        box-shadow: 0 4px 12px rgba(245, 87, 108, 0.3);
+    }
+    
+    .stat-card:nth-child(3) {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        box-shadow: 0 4px 12px rgba(79, 172, 254, 0.3);
+    }
+    
+    .stat-number {
+        font-size: 2.2em;
+        font-weight: 700;
+        margin: 0.5rem 0;
+    }
+    
+    .stat-label {
+        font-size: 0.95em;
+        opacity: 0.95;
+    }
+    
+    hr {
+        margin: 3rem 0;
+        border: none;
+        border-top: 2px solid #f0f0f0;
+    }
+    
+    .footer {
+        text-align: center;
+        padding: 2rem 0;
+        color: #999999;
+        font-size: 0.95em;
+        border-top: 1px solid #f0f0f0;
+    }
+    
+    @media (max-width: 768px) {
+        .header-title {
+            font-size: 2.2em;
+        }
+        
+        .header-subtitle {
+            font-size: 1.1em;
+        }
+        
+        .feature-card {
+            min-height: 320px;
+        }
+    }
+</style>
+""", unsafe_allow_html=True)
+
+
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 # 푸터
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
