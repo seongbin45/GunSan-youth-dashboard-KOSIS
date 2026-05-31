@@ -5,7 +5,7 @@ from finfit_youth.scheduler import ensure_scheduler_started
 from finfit_youth.service import YouthDataService
 
 st.set_page_config(page_title="청년 혜택 정보", page_icon="🎁", layout="wide")
-st.title("🎁 청년을 위한 국가 금융 지원 상품")
+st.title("📮 청년을 위한 국가 금융 지원 상품")
 st.caption("2024~2025년 기준 / 자세한 내용은 각 공식 사이트에서 확인하세요")
 
 data = [
