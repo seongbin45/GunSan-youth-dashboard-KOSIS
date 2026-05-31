@@ -121,7 +121,7 @@ with left:
 with right:
     st.info(
         "운영 안내\n\n"
-        """- 정책/청년센터/콘텐츠 API 키들이 
+        """- 정책/청년센터/콘텐츠 API 키들이  
         각각 환경 변수로 등록되어있어요(`YOUTH_API_KEY`, `YOUTH_CENTER_API_KEY`, `YOUTH_CONTENT_API_KEY`)\n"""
         "- 30분 주기 자동 동기화\n"
         "- 외부 API 오류 시 직전 스냅샷 폴백"
