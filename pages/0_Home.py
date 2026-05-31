@@ -250,7 +250,7 @@ LEVELS = {
 st.session_state.LEVELS = LEVELS
 
 # ── 메인 화면 ─────────────────────────────────────────────────────────────────
-st.title("💰 Financial을 Fit하게 맞추다. FinFit.")
+st.title("💰 FinFit")
 st.markdown("#### 금융 미경험자를 위한 저축·소비 습관 서비스")
 st.divider()
 
