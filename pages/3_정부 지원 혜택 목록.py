@@ -77,7 +77,7 @@ st.divider()
 
 st.set_page_config(page_title="청년 혜택", page_icon="🎁", layout="wide")
 
-st.title("⟲ 온통청년 실시간 정책/청년센터/콘텐츠")
+st.title("⟳ 온통청년 실시간 정책/청년센터/콘텐츠")
 st.caption("목록/검색은 캐시 데이터, 상세는 실시간 조회(단기 캐시) 방식으로 동작합니다.")
 
 service = YouthDataService()
@@ -102,7 +102,7 @@ with left:
     else:
         page = st.number_input("페이지 번호", min_value=1, value=1, step=1)
 
-    refresh_clicked = st.button("지금 동기화 ⟳")
+    refresh_clicked = st.button("지금 동기화")
     if refresh_clicked:
         with st.spinner("동기화 중..."):
             try:
