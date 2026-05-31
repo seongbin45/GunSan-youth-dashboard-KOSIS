@@ -1,10 +1,17 @@
 [theme]
 base = "auto"
-primaryColor        = "#667eea"
-backgroundColor     = "#ffffff"
-secondaryBackgroundColor = "#f8f9fa"
-textColor           = "#212529"
-font                = "sans serif"
+primaryColor = "#667eea"
+font = "sans serif"
 
 [browser]
 gatherUsageStats = false
+
+###[theme]
+#primaryColor        = "#667eea"
+#backgroundColor     = "#ffffff"
+#secondaryBackgroundColor = "#f8f9fa"
+#textColor           = "#212529"
+#font                = "sans serif"
+
+###[browser]
+#gatherUsageStats = false
