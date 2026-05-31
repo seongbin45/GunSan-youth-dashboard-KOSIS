@@ -483,8 +483,8 @@ with col3:
             <div class="card-icon">🎯</div>
             <div class="card-title">저축단계 상세 가이드</div>
             <div class="card-description">
-                몇 개월 후 도달 금액을 미리 확인할 수 있어요<br/>
-                실제 행동을 코칭해줍니다
+                몇 개월 후 도달 금액을<br/>
+                미리 확인할 수 있어요
             </div>
             <div class="card-features">
                 <span class="card-features-title">이런 자료들을 얻을 수 있어요</span>
