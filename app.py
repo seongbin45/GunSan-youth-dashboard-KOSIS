@@ -7,31 +7,6 @@ import json # 사용자 피드백 도구
 from datetime import datetime # 사용자 피드백 도구
 from streamlit_theme import st_theme
 
-theme = st_theme()
-
-if theme is not None:
-    current_base = theme.get("base")
-    
-    if current_base == "dark":
-        # 다크모드일 때 적용할 커스텀 스타일 CSS
-        st.markdown("""
-            <style>
-            .stApp {
-                background-color: #1e1e24; /* 내가 원하는 다크 배경색 */
-                color: #ffffff;
-            }
-            </style>
-        """, unsafe_allow_html=True)
-    else:
-        # 라이트모드일 때 적용할 커스텀 스타일 CSS (질문하신 색상)
-        st.markdown("""
-            <style>
-            .stApp {
-                background-color: #ffffff; 
-                color: #212529;
-            }
-            </style>
-        """, unsafe_allow_html=True)
 
 st.set_page_config(page_title="FinFit", page_icon="💰", layout="wide")
 
@@ -603,6 +578,33 @@ if st.button("피드백 남기기", use_container_width=True):
             
         except Exception as e:
             st.error(f"데이터 저장 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요: {e}")
+
+
+theme = st_theme()
+
+if theme is not None:
+    current_base = theme.get("base")
+    
+    if current_base == "dark":
+        # 다크모드일 때 적용할 커스텀 스타일 CSS
+        st.markdown("""
+            <style>
+            .stApp {
+                background-color: #1e1e24; /* 내가 원하는 다크 배경색 */
+                color: #ffffff;
+            }
+            </style>
+        """, unsafe_allow_html=True)
+    else:
+        # 라이트모드일 때 적용할 커스텀 스타일 CSS (질문하신 색상)
+        st.markdown("""
+            <style>
+            .stApp {
+                background-color: #ffffff; 
+                color: #212529;
+            }
+            </style>
+        """, unsafe_allow_html=True)
 
 
 
