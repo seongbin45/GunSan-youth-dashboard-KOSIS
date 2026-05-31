@@ -308,29 +308,29 @@ with st.sidebar:
         st.rerun()
     st.write("---")
 
-    ### --- [여기에 임시 테스트 코드 추가] ---
-    #st.divider()
-    #st.markdown("**👨‍💻 관리자 도구**")
-    #if st.sidebar.button("🔍 [개발 유지 보수] 현시점 사용 가능한 구글 API 모델 목록 확인하기"):
-        #import google.generativeai as genai
-        #try:
-            ### Streamlit secrets에서 키를 가져와 설정합니다.
-            #genai.configure(api_key=st.secrets["GOOGLE_API_KEY"])
+    # --- [여기에 임시 테스트 코드 추가] ---
+    st.divider()
+    st.markdown("**👨‍💻 관리자 도구**")
+    if st.sidebar.button("🔍 [개발 유지 보수] 현시점 사용 가능한 구글 API 모델 목록 확인하기"):
+        import google.generativeai as genai
+        try:
+            # Streamlit secrets에서 키를 가져와 설정합니다.
+            genai.configure(api_key=st.secrets["GOOGLE_API_KEY"])
             
-            #available_models = []
-            #for m in genai.list_models():
-                ### 텍스트 생성(generateContent)을 지원하는 모델만 걸러냅니다.
-                #if 'generateContent' in m.supported_generation_methods:
-                    ### 모델 이름에서 'models/' 부분을 제외하고 깔끔하게 저장합니다.
-                    #clean_name = m.name.replace('models/', '')
-                    #available_models.append(clean_name)
+            available_models = []
+            for m in genai.list_models():
+                # 텍스트 생성(generateContent)을 지원하는 모델만 걸러냅니다.
+                if 'generateContent' in m.supported_generation_methods:
+                    # 모델 이름에서 'models/' 부분을 제외하고 깔끔하게 저장합니다.
+                    clean_name = m.name.replace('models/', '')
+                    available_models.append(clean_name)
             
-            ### 사이드바에 화면에 목록을 출력합니다.
-            #st.sidebar.success("사용 가능한 모델 목록:")
-            #st.sidebar.write(available_models)
-        #except Exception as e:
-            #st.sidebar.error(f"목록을 불러오는 중 오류 발생: {e}")
-    #st.divider()
+            # 사이드바에 화면에 목록을 출력합니다.
+            st.sidebar.success("사용 가능한 모델 목록:")
+            st.sidebar.write(available_models)
+        except Exception as e:
+            st.sidebar.error(f"목록을 불러오는 중 오류 발생: {e}")
+    st.divider()
     ### ----------------------------------
 
 if "chat_history" not in st.session_state:
