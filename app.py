@@ -517,8 +517,8 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# 깃허브 원본(Raw) 이미지 주소 입력
-github_image_url = "https://githubusercontent.com/seongbin45/GunSan-youth-dashboard-KOSIS/blob/6c3b2c888586971d750c6170acfc3d39641f358d/tests/Image/%EC%A0%9C%EB%AA%A9%EC%9D%84%20%EC%9E%85%EB%A0%A5%ED%95%B4%EC%A3%BC%EC%84%B8%EC%9A%94.%20(3).png"
+# 정적(Raw) 원본 이미지 주소로 수정되었습니다.
+github_image_url = "https://githubusercontent.com"
 
 # 스트림릿에 이미지 출력
 st.image(github_image_url, caption="깃허브에서 가져온 이미지", use_container_width=True)
