@@ -102,7 +102,7 @@ with left:
     else:
         page = st.number_input("페이지 번호", min_value=1, value=1, step=1)
 
-    refresh_clicked = st.button("지금 동기화")
+    refresh_clicked = st.button("지금 동기화 ⟳")
     if refresh_clicked:
         with st.spinner("동기화 중..."):
             try:
