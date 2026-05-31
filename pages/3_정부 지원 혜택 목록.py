@@ -179,4 +179,4 @@ for item in items:
 
 st.divider()
 st.caption("📌 정부 지원 사이트 목록은 온통청년 API를 사용하여, 30분 주기로 자동 동기화 됩니다.")
-st.divider()
+
