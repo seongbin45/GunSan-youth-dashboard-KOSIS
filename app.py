@@ -504,8 +504,6 @@ with col3:
     if st.button("바로 확인해보기 →", key="btn_ai", use_container_width=True):
         st.switch_page("pages/Savings_Step_Setting_Guide.py")
 
-st.divider()
-
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 # 푸터
@@ -517,8 +515,6 @@ github_image_url = "https://github.com/seongbin45/GunSan-youth-dashboard-KOSIS/b
 ### 스트림릿에 이미지 출력
 st.image(github_image_url, use_container_width=True)
 
-
-st.divider()
 
 
 # 1. ⚠️ 핵심 개선점: 캐싱 추가 (55분마다 한 번만 구글 인증 수행)
