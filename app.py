@@ -434,7 +434,7 @@ col1, col2, col3 = st.columns(3, gap="large")
 with col1:
     cols = st.columns(4)
     st.markdown("""
-    <a href="/?page=Government_Backed_Benefits" target="_self" style="text-decoration: none; color: inherit;">
+    <a href="/?page=benefit" target="_self" style="text-decoration: none; color: inherit;">
         <div class="feature-card card-peach">
             <div class="card-icon">🎁</div>
             <div class="card-title">군산 맞춤 혜택 찾기</div>
@@ -455,7 +455,7 @@ with col1:
     
     # 이 버튼이 클릭되면 안전하게 st.switch_page가 작동합니다.
     if st.button("지금 혜택 찾아보기 →", key="btn_Savings_Step_Setting_Guid_For", use_container_width=True):
-        st.switch_page("pages/3_정부 지원 혜택 목록.py")
+        st.switch_page("pages/4_군산시민 맞춤 혜택 찾기.py")
 
 with col2:
     # col2도 똑같이 전체 클릭 기능을 넣고 싶다면 아래처럼 <a> 태그로 감싸주면 됩니다.
