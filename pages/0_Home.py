@@ -377,12 +377,12 @@ def get_gspread_client():
     return gc
     
 # UI 안내 문구 출력
-st.markdown("### 💌 피드백 남기기")
+st.markdown("### 💌 의견 남기기")
 st.markdown("""
 **저희는 더 나은 경험을 드리기 위해   
 꾸준히 준비 중입니다.**  
 
-소중한 피드백을 들려주시면,  
+소중한 의견을 들려주시면,  
 서비스 개선에 큰 도움이 됩니다!  
 
 🔒 개인정보 보호 | 📧 : choiseongbin45@gmail.com
