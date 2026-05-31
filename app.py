@@ -401,7 +401,7 @@ with col3:
     st.markdown("""
     <a href="/?page=ai" target="_self" style="text-decoration: none; color: inherit;">
         <div class="feature-card card-pastel-fog">
-            <div class="card-icon">🤖</div>
+            <div class="card-icon">🚀</div>
             <div class="card-title">AI 금융 상담</div>
             <div class="card-description">
                 "전세금 대출은 언제까지 나올까?"<br/>
