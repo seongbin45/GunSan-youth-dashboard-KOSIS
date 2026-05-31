@@ -121,7 +121,7 @@ with left:
 with right:
     st.info(
         "운영 안내\n\n"
-        "- 정책/청년센터/콘텐츠 API 키를 각각 설정하세요(`YOUTH_API_KEY`, `YOUTH_CENTER_API_KEY`, `YOUTH_CONTENT_API_KEY`)\n"
+        "- 정책/청년센터/콘텐츠 API 키가 각각 설정되어있어요(`YOUTH_API_KEY`, `YOUTH_CENTER_API_KEY`, `YOUTH_CONTENT_API_KEY`)\n"
         "- 30분 주기 자동 동기화\n"
         "- 외부 API 오류 시 직전 스냅샷 폴백"
     )
