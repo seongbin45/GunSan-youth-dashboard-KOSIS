@@ -67,7 +67,7 @@ items = result["items"]
 if not items:
     st.warning("표시할 데이터가 없습니다. API 키/엔드포인트 설정을 확인해주세요.")
 
-for item in items:
+for idx, item in enumerate(items):
     title = item.get("title") or "제목 없음"
     summary = item.get("summary") or "요약 정보 없음"
     region = item.get("region") or "지역 정보 없음"
@@ -90,7 +90,7 @@ for item in items:
                 st.markdown(f"센터 URL: [{url}]({url})")
 
         if item_id:
-            if st.button("상세 실시간 조회", key=f"detail-{source}-{item_id}"):
+            if st.button("상세 실시간 조회", key=f"detail-{source}-{item_id}-{idx}"):
                 try:
                     detail = service.get_detail(source=source, item_id=item_id)
                     st.json(detail)
