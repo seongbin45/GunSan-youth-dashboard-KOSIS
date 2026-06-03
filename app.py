@@ -542,7 +542,7 @@ st.markdown("""
 
 🔒 개인정보 보호 |
 """
-   '<a href="https://google.com" target="_blank"><button style="color: blue;">구글 이동</button></a>', 
+   '<a href="https://docs.google.com/forms/d/e/1FAIpQLSco-O4cGhbt1iMOwrEkqX5Vt0-8ctAtCxM5Z6JjmFlP-Uqq-Q/viewform?usp=header" target="_blank"><button style="color: blue;">설문 링크로 이동</button></a>', 
     unsafe_allow_html=True        
            )
 
