@@ -540,12 +540,12 @@ st.markdown("""
 소중한 의견을 들려주시면,  
 서비스 개선에 큰 도움이 됩니다!  
 
-🔒 개인정보 보호 | 📧 : choiseongbin45@gmail.com
-""")
-st.markdown(
-    '<a href="https://google.com" target="_blank"><button style="color: blue;">구글 이동</button></a>', 
-    unsafe_allow_html=True
-)
+🔒 개인정보 보호 |
+"""
+   '<a href="https://google.com" target="_blank"><button style="color: blue;">구글 이동</button></a>', 
+    unsafe_allow_html=True        
+           )
+
 
 # 의견 입력 창
 user_feedback = st.text_area(
