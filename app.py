@@ -542,6 +542,10 @@ st.markdown("""
 
 🔒 개인정보 보호 | 📧 : choiseongbin45@gmail.com
 """)
+st.markdown(
+    '<a href="https://google.com" target="_blank"><button style="color: blue;">구글 이동</button></a>', 
+    unsafe_allow_html=True
+)
 
 # 의견 입력 창
 user_feedback = st.text_area(
