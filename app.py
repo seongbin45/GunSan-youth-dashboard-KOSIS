@@ -483,18 +483,52 @@ with col2:
         st.switch_page("pages/3_정부 지원 혜택 목록.py")
 
 with col3:
-    # 버튼을 안 보이게 숨기는 CSS (로직은 그대로 작동)
+    # 1. 카드와 버튼을 하나의 투명 감싸개(card-wrapper)로 묶어줍니다.
+    st.markdown('<div class="card-wrapper">', unsafe_allow_html=True)
+    
+    # 기존 HTML 구조 (변경 없음, onclick 제거)
+    st.markdown("""
+    <div class="feature-card card-blue" style="cursor: pointer;">
+        <div class="card-icon">🎯</div>
+        <div class="card-title">저축단계 상세 가이드</div>
+        <div class="card-description">
+            몇 개월 후 도달 금액을<br/>
+            미리 확인할 수 있어요
+        </div>
+        <div class="card-features">
+            <span class="card-features-title">이런 자료들을 얻을 수 있어요</span>
+            <div class="feature-item">단계별 상세 가이드 및 팁</div>
+            <div class="feature-item">목표 금액 시뮬레이션</div>
+            <div class="feature-item">전체 단계 비교 그래프</div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # 이 버튼이 투명해져서 위의 카드 전체를 덮게 됩니다.
+    if st.button("바로 확인해보기 →", key="btn_ai", use_container_width=True):
+        st.switch_page("pages/Savings_Step_Setting_Guide.py")
+        
+    st.markdown('</div>', unsafe_allow_html=True) # 감싸개 닫기
+
+    # 2. 버튼을 투명하게 만들어 카드 위에 얹는 마법의 CSS
     st.markdown("""
     <style>
-    div[data-testid="stButton"]:has(button:contains("바로 확인해보기")) {
-        display: none;
+    .card-wrapper {
+        position: relative;
+    }
+    /* 이 영역 안의 스트림릿 버튼을 투명하게 만들고 전체 크기로 키움 */
+    .card-wrapper div[data-testid="stButton"] button {
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        opacity: 0 !important; /* 완전히 투명하게 설정 */
+        z-index: 10 !important; /* 카드보다 위로 올림 */
+        cursor: pointer !important;
     }
     </style>
     """, unsafe_allow_html=True)
-    
-    # 이 버튼이 자바스크립트에 의해 클릭되며, 데이터를 유지한 채 페이지를 이동시킵니다.
-    if st.button("바로 확인해보기 →", key="btn_ai", use_container_width=True):
-        st.switch_page("pages/Savings_Step_Setting_Guide.py")
 
 
 
