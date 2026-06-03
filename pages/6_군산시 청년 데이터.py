@@ -383,7 +383,16 @@ except Exception as e:
 
     st.write("---")
 
-st.divider()
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# 푸터
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+### github.com 주소 뒤에 ?raw=true 추가
+github_image_url = "https://github.com/seongbin45/GunSan-youth-dashboard-KOSIS/blob/9a0bf10dfd74407e81691b274a1b8e9f690e7104/tests/Image/%EC%A0%9C%EB%AA%A9%EC%9D%84%20%EC%9E%85%EB%A0%A5%ED%95%B4%EC%A3%BC%EC%84%B8%EC%9A%94.%20(7).png?raw=true"
+
+### 스트림릿에 이미지 출력
+st.image(github_image_url, use_container_width=True)
+
 
 
 # 1. ⚠️ 핵심 개선점: 캐싱 추가 (55분마다 한 번만 구글 인증 수행)
@@ -411,8 +420,9 @@ st.markdown("""
 🔒 개인정보 보호 |
 """
    '<a href="https://docs.google.com/forms/d/e/1FAIpQLSco-O4cGhbt1iMOwrEkqX5Vt0-8ctAtCxM5Z6JjmFlP-Uqq-Q/viewform?usp=header" target="_blank"><button style="color: blue;">설문 링크로 이동</button></a>', 
-    unsafe_allow_html=True  
+    unsafe_allow_html=True        
            )
+
 
 # 의견 입력 창
 user_feedback = st.text_area(
@@ -448,6 +458,7 @@ if st.button("피드백 남기기", use_container_width=True):
             
         except Exception as e:
             st.error(f"데이터 저장 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요: {e}")
+
 
 
 
