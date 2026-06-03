@@ -2,6 +2,9 @@ import streamlit as st
 import pandas as pd
 import sqlite3  # 👈 이 녀석이 빠져 있어서 에러가 났던 겁니다!
 import plotly.express as px
+import gspread # 사용자 피드백 도구
+import json # 사용자 피드백 도구
+from datetime import datetime # 사용자 피드백 도구
 
 # 📈 시각화 대시보드 파트 (try-except 구문을 데이터 로드 전체에 적용)
 st.write("---")
@@ -381,7 +384,6 @@ except Exception as e:
     st.error(f"🚨 오류가 발생했습니다: {e}")
 
 
-    st.write("---")
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 # 푸터
