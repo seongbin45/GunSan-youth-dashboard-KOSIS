@@ -77,13 +77,6 @@ st.write("---")
 
 st.set_page_config(page_title="청년 머니 플래너", page_icon="💰", layout="wide")
 
-# ── 세션 초기화 ──────────────────────────────────────────────────────────────
-if "income" not in st.session_state:
-    st.session_state.income = 2000000
-if "level" not in st.session_state:
-    st.session_state.level = 5
-if "expenses" not in st.session_state:
-    st.session_state.expenses = []
 
 LEVELS = {
     1:  {"name":"여가 최우선",    "save":0.05, "fix":0.45, "leisure":0.50, "color":"#4CAF50"},
