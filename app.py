@@ -483,22 +483,13 @@ with col2:
         st.switch_page("pages/3_정부 지원 혜택 목록.py")
 
 with col3:
-    # <a> 태그 대신 div에 직접 onclick 이벤트를 부여했습니다.
+    # 버튼을 안 보이게 숨기는 CSS (로직은 그대로 작동)
     st.markdown("""
-    <div class="feature-card card-blue" style="cursor: pointer;" onclick="Array.from(window.parent.document.querySelectorAll('button')).find(el => el.textContent.includes('바로 확인해보기')).click();">
-        <div class="card-icon">🎯</div>
-        <div class="card-title">저축단계 상세 가이드</div>
-        <div class="card-description">
-            몇 개월 후 도달 금액을<br/>
-            미리 확인할 수 있어요
-        </div>
-        <div class="card-features">
-            <span class="card-features-title">이런 자료들을 얻을 수 있어요</span>
-            <div class="feature-item">단계별 상세 가이드 및 팁</div>
-            <div class="feature-item">목표 금액 시뮬레이션</div>
-            <div class="feature-item">전체 단계 비교 그래프</div>
-        </div>
-    </div>
+    <style>
+    div[data-testid="stButton"]:has(button:contains("바로 확인해보기")) {
+        display: none;
+    }
+    </style>
     """, unsafe_allow_html=True)
     
     # 이 버튼이 자바스크립트에 의해 클릭되며, 데이터를 유지한 채 페이지를 이동시킵니다.
