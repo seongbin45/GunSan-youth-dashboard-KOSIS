@@ -125,7 +125,7 @@ with col1:
     income = st.number_input(
         "월 소득 / 용돈 (원)",
         min_value=10000, max_value=10000000,
-        value=st.session_state.income, step=100000,
+        value=st.session_state.income, step=10000,
         format="%d"
     )
     st.session_state.income = income
