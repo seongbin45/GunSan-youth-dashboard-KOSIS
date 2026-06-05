@@ -265,8 +265,8 @@ LEVELS = {
     6:  {"name":"저축 균형형",    "save":0.30, "fix":0.55, "leisure":0.15, "color":"#FF9800"},
     7:  {"name":"저축 집중형",    "save":0.40, "fix":0.50, "leisure":0.10, "color":"#FF5722"},
     8:  {"name":"고강도 저축",    "save":0.50, "fix":0.45, "leisure":0.05, "color":"#F44336"},
-    9:  {"name":"극한 저축",      "save":0.65, "fix":0.35, "leisure":0.00, "color":"#E91E63"},
-    10: {"name":"생존형 저축",    "save":0.80, "fix":0.20, "leisure":0.00, "color":"#9C27B0"},
+    9:  {"name":"열정 저축형",      "save":0.65, "fix":0.35, "leisure":0.00, "color":"#E91E63"},
+    10: {"name":"목표 달성형",    "save":0.80, "fix":0.20, "leisure":0.00, "color":"#9C27B0"},
 }
 st.session_state.LEVELS = LEVELS
 
@@ -287,9 +287,9 @@ with col1:
     )
     st.session_state.income = income
 
-    st.subheader("🎚️ 저축 강도 선택 (1~10단계)")
+    st.subheader("🎚️ 나는 어떤 스타일로 돈을 모을까요? (1~10단계)")
     level = st.slider(
-        "1 = 여가 최우선 ~ 10 = 생존형 저축",
+        "여유롭게 ← → 최대한 모으기",
         min_value=1, max_value=10,
         value=st.session_state.level
     )
