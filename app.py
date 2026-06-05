@@ -406,10 +406,7 @@ with col2:
 
 st.write("---")
 
-st.set_page_config(page_title="저축단계 상세", page_icon="🎯", layout="wide")
-st.title("🎯 상세 가이드")
-st.markdown("#### 사회초년생을 위한 저축·소비 습관 계획 서비스")
-st.divider()
+st.subheader("🎯 상세 가이드")
 
 with st.expander("🎯 상세 가이드 보기"):
 
