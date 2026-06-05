@@ -264,7 +264,7 @@ LEVELS = {
     5:  {"name":"균형형",         "save":0.25, "fix":0.55, "leisure":0.20, "color":"#FFC107"},
     6:  {"name":"저축 균형형",    "save":0.30, "fix":0.55, "leisure":0.15, "color":"#FF9800"},
     7:  {"name":"저축 집중형",    "save":0.40, "fix":0.50, "leisure":0.10, "color":"#FF5722"},
-    8:  {"name":"고강도 저축",    "save":0.50, "fix":0.45, "leisure":0.05, "color":"#F44336"},
+    8:  {"name":"고강도 저축형",    "save":0.50, "fix":0.45, "leisure":0.05, "color":"#F44336"},
     9:  {"name":"열정 저축형",      "save":0.65, "fix":0.35, "leisure":0.00, "color":"#E91E63"},
     10: {"name":"목표 달성형",    "save":0.80, "fix":0.20, "leisure":0.00, "color":"#9C27B0"},
 }
