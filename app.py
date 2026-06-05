@@ -5,7 +5,7 @@ import plotly.express as px
 import gspread # 사용자 피드백 도구
 import json # 사용자 피드백 도구
 from datetime import datetime # 사용자 피드백 도구
-import plotly.graph_objects as go # 저축 상세 가이드
+import plotly.graph_objects as go # 저축 상세 가이드(비교표)
 
 
 st.set_page_config(page_title="FinFit", page_icon="💰", layout="wide")
@@ -506,8 +506,6 @@ fig.add_bar(name="여가·식비", x=[f"{k}단계" for k,_ in levels_list],
 fig.update_layout(barmode="stack", height=350,
                   yaxis_title="비율 (%)", margin=dict(l=10,r=10,t=10,b=10))
 st.plotly_chart(fig, use_container_width=True)
-
-st.write("---")
 
 
 
