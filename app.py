@@ -307,12 +307,9 @@ with col1:
     <div style="background:{lv['color']}22; border-left:5px solid {lv['color']};
                 padding:14px 18px; border-radius:8px; margin-top:10px;">
         <b style="font-size:1.1em">{level}단계 · {lv['name']}</b><br>
-        <span style="font-size:0.9em; color:#555; margin-top:6px; display:block">
-            💰 {monthly:,}원 기준 &nbsp;→&nbsp;
-            저축 <b>{save_pct}%</b> ({int(monthly*lv['save']):,}원) &nbsp;|&nbsp;
-            고정비 <b>{fix_pct}%</b> ({int(monthly*lv['fix']):,}원) &nbsp;|&nbsp;
-            여가 <b>{leisure_pct}%</b> ({int(monthly*lv['leisure']):,}원)
-        </span>
+        저축 <b>{int(lv['save']*100)}%</b> &nbsp;|&nbsp;
+        고정비 <b>{int(lv['fix']*100)}%</b> &nbsp;|&nbsp;
+        여가·식비 <b>{int(lv['leisure']*100)}%</b>
     </div>
     """, unsafe_allow_html=True)
 
