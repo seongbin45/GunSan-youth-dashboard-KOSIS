@@ -508,7 +508,7 @@ with st.expander("📊 전체 단계 비교 상세 보기"):
                 y=[v["leisure"]*100 for _,v in levels_list], marker_color="#4CAF50")
     fig.update_layout(barmode="stack", height=350,
                       yaxis_title="비율 (%)", margin=dict(l=10,r=10,t=10,b=10))
-    st.plotly_chart(fig, use_container_width=True)"
+    st.plotly_chart(fig, use_container_width=True)
     
     levels_list = list(LEVELS.items())
     fig = go.Figure()
