@@ -510,18 +510,6 @@ with st.expander("📊 전체 단계 비교 상세 보기"):
                       yaxis_title="비율 (%)", margin=dict(l=10,r=10,t=10,b=10))
     st.plotly_chart(fig, use_container_width=True)
     
-    levels_list = list(LEVELS.items())
-    fig = go.Figure()
-    fig.add_bar(name="저축", x=[f"{k}단계" for k,_ in levels_list],
-                y=[v["save"]*100 for _,v in levels_list], marker_color="#9C27B0")
-    fig.add_bar(name="고정비", x=[f"{k}단계" for k,_ in levels_list],
-                y=[v["fix"]*100 for _,v in levels_list], marker_color="#2196F3")
-    fig.add_bar(name="여가·식비", x=[f"{k}단계" for k,_ in levels_list],
-                y=[v["leisure"]*100 for _,v in levels_list], marker_color="#4CAF50")
-    fig.update_layout(barmode="stack", height=350,
-                      yaxis_title="비율 (%)", margin=dict(l=10,r=10,t=10,b=10))
-    st.plotly_chart(fig, use_container_width=True)
-
 
 
 
