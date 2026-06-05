@@ -411,7 +411,7 @@ st.title("🎯 상세 가이드")
 st.markdown("#### 사회초년생을 위한 저축·소비 습관 계획 서비스")
 st.divider()
 
-with st.expander("🎯 상세 가이드"):
+with st.expander("🎯 상세 가이드 보기"):
 
     if "income" not in st.session_state:
         st.session_state.income = 2000000
