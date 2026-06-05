@@ -498,7 +498,7 @@ st.session_state.LEVELS = LEVELS
 # 전체 단계 비교표
 st.subheader("📊 전체 단계 비교")
 
-with st.expander("📊 전체 단계 비교 상세 보기"):
+with st.expander("📊 전체 단계 비교표 보기"):
 
     levels_list = list(LEVELS.items())
     fig = go.Figure()
