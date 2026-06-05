@@ -290,7 +290,7 @@ with col1:
 
     st.subheader("🎚️ 어떤 스타일로 돈을 모을까요? (1~10단계)")
     level = st.slider(
-        "여유롭게 즐기기  ←————→  최대한 모으기",
+        "여유롭게 즐기기  ←    →  최대한 모으기",
         min_value=1, max_value=10,
         value=st.session_state.level,
         help="숫자가 낮을수록 여가·식비에 더 쓰고, 높을수록 저축을 더 많이 해요. 지금 당장 완벽하게 안 맞아도 괜찮아요, 나중에 언제든 바꿀 수 있어요!"
@@ -369,8 +369,8 @@ with col2:
         content: "";
         position: absolute;
         top: 100%;
-        left: 50%;
-        transform: translateX(-50%);
+        left: 20px;       /* 기존 left: 50% → 20px로 변경 */
+        transform: none;  /* 기존 translateX(-50%) 제거 */
         border: 6px solid transparent;
         border-top-color: #1a1a1a;
     }
