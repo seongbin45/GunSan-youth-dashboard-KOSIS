@@ -353,8 +353,8 @@ with col2:
         position: absolute;
         z-index: 999;
         bottom: 130%;
-        left: 50%;
-        transform: translateX(-50%);
+        left: 0%;
+        transform: none;
         width: 220px;
         box-shadow: 0 4px 16px rgba(0,0,0,0.18);
         transition: opacity 0.2s;
