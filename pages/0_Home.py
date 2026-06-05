@@ -145,6 +145,40 @@ st.markdown("""
     .card-mint {
         border-left-color: #95E1D3;
     }
+
+    .card-peach {
+        border-left-color: #FF9E7D;
+    }
+    
+    .card-blue {
+        border-left-color: #579BB1;
+    }
+
+    .card-pastel-milk {
+        border-left-color: #AEC6CF;
+    }
+    
+    .card-pastel-powder {
+        border-left-color: #B0C4DE;
+    }
+    
+    .card-pastel-ice {
+        border-left-color: #BCEEFA;
+    }
+    
+
+    .card-pastel-fog {
+        border-left-color: #C1D3DB;
+    }
+
+    
+    .card-lavender {
+        border-left-color: #A7BBC7;
+    }
+    
+    .card-yellow {
+        border-left-color: #F4D160;
+    }
     
     .stat-card {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
