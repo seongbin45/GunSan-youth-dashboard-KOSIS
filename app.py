@@ -5,6 +5,7 @@ import plotly.express as px
 import gspread # 사용자 피드백 도구
 import json # 사용자 피드백 도구
 from datetime import datetime # 사용자 피드백 도구
+import plotly.graph_objects as go # 저축 상세 가이드
 
 
 st.set_page_config(page_title="FinFit", page_icon="💰", layout="wide")
