@@ -318,9 +318,9 @@ with col1:
 
 with col2:
     st.subheader("📊 이번 달 예산 배분")
-    save_amt    = int(income * lv['save'])
-    fix_amt     = int(income * lv['fix'])
-    leisure_amt = int(income * lv['leisure'])
+    #save_amt    = int(income * lv['save'])
+    #fix_amt     = int(income * lv['fix'])
+    #leisure_amt = int(income * lv['leisure'])
 
     # 👇 이 CSS 툴팁 블록 추가
     st.markdown("""
@@ -375,39 +375,39 @@ with col2:
         "🎉 여가·식비 예산": ("여가·식비", "밥값, 카페, 취미, 쇼핑처럼<br>생활을 즐기는 데 쓰는 돈이에요."),
     }
     
-    for label, amt, color in metrics:
-        term, tip = TERM_TIPS[label]
-        st.markdown(f"""
-        <div style="background:#f8f9fa; border-radius:10px; padding:14px 20px; margin-bottom:10px;
-                    border-left:5px solid {color};">
-            <span style="color:#555; font-size:0.9em">
-                {label.split()[0]}&nbsp;
-                <span class="tooltip-wrap" tabindex="0">
-                    {term}
-                    <span class="tooltip-box">{tip}</span>
-                </span>
-            </span><br>
-            <span style="font-size:1.6em; font-weight:bold; color:#222">
-                {amt:,}원
+for label, amt, color in metrics:
+    term, tip = TERM_TIPS[label]
+    st.markdown(f"""
+    <div style="background:#f8f9fa; border-radius:10px; padding:14px 20px; margin-bottom:10px;
+                border-left:5px solid {color};">
+        <span style="color:#555; font-size:0.9em">
+            {label.split()[0]}&nbsp;
+            <span class="tooltip-wrap" tabindex="0">
+                {term}
+                <span class="tooltip-box">{tip}</span>
             </span>
-            <span style="color:#888; font-size:0.85em"> / 월</span>
-        </div>
-        """, unsafe_allow_html=True)
-        
-    st.divider()
-    st.markdown("#### 🗺️ 아래에서 기능을 선택해주세요")
-    cols = st.columns(4)
-    #pages = [
-        #("📒 가계부",        "수입·지출 기록 및 월별 분석"),
-        #("🎯 저축단계 상세", "단계별 상세 가이드 및 팁"),
-        #("🎁 청년 혜택",     "국가 청년 금융 지원 정보"),
-        #("📚 금융 용어",     "꼭 알아야 할 금융 개념 정리"),
-    #]
-    #for col, (title, desc) in zip(cols, pages):
-        #with col:
-            #st.info(f"**{title}**\n\n{desc}")
+        </span><br>
+        <span style="font-size:1.6em; font-weight:bold; color:#222">
+            {amt:,}원
+        </span>
+        <span style="color:#888; font-size:0.85em"> / 월</span>
+    </div>
+    """, unsafe_allow_html=True)
     
-    #st.write("---")
+st.divider()
+st.markdown("#### 🗺️ 아래에서 기능을 선택해주세요")
+cols = st.columns(4)
+#pages = [
+    #("📒 가계부",        "수입·지출 기록 및 월별 분석"),
+    #("🎯 저축단계 상세", "단계별 상세 가이드 및 팁"),
+    #("🎁 청년 혜택",     "국가 청년 금융 지원 정보"),
+    #("📚 금융 용어",     "꼭 알아야 할 금융 개념 정리"),
+#]
+#for col, (title, desc) in zip(cols, pages):
+    #with col:
+        #st.info(f"**{title}**\n\n{desc}")
+
+#st.write("---")
 
 
 # 기능 카드
