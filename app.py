@@ -408,7 +408,7 @@ st.write("---")
 
 st.subheader("🎯 상세 가이드")
 
-with st.expander("🎯 상세 가이드 보기"):
+with st.expander("상세 가이드 보기"):
 
     if "income" not in st.session_state:
         st.session_state.income = 2000000
@@ -495,7 +495,7 @@ st.session_state.LEVELS = LEVELS
 # 전체 단계 비교표
 st.subheader("📊 전체 단계 비교")
 
-with st.expander("📊 전체 단계 비교표 보기"):
+with st.expander("전체 단계 비교표 보기"):
 
     levels_list = list(LEVELS.items())
     fig = go.Figure()
