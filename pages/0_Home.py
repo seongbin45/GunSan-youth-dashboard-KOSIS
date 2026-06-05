@@ -216,46 +216,48 @@ st.markdown("""
 
 st.divider()
 
-# 세 가지 기능 카드
+# 기능 카드
 col1, col2, col3 = st.columns(3, gap="large")
 
 with col1:
-    # 카드 전체를 <a> 태그로 감싸고 주소 뒤에 ?page=benefit이 붙도록 만듭니다.
+    # 카드 전체를 <a> 태그로 감싸고 주소 뒤에 ?page=Household_Ledger이 붙도록 만듭니다.
+    cols = st.columns(4)
     st.markdown("""
-    <a href="/?page=benefit" target="_self" style="text-decoration: none; color: inherit;">
-        <div class="feature-card card-red">
-            <div class="card-icon">🎁</div>
-            <div class="card-title">내 혜택 찾기</div>
+    <a href="/?page=Household_Ledger" target="_self" style="text-decoration: none; color: inherit;">
+        <div class="feature-card card-yellow">
+            <div class="card-icon">📒</div>
+            <div class="card-title">가계부</div>
             <div class="card-description">
-                나이, 소득, 지역만 입력하면<br/>
-                정부·군산시에서 나에게 주는<br/>
-                금융 지원과 대출을 자동 추천
+                내역을 입력만 하면<br/>
+                수입·지출 기록 및 월별 자동 분석
             </div>
             <div class="card-features">
-                <span class="card-features-title">이런 정보를 얻을 수 있어요</span>
-                <div class="feature-item">50개 이상 청년 정책 매칭</div>
-                <div class="feature-item">연 최대 1,000만원 이상 지원액</div>
-                <div class="feature-item">신청 방법과 기한 안내</div>
+                <span class="card-features-title">이런 것들을 얻을 수 있어요</span>
+                <div class="feature-item">고정비, 식비, 여가 등 정보</div>
+                <div class="feature-item">구글 시트에 데이터 자동 동기화</div>
+                <div class="feature-item">구글 시트 데이터 초기화 가능</div>
             </div>
         </div>
     </a>
     """, unsafe_allow_html=True)
     
     # 이 버튼이 클릭되면 안전하게 st.switch_page가 작동합니다.
-    if st.button("지금 혜택 찾아보기 →", key="btn_benefit", use_container_width=True):
-        st.switch_page("pages/4_군산시민 맞춤 혜택 찾기.py")
+    if st.button("지금 입력해보기 →", key="btn_benefit", use_container_width=True):
+        st.switch_page("pages/Household_Ledger.py")
 
 with col2:
     # col2도 똑같이 전체 클릭 기능을 넣고 싶다면 아래처럼 <a> 태그로 감싸주면 됩니다.
     st.markdown("""
     <a href="/?page=finance" target="_self" style="text-decoration: none; color: inherit;">
-        <div class="feature-card card-teal">
+        <div class="feature-card card-mint">
             <div class="card-icon">📚</div>
             <div class="card-title">금융 용어</div>
             <div class="card-description">
                 CMA, ETF, 청년도약계좌,<br/>
-                전세대출... 경제 신문에 나오는<br/>
-                어려운 용어를 쉽게 설명해줍니다
+                전세대출 등<br/>
+                경제 신문에 나오는<br/> 
+                어려운 용어를<br/>
+                쉽게 설명해줍니다
             </div>
             <div class="card-features">
                 <span class="card-features-title">이 정도는 꼭 알아야 해요</span>
@@ -273,8 +275,8 @@ with col2:
 with col3:
     st.markdown("""
     <a href="/?page=ai" target="_self" style="text-decoration: none; color: inherit;">
-        <div class="feature-card card-mint">
-            <div class="card-icon">💭</div>
+        <div class="feature-card card-pastel-fog">
+            <div class="card-icon">🚀</div>
             <div class="card-title">AI 금융 상담</div>
             <div class="card-description">
                 "전세금 대출은 언제까지 나올까?"<br/>
@@ -291,10 +293,88 @@ with col3:
     </a>
     """, unsafe_allow_html=True)
     
-    if st.button("AI와 상담하기 →", key="btn_ai", use_container_width=True):
+    if st.button("AI와 상담하기 →", key="btn_ai_agent", use_container_width=True):
         st.switch_page("pages/2_AI와_대화하기.py")
 
-st.divider()
+
+#st.divider()
+
+# 기능 카드
+col1, col2, col3 = st.columns(3, gap="large")
+
+with col1:
+    cols = st.columns(4)
+    st.markdown("""
+    <a href="/?page=benefit" target="_self" style="text-decoration: none; color: inherit;">
+        <div class="feature-card card-peach">
+            <div class="card-icon">🎁</div>
+            <div class="card-title">군산 맞춤 혜택 찾기</div>
+            <div class="card-description">
+                나이, 소득, 지역만 입력하면<br/>
+                군산시에서 나에게 주는<br/>
+                나에게 맞는 혜택을 자동 추천
+            </div>
+            <div class="card-features">
+                <span class="card-features-title">이런 정보를 얻을 수 있어요</span>
+                <div class="feature-item">50개 이상 청년 정책 매칭</div>
+                <div class="feature-item">연 최대 1,000만원 이상 지원액</div>
+                <div class="feature-item">신청 방법과 기한 안내</div>
+            </div>
+        </div>
+    </a>
+    """, unsafe_allow_html=True)
+    
+    # 이 버튼이 클릭되면 안전하게 st.switch_page가 작동합니다.
+    if st.button("지금 혜택 찾아보기 →", key="btn_Savings_Step_Setting_Guid_For", use_container_width=True):
+        st.switch_page("pages/4_군산시민 맞춤 혜택 찾기.py")
+
+with col2:
+    # col2도 똑같이 전체 클릭 기능을 넣고 싶다면 아래처럼 <a> 태그로 감싸주면 됩니다.
+    st.markdown("""
+    <a href="/?page=Government_Backed_Benefits" target="_self" style="text-decoration: none; color: inherit;">
+        <div class="feature-card card-pastel-powder">
+            <div class="card-icon">🌐</div>
+            <div class="card-title">정부 지원 혜택</div>
+            <div class="card-description">
+                국가 청년 금융 지원 정보<br/>
+                정부 사이트 실시간 동기화<br/>
+                모든 정책을 한 화면에 보여줍니다
+            </div>
+            <div class="card-features">
+                <span class="card-features-title">이런 정보를 얻을 수 있어요</span>
+                <div class="feature-item">청년도약계좌, 햇살론 등</div>
+                <div class="feature-item">신청 방법 및 기한</div>
+                <div class="feature-item">공식 사이트 링크</div>
+            </div>
+        </div>
+    </a>
+    """, unsafe_allow_html=True)
+    
+    if st.button("확인해 보러 가기 →", key="btn_finances", use_container_width=True):
+        st.switch_page("pages/3_정부 지원 혜택 목록.py")
+
+with col3:
+    # onclick 내부의 window.parent를 제거하여 보안 차단을 우회합니다.
+    st.markdown("""
+    <div class="feature-card card-blue" style="cursor: pointer;" onclick="Array.from(document.querySelectorAll('button')).find(el => el.textContent.includes('바로 확인해보기')).click();">
+        <div class="card-icon">🎯</div>
+        <div class="card-title">저축단계 상세 가이드</div>
+        <div class="card-description">
+            몇 개월 후 도달 금액을<br/>
+            미리 확인할 수 있어요
+        </div>
+        <div class="card-features">
+            <span class="card-features-title">이런 자료들을 얻을 수 있어요</span>
+            <div class="feature-item">단계별 상세 가이드 및 팁</div>
+            <div class="feature-item">목표 금액 시뮬레이션</div>
+            <div class="feature-item">전체 단계 비교 그래프</div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # 이 버튼이 자바스크립트에 의해 클릭되며 데이터 초기화 없이 페이지를 이동시킵니다.
+    if st.button("바로 확인해보기 →", key="btn_ai", use_container_width=True):
+        st.switch_page("pages/Savings_Step_Setting_Guide.py")
 
 # 통계 섹션
 st.markdown("## 📊 FinFit이 찾아준 혜택들")
