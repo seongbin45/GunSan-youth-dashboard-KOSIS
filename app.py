@@ -287,7 +287,7 @@ with col1:
     )
     st.session_state.income = income
 
-    st.subheader("🎚️ 나는 어떤 스타일로 돈을 모을까요? (1~10단계)")
+    st.subheader("🎚️ 어떤 스타일로 돈을 모을까요? (1~10단계)")
     level = st.slider(
         "여유롭게 ← → 최대한 모으기",
         min_value=1, max_value=10,
