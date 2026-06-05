@@ -273,15 +273,6 @@ st.session_state.LEVELS = LEVELS
 # ── 메인 화면 ─────────────────────────────────────────────────────────────────
 st.title("💰 FinFit")
 st.markdown("#### 금융 미경험 청년을 위한 저축·소비 습관 서비스")
-    # 이렇게 쓰면 돼 - 용어 옆에 ? 아이콘으로 설명 팝업
-    def term_tooltip(term, explanation):
-        with st.expander(f"💬 {term}이 뭔가요?"):
-            st.info(explanation)
-
-# 사용 예시 - 슬라이더 아래에 붙이기
-st.slider(...)
-term_tooltip("저축", "매달 쓰고 남은 돈을 따로 모아두는 것이에요. 예를 들어 용돈 30만원 중 5만원을 통장에 넣어두는 것!")
-
 st.divider()
 
 col1, col2 = st.columns([1, 1], gap="large")
