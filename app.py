@@ -318,9 +318,18 @@ with col1:
 
 with col2:
     st.subheader("📊 이번 달 예산 배분")
-    #save_amt    = int(income * lv['save'])
-    #fix_amt     = int(income * lv['fix'])
-    #leisure_amt = int(income * lv['leisure'])
+
+    # ✅ 이 세 줄 주석 해제 (삭제 말고 살려야 해)
+    save_amt    = int(income * lv['save'])
+    fix_amt     = int(income * lv['fix'])
+    leisure_amt = int(income * lv['leisure'])
+
+    # ✅ metrics 리스트 정의 추가
+    metrics = [
+        ("💎 저축 목표",      save_amt,    lv['color']),
+        ("🏠 고정비 예산",    fix_amt,     "#2196F3"),
+        ("🎉 여가·식비 예산", leisure_amt, "#4CAF50"),
+    ]
 
     # 👇 이 CSS 툴팁 블록 추가
     st.markdown("""
@@ -374,25 +383,26 @@ with col2:
         "🏠 고정비 예산":    ("고정비", "매달 비슷하게 나가는 돈이에요.<br>월세, 통신비, 교통비처럼 줄이기 어려운 지출들이에요."),
         "🎉 여가·식비 예산": ("여가·식비", "밥값, 카페, 취미, 쇼핑처럼<br>생활을 즐기는 데 쓰는 돈이에요."),
     }
-    
-for label, amt, color in metrics:
-    term, tip = TERM_TIPS[label]
-    st.markdown(f"""
-    <div style="background:#f8f9fa; border-radius:10px; padding:14px 20px; margin-bottom:10px;
-                border-left:5px solid {color};">
-        <span style="color:#555; font-size:0.9em">
-            {label.split()[0]}&nbsp;
-            <span class="tooltip-wrap" tabindex="0">
-                {term}
-                <span class="tooltip-box">{tip}</span>
+
+    # ✅ for 루프가 with col2: 안에 들여쓰기 되어 있어야 해
+    for label, amt, color in metrics:
+        term, tip = TERM_TIPS[label]
+        st.markdown(f"""
+        <div style="background:#f8f9fa; border-radius:10px; padding:14px 20px; margin-bottom:10px;
+                    border-left:5px solid {color};">
+            <span style="color:#555; font-size:0.9em">
+                {label.split()[0]}&nbsp;
+                <span class="tooltip-wrap" tabindex="0">
+                    {term}
+                    <span class="tooltip-box">{tip}</span>
+                </span>
+            </span><br>
+            <span style="font-size:1.6em; font-weight:bold; color:#222">
+                {amt:,}원
             </span>
-        </span><br>
-        <span style="font-size:1.6em; font-weight:bold; color:#222">
-            {amt:,}원
-        </span>
-        <span style="color:#888; font-size:0.85em"> / 월</span>
-    </div>
-    """, unsafe_allow_html=True)
+            <span style="color:#888; font-size:0.85em"> / 월</span>
+        </div>
+        """, unsafe_allow_html=True)
     
 st.divider()
 st.markdown("#### 🗺️ 아래에서 기능을 선택해주세요")
