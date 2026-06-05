@@ -283,7 +283,7 @@ with col1:
         "월 소득 / 용돈 (원)",
         min_value=10000, max_value=10000000,
         value=st.session_state.income, step=100000,
-        format="%d"
+        format="%d",
         help="매달 정기적으로 받는 돈이에요. 알바비, 용돈, 급여 모두 포함해서 입력하세요. 정확하지 않아도 괜찮아요!"
     )
     st.session_state.income = income
@@ -292,7 +292,7 @@ with col1:
     level = st.slider(
         "여유롭게 ← → 최대한 모으기",
         min_value=1, max_value=10,
-        value=st.session_state.level
+        value=st.session_state.level,
         help="숫자가 낮을수록 여가·식비에 더 쓰고, 높을수록 저축을 더 많이 해요. 지금 당장 완벽하게 안 맞아도 괜찮아요, 나중에 언제든 바꿀 수 있어요!"
     )
     st.session_state.level = level
