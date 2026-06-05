@@ -375,7 +375,7 @@ with col2:
         "🎉 여가·식비 예산": ("여가·식비", "밥값, 카페, 취미, 쇼핑처럼<br>생활을 즐기는 데 쓰는 돈이에요."),
     }
     
-for label, amt, color in metrics:
+    for label, amt, color in metrics:
     term, tip = TERM_TIPS[label]
     st.markdown(f"""
     <div style="background:#f8f9fa; border-radius:10px; padding:14px 20px; margin-bottom:10px;
