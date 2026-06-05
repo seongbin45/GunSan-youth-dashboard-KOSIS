@@ -376,23 +376,23 @@ with col2:
     }
     
     for label, amt, color in metrics:
-    term, tip = TERM_TIPS[label]
-    st.markdown(f"""
-    <div style="background:#f8f9fa; border-radius:10px; padding:14px 20px; margin-bottom:10px;
-                border-left:5px solid {color};">
-        <span style="color:#555; font-size:0.9em">
-            {label.split()[0]}&nbsp;
-            <span class="tooltip-wrap" tabindex="0">
-                {term}
-                <span class="tooltip-box">{tip}</span>
+        term, tip = TERM_TIPS[label]
+        st.markdown(f"""
+        <div style="background:#f8f9fa; border-radius:10px; padding:14px 20px; margin-bottom:10px;
+                    border-left:5px solid {color};">
+            <span style="color:#555; font-size:0.9em">
+                {label.split()[0]}&nbsp;
+                <span class="tooltip-wrap" tabindex="0">
+                    {term}
+                    <span class="tooltip-box">{tip}</span>
+                </span>
+            </span><br>
+            <span style="font-size:1.6em; font-weight:bold; color:#222">
+                {amt:,}원
             </span>
-        </span><br>
-        <span style="font-size:1.6em; font-weight:bold; color:#222">
-            {amt:,}원
-        </span>
-        <span style="color:#888; font-size:0.85em"> / 월</span>
-    </div>
-    """, unsafe_allow_html=True)
+            <span style="color:#888; font-size:0.85em"> / 월</span>
+        </div>
+        """, unsafe_allow_html=True)
     
 st.divider()
 st.markdown("#### 🗺️ 아래에서 기능을 선택해주세요")
