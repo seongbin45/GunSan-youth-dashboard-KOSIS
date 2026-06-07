@@ -38,5 +38,5 @@ jobs:
 
       - name: 6. 수동 Reboot 버튼 클릭 매크로 가동
         run: |
-          python all_app_reboot_macro.py
+          python streamlit_reboot_macro/all_app_reboot_macro.py
 
