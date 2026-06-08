@@ -147,7 +147,7 @@ with col2:
     for label, amt, color in metrics:
         term, tip = TERM_TIPS[label]
         st.markdown(f"""
-        <div style="background:#f8f9fa; border-radius:10px; padding:14px 20px; margin-bottom:10px;
+        <div style="background:#1a1a1a; border-radius:10px; padding:14px 20px; margin-bottom:10px;
                     border-left:5px solid {color};">
             <span style="color:#555; font-size:0.9em">
                 {label.split()[0]}&nbsp;
