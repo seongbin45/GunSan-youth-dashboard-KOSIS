@@ -1,106 +1,93 @@
+from __future__ import annotations
+
+from datetime import UTC, datetime
+
 import streamlit as st
 
 from finfit_youth.scheduler import ensure_scheduler_started
 from finfit_youth.service import YouthDataService
 
-st.set_page_config(page_title="청년 혜택", page_icon="🎁", layout="wide")
 
-st.title("🎁 온통청년 실시간 정책/청년센터/콘텐츠")
-st.caption("목록/검색은 캐시 데이터, 상세는 실시간 조회(단기 캐시) 방식으로 동작합니다.")
+st.set_page_config(page_title="청년 혜택 업데이트", page_icon="🎁", layout="wide")
+
+
+def _format_age(seconds: int | None) -> str:
+    if seconds is None:
+        return "데이터 없음"
+    if seconds < 60:
+        return f"{seconds}초 전"
+    if seconds < 3600:
+        return f"{seconds // 60}분 전"
+    if seconds < 86400:
+        return f"{seconds // 3600}시간 전"
+    return f"{seconds // 86400}일 전"
+
+
+def _format_sync(value: str | None) -> str:
+    if not value:
+        return "동기화 기록 없음"
+    return value.replace("T", " ").replace("+00:00", " UTC")
+
+
+st.title("청년 혜택 업데이트")
+st.caption(
+    "현재는 공공 API 기반 동기화 구조와 캐시 시스템을 구현했고, "
+    "주기적 자동화는 차기 단계에서 확장 가능합니다."
+)
 
 service = YouthDataService()
 if "youth_scheduler" not in st.session_state:
     st.session_state.youth_scheduler = ensure_scheduler_started(service, interval_seconds=30 * 60)
 
-left, right = st.columns([2, 1])
+source_label = st.selectbox("데이터 구분", ["정책", "청년센터", "콘텐츠"], index=0)
+source_map = {"정책": "policy", "청년센터": "center", "콘텐츠": "content"}
+source = source_map[source_label]
 
-with left:
-    source_label = st.selectbox("데이터 구분", ["정책", "청년센터", "콘텐츠"], index=0)
-    source_map = {"정책": "policy", "청년센터": "center", "콘텐츠": "content"}
-    source = source_map[source_label]
+status = service.get_source_status(source)
 
-    query = st.text_input("검색어", placeholder="예: 취업, 주거, 금융")
+st.subheader("운영 상태 대시보드")
+cols = st.columns(3)
+cols[0].metric("마지막 동기화", _format_sync(status["last_synced_at"]))
+cols[1].metric("데이터 신선도", _format_age(status["cache_age_seconds"]))
+cols[2].metric("정책/항목 수", f"{status['item_count']}개")
 
-    size_label = st.selectbox("한 화면에 표시할 목록 개수", [10, 20, 30, 50, 100, "Max"], index=2)
-    size = 9999 if size_label == "Max" else int(size_label)
+cols = st.columns(3)
+cols[0].metric("API 상태", status["api_status"])
+cols[1].metric("캐시 상태", status["cache_status"])
+cols[2].metric("Fallback 여부", "사용" if status["fallback_used"] else "미사용")
 
-    if size_label == "Max":
-        page = 1
-        st.caption("Max 선택 시 페이지는 1개로 고정됩니다.")
-    else:
-        page = st.number_input("페이지 번호", min_value=1, value=1, step=1)
-
-    refresh_clicked = st.button("지금 동기화")
-    if refresh_clicked:
-        with st.spinner("동기화 중..."):
-            try:
-                result = service.sync_source(source)
-                st.success(f"{source_label} 동기화 완료: {result['count']}건")
-            except Exception as e:
-                msg = str(e)
-                if source == "content" and ("403" in msg or "400" in msg):
-                    st.error("동기화 실패: 콘텐츠 API 키 권한 또는 파라미터(apiKeyNm/pageType/pstSn/rtnType)를 확인해주세요.")
-                elif source == "center" and ("403" in msg or "400" in msg):
-                    st.error("동기화 실패: 청년센터 API 키 권한 또는 파라미터(apiKeyNm/pageType/plcSn/rtnType)를 확인해주세요.")
-                else:
-                    st.error(f"동기화 실패: {e}")
-                st.stop()
-
-with right:
-    st.info(
-        "운영 안내\n\n"
-        "- 정책/청년센터/콘텐츠 API 키를 각각 설정하세요(`YOUTH_API_KEY`, `YOUTH_CENTER_API_KEY`, `YOUTH_CONTENT_API_KEY`)\n"
-        "- 30분 주기 자동 동기화\n"
-        "- 외부 API 오류 시 직전 스냅샷 폴백"
-    )
-
-try:
-    result = service.get_list(source=source, query=query, page=int(page), size=int(size))
-except Exception as e:
-    st.error(f"목록 조회 실패: {e}")
-    st.stop()
+if st.button("지금 동기화", use_container_width=True):
+    with st.spinner("공공 API 동기화 중..."):
+        try:
+            result = service.sync_source(source)
+            st.success(f"{source_label} 동기화 완료: {result['count']}건")
+        except Exception as exc:
+            service.record_source_error(source, str(exc))
+            st.error(f"동기화 실패: {exc}")
 
 st.divider()
+
+query = st.text_input("검색어", placeholder="예: 취업, 주거, 금융")
+size = st.selectbox("표시 개수", [10, 20, 30, 50, 100], index=1)
+
+result = service.get_list(source=source, query=query, page=1, size=int(size))
 st.write(f"총 {result['total']}건")
+if result.get("fallback_used"):
+    st.warning("외부 API 조회가 실패해 저장된 캐시 데이터를 표시하고 있습니다.")
 
-items = result["items"]
-if not items:
-    st.warning("표시할 데이터가 없습니다. API 키/엔드포인트 설정을 확인해주세요.")
-
-for idx, item in enumerate(items):
+for idx, item in enumerate(result["items"]):
     title = item.get("title") or "제목 없음"
     summary = item.get("summary") or "요약 정보 없음"
     region = item.get("region") or "지역 정보 없음"
     item_id = item.get("id") or ""
-    raw = item.get("raw") if isinstance(item.get("raw"), dict) else {}
 
     with st.expander(f"{title} ({region})"):
         st.write(summary)
+        if item_id and st.button("상세 실시간 조회", key=f"detail-{source}-{item_id}-{idx}"):
+            try:
+                detail = service.get_detail(source=source, item_id=item_id)
+                st.json(detail)
+            except Exception as exc:
+                st.error(f"상세 조회 실패: {exc}")
 
-        if source == "center":
-            tel = raw.get("cntrTelno") or "전화번호 정보 없음"
-            addr = " ".join(
-                x for x in [str(raw.get("cntrAddr") or "").strip(), str(raw.get("cntrDaddr") or "").strip()] if x
-            ) or "주소 정보 없음"
-            url = raw.get("cntrUrlAddr")
-
-            st.caption(f"전화: {tel}")
-            st.caption(f"주소: {addr}")
-            if url:
-                st.markdown(f"센터 URL: [{url}]({url})")
-
-        if item_id:
-            if st.button("상세 실시간 조회", key=f"detail-{source}-{item_id}-{idx}"):
-                try:
-                    detail = service.get_detail(source=source, item_id=item_id)
-                    st.json(detail)
-                except Exception as e:
-                    msg = str(e)
-                    if source == "content" and ("403" in msg or "400" in msg):
-                        st.error("상세 조회 실패: 콘텐츠 API 권한 또는 상세 파라미터(pstSn/pageType/rtnType)를 확인해주세요.")
-                    elif source == "center" and ("403" in msg or "400" in msg):
-                        st.error("상세 조회 실패: 청년센터 API 권한 또는 상세 파라미터(plcSn/pageType/rtnType)를 확인해주세요.")
-                    else:
-                        st.error(f"상세 조회 실패: {e}")
-        else:
-            st.caption("상세 조회를 위한 식별자가 없어 목록 데이터만 표시합니다.")
+st.caption(f"화면 확인 시각: {datetime.now(UTC).isoformat(timespec='seconds')}")
