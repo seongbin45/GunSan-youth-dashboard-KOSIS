@@ -62,7 +62,7 @@ def _format_sync(value: str | None) -> str:
 
 # --- 메인 실행부 ---
 st.title("청년 혜택 업데이트")
-t.caption(
+st.caption(
     "현재는 공공 API 기반 동기화 구조와 캐시 시스템을 구현했고, "
     "주기적 자동화는 차기 단계에서 확장 가능합니다."
 )
