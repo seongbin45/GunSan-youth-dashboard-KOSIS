@@ -52,6 +52,7 @@ source = source_map[source_label]
 
 status = service.get_source_status(source)
 
+with right:
     st.info(
         # --- 📊 사용자 친화적으로 개선된 운영 상태 대시보드 ---
         st.subheader("📊 운영 상태 대시보드")
