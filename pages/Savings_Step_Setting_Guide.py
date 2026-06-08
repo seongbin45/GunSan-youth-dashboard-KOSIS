@@ -97,7 +97,7 @@ with col2:
         display: inline-block;
         position: relative;
         cursor: pointer;
-        border-bottom: 1.5px dashed #aaa;
+        border-bottom: 1.5px dashed #bfdbfe;
         color: inherit;
     }
     .tooltip-wrap .tooltip-box {
