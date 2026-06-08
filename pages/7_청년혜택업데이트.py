@@ -42,6 +42,8 @@ st.caption(
     "주기적 자동화는 차기 단계에서 확장 가능합니다."
 )
 
+st.divider()
+
 service = YouthDataService()
 if "youth_scheduler" not in st.session_state:
     st.session_state.youth_scheduler = ensure_scheduler_started(service, interval_seconds=30 * 60)
