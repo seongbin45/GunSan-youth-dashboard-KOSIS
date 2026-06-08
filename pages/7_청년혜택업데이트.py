@@ -47,7 +47,7 @@ def _format_sync(value: str | None) -> str:
         
         # 5. 차이에 따라 완벽하게 일상적인 말로 반환
         if days_diff == 0:
-            return f"오늘 {time_str}"
+            return f"{time_str}"
         elif days_diff == 1:
             return f"어제 {time_str}"
         elif days_diff == 2:
