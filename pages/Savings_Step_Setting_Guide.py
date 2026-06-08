@@ -103,7 +103,7 @@ with col2:
     .tooltip-wrap .tooltip-box {
         visibility: hidden;
         opacity: 0;
-        background: #1a1a1a;
+        background: #f8f9fa;
         color: #fff;
         font-size: 0.82em;
         line-height: 1.6;
