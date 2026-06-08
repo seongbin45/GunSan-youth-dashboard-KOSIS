@@ -29,11 +29,11 @@ LEVELS = {
          "tips":["주거비 절감 방안 검토 (청년월세지원 신청)","카드 대신 체크카드 사용","월말 잔액 추가 저축 습관 만들기"]},
     7:  {"name":"저축 집중형",  "save":0.40,"fix":0.50,"leisure":0.10,"color":"#FF5722",
          "tips":["고정비 항목 전면 재검토","통신비 알뜰폰으로 전환 (월 1~2만원대)","여가는 한 달에 1~2회만"]},
-    8:  {"name":"고강도 저축",  "save":0.50,"fix":0.45,"leisure":0.05,"color":"#F44336",
+    8:  {"name":"고강도 저축형",  "save":0.50,"fix":0.45,"leisure":0.05,"color":"#F44336",
          "tips":["월세 부담 낮추기 (룸메이트 또는 고시원 검토)","식비는 직접 요리 위주","절약 챌린지 SNS 커뮤니티 참여"]},
-    9:  {"name":"극한 저축",    "save":0.65,"fix":0.35,"leisure":0.00,"color":"#E91E63",
+    9:  {"name":"열정 저축형",    "save":0.65,"fix":0.35,"leisure":0.00,"color":"#E91E63",
          "tips":["단기 목돈 마련 목표 설정 (1년 내)","불필요한 모든 지출 제거","정부 지원 식품바우처 등 최대한 활용"]},
-    10: {"name":"생존형 저축",  "save":0.80,"fix":0.20,"leisure":0.00,"color":"#9C27B0",
+    10: {"name":"목표 달성형",  "save":0.80,"fix":0.20,"leisure":0.00,"color":"#9C27B0",
          "tips":["생활비 최저 생계비 수준으로 제한","무료 와이파이·공공시설 적극 이용","번아웃 주의: 1~2개월 단기 목표로 운영"]},
 }
 
@@ -133,20 +133,7 @@ st.success(f"**{months}개월 후 예상 저축액: {total_save:,}원** (월 {mo
 
 st.write("---")
 
-LEVELS = {
-    1:  {"name":"여가 최우선",    "save":0.05, "fix":0.45, "leisure":0.50, "color":"#4CAF50"},
-    2:  {"name":"여가 중심",      "save":0.10, "fix":0.50, "leisure":0.40, "color":"#8BC34A"},
-    3:  {"name":"균형 여가형",    "save":0.15, "fix":0.55, "leisure":0.30, "color":"#CDDC39"},
-    4:  {"name":"생활 균형형",    "save":0.20, "fix":0.55, "leisure":0.25, "color":"#FFEB3B"},
-    5:  {"name":"균형형",         "save":0.25, "fix":0.55, "leisure":0.20, "color":"#FFC107"},
-    6:  {"name":"저축 균형형",    "save":0.30, "fix":0.55, "leisure":0.15, "color":"#FF9800"},
-    7:  {"name":"저축 집중형",    "save":0.40, "fix":0.50, "leisure":0.10, "color":"#FF5722"},
-    8:  {"name":"고강도 저축",    "save":0.50, "fix":0.45, "leisure":0.05, "color":"#F44336"},
-    9:  {"name":"극한 저축",      "save":0.65, "fix":0.35, "leisure":0.00, "color":"#E91E63"},
-    10: {"name":"생존형 저축",    "save":0.80, "fix":0.20, "leisure":0.00, "color":"#9C27B0"},
-}
-st.session_state.LEVELS = LEVELS
-    
+
 
 # 전체 단계 비교표
 st.subheader("📊 전체 단계 비교")
