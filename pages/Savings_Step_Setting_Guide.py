@@ -45,7 +45,7 @@ level  = st.session_state.level
 col1, col2 = st.columns([1, 1], gap="large")
 
 with col1:
-    st.subheader("📋 본인의 정보를 입력해주세요")
+    st.subheader("📋 정보를 입력해주세요")
     income = st.number_input(
         "월 소득 / 용돈 (원)",
         min_value=10000, max_value=10000000,
@@ -77,26 +77,92 @@ with col1:
 
 with col2:
     st.subheader("📊 이번 달 예산 배분")
+
+    # ✅ 이 세 줄 주석 해제 (삭제 말고 살려야 해)
     save_amt    = int(income * lv['save'])
     fix_amt     = int(income * lv['fix'])
     leisure_amt = int(income * lv['leisure'])
 
+    # ✅ metrics 리스트 정의 추가
     metrics = [
-        ("💎 저축 목표",     save_amt,    lv['color']),
-        ("🏠 고정비 예산",   fix_amt,     "#2196F3"),
+        ("💎 저축 목표",      save_amt,    lv['color']),
+        ("🏠 고정비 예산",    fix_amt,     "#2196F3"),
         ("🎉 여가·식비 예산", leisure_amt, "#4CAF50"),
     ]
+
+    # 👇 이 CSS 툴팁 블록 추가
+    st.markdown("""
+    <style>
+    .tooltip-wrap {
+        display: inline-block;
+        position: relative;
+        cursor: pointer;
+        border-bottom: 1.5px dashed #aaa;
+        color: inherit;
+    }
+    .tooltip-wrap .tooltip-box {
+        visibility: hidden;
+        opacity: 0;
+        background: #1a1a1a;
+        color: #fff;
+        font-size: 0.82em;
+        line-height: 1.6;
+        border-radius: 8px;
+        padding: 10px 14px;
+        position: absolute;
+        z-index: 999;
+        bottom: 130%;
+        left: 0%;
+        transform: none;
+        width: 220px;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+        transition: opacity 0.2s;
+        pointer-events: none;
+    }
+    .tooltip-wrap:hover .tooltip-box,
+    .tooltip-wrap:focus .tooltip-box {
+        visibility: visible;
+        opacity: 1;
+    }
+    .tooltip-wrap .tooltip-box::after {
+        content: "";
+        position: absolute;
+        top: 100%;
+        left: 20px;       /* 기존 left: 50% → 20px로 변경 */
+        transform: none;  /* 기존 translateX(-50%) 제거 */
+        border: 6px solid transparent;
+        border-top-color: #1a1a1a;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+    
+    # 👇 기존 metrics 루프를 이걸로 교체
+    TERM_TIPS = {
+        "💎 저축 목표":      ("저축", "쓰지 않고 모아두는 돈이에요.<br>이 금액을 매달 통장에 먼저 빼두는 게 핵심이에요!"),
+        "🏠 고정비 예산":    ("고정비", "매달 비슷하게 나가는 돈이에요.<br>월세, 통신비, 교통비처럼 줄이기 어려운 지출들이에요."),
+        "🎉 여가·식비 예산": ("여가·식비", "밥값, 카페, 취미, 쇼핑처럼<br>생활을 즐기는 데 쓰는 돈이에요."),
+    }
+
+    # ✅ for 루프가 with col2: 안에 들여쓰기 되어 있어야 해
     for label, amt, color in metrics:
+        term, tip = TERM_TIPS[label]
         st.markdown(f"""
         <div style="background:#f8f9fa; border-radius:10px; padding:14px 20px; margin-bottom:10px;
                     border-left:5px solid {color};">
-            <span style="color:#555; font-size:0.9em">{label}</span><br>
+            <span style="color:#555; font-size:0.9em">
+                {label.split()[0]}&nbsp;
+                <span class="tooltip-wrap" tabindex="0">
+                    {term}
+                    <span class="tooltip-box">{tip}</span>
+                </span>
+            </span><br>
             <span style="font-size:1.6em; font-weight:bold; color:#222">
                 {amt:,}원
             </span>
             <span style="color:#888; font-size:0.85em"> / 월</span>
         </div>
         """, unsafe_allow_html=True)
+
 
 st.write("---")
 
