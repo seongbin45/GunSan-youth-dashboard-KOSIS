@@ -1,5 +1,5 @@
 from __future__ import annotations
-
+import time  # 1. 시간 제어 모듈 추가
 from datetime import UTC, datetime, timezone, timedelta
 
 import streamlit as st
@@ -72,6 +72,10 @@ service = YouthDataService()
 if "youth_scheduler" not in st.session_state:
     st.session_state.youth_scheduler = ensure_scheduler_started(service, interval_seconds=30 * 60)
 
+# [설정값 유지] 검색어와 페이지 정보를 세션 상태에 저장하여 새로고침 시에도 유지
+if "query" not in st.session_state: st.session_state.query = ""
+if "size" not in st.session_state: st.session_state.size = 20
+
 source_label = st.selectbox("데이터 구분", ["정책", "청년센터", "콘텐츠"], index=0)
 source_map = {"정책": "policy", "청년센터": "center", "콘텐츠": "content"}
 source = source_map[source_label]
@@ -140,6 +144,7 @@ if st.button("지금 동기화", use_container_width=True):
 st.divider()
 
 query = st.text_input("검색어", placeholder="예: 취업, 주거, 금융")
+st.session_state.query = query # 상태 업데이트
 size = st.selectbox("표시 개수", [10, 20, 30, 50, 100], index=1)
 
 st.divider()
@@ -165,3 +170,12 @@ for idx, item in enumerate(result["items"]):
                 st.error(f"상세 조회 실패: {exc}")
 
 st.caption(f"화면 확인 시각: {datetime.now(timezone(timedelta(hours=9))).strftime('%Y-%m-%d %H:%M:%S')}")
+
+# 데이터 조회
+for item in result["items"]:
+    with st.expander(f"{item.get('title')}"):
+        st.write(item.get("summary"))
+
+# --- 💡 핵심: 30초 자동 새로고침 ---
+time.sleep(30)
+st.rerun()
