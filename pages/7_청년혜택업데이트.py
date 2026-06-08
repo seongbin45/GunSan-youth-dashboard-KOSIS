@@ -54,8 +54,6 @@ source = source_map[source_label]
 
 status = service.get_source_status(source)
 
-st.divider()
-
 # --- 📊 사용자 친화적으로 개선된 운영 상태 대시보드 ---
 # st.info 대신 테두리가 있는 컨테이너를 사용하여 요소들을 깔끔하게 그룹화합니다.
 with st.container(border=True):
