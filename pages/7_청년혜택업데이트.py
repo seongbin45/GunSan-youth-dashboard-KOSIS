@@ -25,15 +25,35 @@ def _format_age(seconds: int | None) -> str:
 
 def _format_sync(value: str | None) -> str:
     if not value:
-        return "동기화 기록 없음"
-    try:
-        # ISO 포맷(UTC)을 한국 시간(KST)으로 변환하여 보기 좋게 출력
-        dt = datetime.fromisoformat(value)
-        korea_dt = dt.astimezone(timezone(timedelta(hours=9)))
-        return korea_dt.strftime("%Y년 %m월 %d일 %H:%M")
-    except ValueError:
-        # 만약 ISO 포맷이 아닐 경우 기존 방식대로 출력
-        return value.replace("T", " ").replace("+00:00", " UTC")
+            return "동기화 기록 없음"
+        try:
+            # 1. ISO 포맷(UTC)을 한국 시간(KST)으로 변환
+            dt = datetime.fromisoformat(value)
+            korea_tz = timezone(timedelta(hours=9))
+            korea_dt = dt.astimezone(korea_tz)
+            
+            # 2. 현재 한국 시간 가져오기
+            now = datetime.now(korea_tz)
+            
+            # 3. 날짜(Date)만 추출해서 며칠 차이인지 계산
+            days_diff = (now.date() - korea_dt.date()).days
+            
+            # 4. 시간은 "HH:MM" 형태로 통일
+            time_str = korea_dt.strftime("%H:%M")
+            
+            # 5. 차이에 따라 친숙한 말로 반환
+            if days_diff == 0:
+                return f"오늘 {time_str}"
+            elif days_diff == 1:
+                return f"어제 {time_str}"
+            elif days_diff == 2:
+                return f"그저께 {time_str}"
+            else:
+                # 3일 이상 지났으면 날짜를 표시
+                return korea_dt.strftime("%Y년 %m월 %d일 %H:%M")
+                
+        except ValueError:
+            return value.replace("T", " ").replace("+00:00", " UTC")
 
 
 st.title("청년 혜택 업데이트")
