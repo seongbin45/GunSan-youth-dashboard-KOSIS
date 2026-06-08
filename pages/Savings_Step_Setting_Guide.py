@@ -181,17 +181,17 @@ for col, (label, ratio, color) in zip(
     col.markdown(f"""
         <div style="text-align:center; background:{color}22;
                     border-radius:12px; padding:20px; border-top:4px solid {color}">
-            <span style="color:#555; font-size:0.9em">
+            <span style="color:#f8f9fa; font-size:0.9em">
                 {label.split()[0]}&nbsp;
                 <span class="tooltip-wrap" tabindex="0">
                     {term}
                     <span class="tooltip-box">{tip}</span>
                 </span>
             </span><br>
-            <span style="font-size:1.6em; font-weight:bold; color:#222">
+            <span style="font-size:1.6em; font-weight:bold; color:#f8f9fa">
                 {amt:,}원
             </span>
-            <span style="color:#888; font-size:0.85em"> / 월</span>
+            <span style="color:#f8f9fa; font-size:0.85em"> / 월</span>
         </div>
         """, unsafe_allow_html=True)
 
