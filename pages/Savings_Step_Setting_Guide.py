@@ -98,7 +98,7 @@ with col2:
         position: relative;
         cursor: pointer;
         border-bottom: 1.5px dashed #bfdbfe;
-        color: inherit;
+        color: #bfdbfe;
     }
     .tooltip-wrap .tooltip-box {
         visibility: hidden;
