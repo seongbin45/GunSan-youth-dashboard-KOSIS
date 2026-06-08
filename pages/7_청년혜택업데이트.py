@@ -46,14 +46,19 @@ service = YouthDataService()
 if "youth_scheduler" not in st.session_state:
     st.session_state.youth_scheduler = ensure_scheduler_started(service, interval_seconds=30 * 60)
 
-source_label = st.selectbox("데이터 구분", ["정책", "청년센터", "콘텐츠"], index=0)
-source_map = {"정책": "policy", "청년센터": "center", "콘텐츠": "content"}
-source = source_map[source_label]
+#source_label = st.selectbox("데이터 구분", ["정책", "청년센터", "콘텐츠"], index=0)
+#source_map = {"정책": "policy", "청년센터": "center", "콘텐츠": "content"}
+#source = source_map[source_label]
 
-status = service.get_source_status(source)
+#status = service.get_source_status(source)
 
 with right:
     st.info(
+        source_label = st.selectbox("데이터 구분", ["정책", "청년센터", "콘텐츠"], index=0)
+        source_map = {"정책": "policy", "청년센터": "center", "콘텐츠": "content"}
+        source = source_map[source_label]
+        
+        status = service.get_source_status(source)
         # --- 📊 사용자 친화적으로 개선된 운영 상태 대시보드 ---
         st.subheader("📊 운영 상태 대시보드")
         st.caption("현재 데이터의 수집 상태와 시스템 연결 상황을 실시간으로 확인합니다.")
