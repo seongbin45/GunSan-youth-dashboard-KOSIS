@@ -115,7 +115,7 @@ with st.container(border=True):
         help="국가 공공 데이터 포털과의 현재 통신 상태입니다."
     )
     cols2[1].metric(
-        label="조회 시스템", 
+        label="동기화 시스템", 
         value=cache_status_display,
         help="속도를 높이기 위한 내부 임시 저장소(캐시) 상태입니다."
     )
