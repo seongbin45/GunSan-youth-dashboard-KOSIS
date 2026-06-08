@@ -68,7 +68,7 @@ cols1[0].metric(
     help="정부 공공 데이터가 마지막으로 당겨져 온 시간입니다."
 )
 cols1[1].metric(
-    label="데이터 신선도", 
+    label="데이터 신뢰도", 
     value=_format_age(status["cache_age_seconds"]),
     help="현재 보고 계신 혜택 정보가 얼마 전 기준으로 작성되었는지 나타냅니다."
 )
