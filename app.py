@@ -100,4 +100,6 @@ with quick_cols[2]:
 with quick_cols[3]:
     st.page_link("pages/Household_Ledger.py", label="가계부")
 
+st.divider()
+
 st.caption("FinFit은 금융상품 가입 대행, 법적 자격 판정, 투자 자문을 제공하지 않습니다.")
