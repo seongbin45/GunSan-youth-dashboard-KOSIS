@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timezone, timedelta
 
 import streamlit as st
 
@@ -26,7 +26,14 @@ def _format_age(seconds: int | None) -> str:
 def _format_sync(value: str | None) -> str:
     if not value:
         return "동기화 기록 없음"
-    return value.replace("T", " ").replace("+00:00", " UTC")
+    try:
+        # ISO 포맷(UTC)을 한국 시간(KST)으로 변환하여 보기 좋게 출력
+        dt = datetime.fromisoformat(value)
+        korea_dt = dt.astimezone(timezone(timedelta(hours=9)))
+        return korea_dt.strftime("%Y년 %m월 %d일 %H:%M")
+    except ValueError:
+        # 만약 ISO 포맷이 아닐 경우 기존 방식대로 출력
+        return value.replace("T", " ").replace("+00:00", " UTC")
 
 
 st.title("청년 혜택 업데이트")
@@ -45,16 +52,51 @@ source = source_map[source_label]
 
 status = service.get_source_status(source)
 
-st.subheader("운영 상태 대시보드")
-cols = st.columns(3)
-cols[0].metric("마지막 동기화", _format_sync(status["last_synced_at"]))
-cols[1].metric("데이터 신선도", _format_age(status["cache_age_seconds"]))
-cols[2].metric("정책/항목 수", f"{status['item_count']}개")
+# --- 📊 사용자 친화적으로 개선된 운영 상태 대시보드 ---
+st.subheader("📊 운영 상태 대시보드")
+st.caption("현재 데이터의 수집 상태와 시스템 연결 상황을 실시간으로 확인합니다.")
 
-cols = st.columns(3)
-cols[0].metric("API 상태", status["api_status"])
-cols[1].metric("캐시 상태", status["cache_status"])
-cols[2].metric("Fallback 여부", "사용" if status["fallback_used"] else "미사용")
+# 상태에 따른 시각적 단서(이모지) 배정
+api_status_display = "🟢 원활" if status["api_status"] == "정상" else f"🔴 {status['api_status']}"
+cache_status_display = "🟢 작동 중" if status["cache_status"] == "정상" else f"🟡 {status['cache_status']}"
+fallback_display = "⚠️ 백업 데이터 표시" if status["fallback_used"] else "🟢 실시간 연결"
+
+cols1 = st.columns(3)
+cols1[0].metric(
+    label="마지막 업데이트", 
+    value=_format_sync(status["last_synced_at"]),
+    help="정부 공공 데이터가 마지막으로 당겨져 온 시간입니다."
+)
+cols1[1].metric(
+    label="데이터 신선도", 
+    value=_format_age(status["cache_age_seconds"]),
+    help="현재 보고 계신 혜택 정보가 얼마 전 기준으로 작성되었는지 나타냅니다."
+)
+cols1[2].metric(
+    label="제공 중인 혜택", 
+    value=f"{status['item_count']}개",
+    help="현재 시스템에서 조회 가능한 전체 청년 혜택의 개수입니다."
+)
+
+st.markdown("<br>", unsafe_allow_html=True) # 위아래 줄 여백
+
+cols2 = st.columns(3)
+cols2[0].metric(
+    label="공공 서버 통신", 
+    value=api_status_display,
+    help="국가 공공 데이터 포털과의 현재 통신 상태입니다."
+)
+cols2[1].metric(
+    label="빠른 조회 시스템", 
+    value=cache_status_display,
+    help="속도를 높이기 위한 내부 임시 저장소(캐시) 상태입니다."
+)
+cols2[2].metric(
+    label="데이터 제공 방식", 
+    value=fallback_display,
+    help="🟢 실시간 연결: 가장 최신 데이터를 보여줍니다.\n⚠️ 백업 데이터 표시: 공공 서버 지연 시 임시로 저장된 데이터를 보여줍니다."
+)
+# --------------------------------------------------------
 
 if st.button("지금 동기화", use_container_width=True):
     with st.spinner("공공 API 동기화 중..."):
@@ -90,4 +132,4 @@ for idx, item in enumerate(result["items"]):
             except Exception as exc:
                 st.error(f"상세 조회 실패: {exc}")
 
-st.caption(f"화면 확인 시각: {datetime.now(UTC).isoformat(timespec='seconds')}")
+st.caption(f"화면 확인 시각: {datetime.now(timezone(timedelta(hours=9))).strftime('%Y-%m-%d %H:%M:%S')}")
