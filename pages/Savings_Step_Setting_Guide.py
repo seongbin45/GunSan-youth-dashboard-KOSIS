@@ -9,6 +9,64 @@ st.title("🎯 상세 가이드")
 st.markdown("#### 사회초년생을 위한 저축·소비 습관 계획 서비스")
 st.divider()
 
+# ── 메인 화면 ─────────────────────────────────────────────────────────────────
+
+col1, col2 = st.columns([1, 1], gap="large")
+
+with col1:
+    st.subheader("📋 본인의 정보가 맞는지 확인")
+    income = st.number_input(
+        "월 소득 / 용돈 (원)",
+        min_value=10000, max_value=10000000,
+        value=st.session_state.income, step=10000,
+        format="%d"
+    )
+    st.session_state.income = income
+
+    st.subheader("🎚️ 저축 강도 선택 (1~10단계)")
+    level = st.slider(
+        "1 = 여가 최우선 ~ 10 = 생존형 저축",
+        min_value=1, max_value=10,
+        value=st.session_state.level
+    )
+    st.session_state.level = level
+
+    lv = LEVELS[level]
+    st.markdown(f"""
+    <div style="background:{lv['color']}22; border-left:5px solid {lv['color']};
+                padding:14px 18px; border-radius:8px; margin-top:10px;">
+        <b style="font-size:1.1em">{level}단계 · {lv['name']}</b><br>
+        저축 <b>{int(lv['save']*100)}%</b> &nbsp;|&nbsp;
+        고정비 <b>{int(lv['fix']*100)}%</b> &nbsp;|&nbsp;
+        여가·식비 <b>{int(lv['leisure']*100)}%</b>
+    </div>
+    """, unsafe_allow_html=True)
+
+with col2:
+    st.subheader("📊 이번 달 예산 배분")
+    save_amt    = int(income * lv['save'])
+    fix_amt     = int(income * lv['fix'])
+    leisure_amt = int(income * lv['leisure'])
+
+    metrics = [
+        ("💎 저축 목표",     save_amt,    lv['color']),
+        ("🏠 고정비 예산",   fix_amt,     "#2196F3"),
+        ("🎉 여가·식비 예산", leisure_amt, "#4CAF50"),
+    ]
+    for label, amt, color in metrics:
+        st.markdown(f"""
+        <div style="background:#f8f9fa; border-radius:10px; padding:14px 20px; margin-bottom:10px;
+                    border-left:5px solid {color};">
+            <span style="color:#555; font-size:0.9em">{label}</span><br>
+            <span style="font-size:1.6em; font-weight:bold; color:#222">
+                {amt:,}원
+            </span>
+            <span style="color:#888; font-size:0.85em"> / 월</span>
+        </div>
+        """, unsafe_allow_html=True)
+
+st.write("---")
+
 if "income" not in st.session_state:
     st.session_state.income = 2000000
 if "level" not in st.session_state:
@@ -103,62 +161,6 @@ fig.update_layout(barmode="stack", height=350,
 st.plotly_chart(fig, use_container_width=True)
 
 st.write("---")
-
-# ── 메인 화면 ─────────────────────────────────────────────────────────────────
-
-col1, col2 = st.columns([1, 1], gap="large")
-
-with col1:
-    st.subheader("📋 본인의 정보가 맞는지 확인")
-    income = st.number_input(
-        "월 소득 / 용돈 (원)",
-        min_value=10000, max_value=10000000,
-        value=st.session_state.income, step=10000,
-        format="%d"
-    )
-    st.session_state.income = income
-
-    st.subheader("🎚️ 저축 강도 선택 (1~10단계)")
-    level = st.slider(
-        "1 = 여가 최우선 ~ 10 = 생존형 저축",
-        min_value=1, max_value=10,
-        value=st.session_state.level
-    )
-    st.session_state.level = level
-
-    lv = LEVELS[level]
-    st.markdown(f"""
-    <div style="background:{lv['color']}22; border-left:5px solid {lv['color']};
-                padding:14px 18px; border-radius:8px; margin-top:10px;">
-        <b style="font-size:1.1em">{level}단계 · {lv['name']}</b><br>
-        저축 <b>{int(lv['save']*100)}%</b> &nbsp;|&nbsp;
-        고정비 <b>{int(lv['fix']*100)}%</b> &nbsp;|&nbsp;
-        여가·식비 <b>{int(lv['leisure']*100)}%</b>
-    </div>
-    """, unsafe_allow_html=True)
-
-with col2:
-    st.subheader("📊 이번 달 예산 배분")
-    save_amt    = int(income * lv['save'])
-    fix_amt     = int(income * lv['fix'])
-    leisure_amt = int(income * lv['leisure'])
-
-    metrics = [
-        ("💎 저축 목표",     save_amt,    lv['color']),
-        ("🏠 고정비 예산",   fix_amt,     "#2196F3"),
-        ("🎉 여가·식비 예산", leisure_amt, "#4CAF50"),
-    ]
-    for label, amt, color in metrics:
-        st.markdown(f"""
-        <div style="background:#f8f9fa; border-radius:10px; padding:14px 20px; margin-bottom:10px;
-                    border-left:5px solid {color};">
-            <span style="color:#555; font-size:0.9em">{label}</span><br>
-            <span style="font-size:1.6em; font-weight:bold; color:#222">
-                {amt:,}원
-            </span>
-            <span style="color:#888; font-size:0.85em"> / 월</span>
-        </div>
-        """, unsafe_allow_html=True)
 
     
 
