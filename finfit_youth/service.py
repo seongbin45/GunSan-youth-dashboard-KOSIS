@@ -1,6 +1,7 @@
 ﻿from __future__ import annotations
 
 import logging
+from datetime import UTC, datetime
 from typing import Any, Callable
 
 from .cache_store import CacheStore
@@ -217,8 +218,56 @@ class YouthDataService:
 
         normalized = [self._normalize_item(source, x) for x in items]
         self.store.set(f"snapshot:{source}", normalized)
-        self.store.set(f"latest_sync:{source}", {"count": len(normalized)})
+        self.store.set(
+            f"latest_sync:{source}",
+            {
+                "count": len(normalized),
+                "source": source,
+                "synced_at": datetime.now(UTC).isoformat(timespec="seconds"),
+            },
+        )
+        self.store.set(
+            f"sync_status:{source}",
+            {
+                "api_status": "정상",
+                "fallback_used": False,
+                "last_error": "",
+                "checked_at": datetime.now(UTC).isoformat(timespec="seconds"),
+            },
+        )
         return {"source": source, "count": len(normalized)}
+
+    def record_source_error(self, source: str, error: str) -> None:
+        self.store.set(
+            f"sync_status:{source}",
+            {
+                "api_status": "오류",
+                "fallback_used": True,
+                "last_error": error,
+                "checked_at": datetime.now(UTC).isoformat(timespec="seconds"),
+            },
+        )
+
+    def get_source_status(self, source: str) -> dict[str, Any]:
+        snapshot = self.store.get(f"snapshot:{source}", max_age_seconds=None)
+        latest = self.store.get(f"latest_sync:{source}", max_age_seconds=None) or {}
+        sync_status = self.store.get(f"sync_status:{source}", max_age_seconds=None) or {}
+        cache_age = self.store.age_seconds(f"snapshot:{source}")
+        item_count = len(snapshot) if isinstance(snapshot, list) else int(latest.get("count") or 0)
+
+        cache_status = "정상" if snapshot else "없음"
+        api_status = sync_status.get("api_status") or ("정상" if latest else "미확인")
+
+        return {
+            "source": source,
+            "last_synced_at": latest.get("synced_at"),
+            "cache_age_seconds": cache_age,
+            "item_count": item_count,
+            "api_status": api_status,
+            "cache_status": cache_status,
+            "fallback_used": bool(sync_status.get("fallback_used", False)),
+            "last_error": sync_status.get("last_error", ""),
+        }
 
     def sync_all(self) -> dict[str, Any]:
         results = []
@@ -233,13 +282,16 @@ class YouthDataService:
     def get_list(self, source: str, query: str = "", page: int = 1, size: int = 10) -> dict[str, Any]:
         key = f"snapshot:{source}"
         snapshot = self.store.get(key)
+        fallback_used = False
 
         if snapshot is None:
             try:
                 self.sync_source(source)
                 snapshot = self.store.get(key) or []
             except Exception:
+                fallback_used = True
                 snapshot = self.store.get(key, max_age_seconds=None) or []
+                self.record_source_error(source, "initial sync failed; using cache")
 
         age = self.store.age_seconds(key)
         if age is not None and age > CACHE_TTL_SECONDS:
@@ -247,6 +299,8 @@ class YouthDataService:
                 self.sync_source(source)
                 snapshot = self.store.get(key) or snapshot
             except Exception:
+                fallback_used = True
+                self.record_source_error(source, "refresh failed; using cache")
                 pass
 
         rows = snapshot if isinstance(snapshot, list) else []
@@ -257,7 +311,15 @@ class YouthDataService:
         total = len(rows)
         start = max((page - 1) * size, 0)
         end = start + size
-        return {"source": source, "items": rows[start:end], "total": total, "page": page, "size": size}
+        return {
+            "source": source,
+            "items": rows[start:end],
+            "total": total,
+            "page": page,
+            "size": size,
+            "fallback_used": fallback_used,
+            "cache_age_seconds": self.store.age_seconds(key),
+        }
 
     def get_detail(self, source: str, item_id: str) -> dict[str, Any]:
         cache_key = f"detail:{source}:{item_id}"

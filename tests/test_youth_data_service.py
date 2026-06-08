@@ -7,8 +7,8 @@ class FakeClient:
 
     def get(self, path, params=None):
         self.calls.append((path, params or {}))
-        if "Dtl" in path or "detail" in path:
-            return {"id": params.get("id") or params.get("bizId"), "title": "상세"}
+        if str((params or {}).get("pageType")) == "2":
+            return {"id": params.get("id") or params.get("bizId") or params.get("plcyNo"), "title": "상세"}
         return {
             "result": [
                 {"id": "A1", "title": "청년 취업 지원", "summary": "취업 준비", "region": "서울"},
@@ -48,5 +48,5 @@ def test_detail_realtime_then_cache():
 
     assert first["id"] == "A1"
     assert second["id"] == "A1"
-    detail_calls = [c for c in client.calls if "Dtl" in c[0] or "detail" in c[0]]
+    detail_calls = [c for c in client.calls if str(c[1].get("pageType")) == "2"]
     assert len(detail_calls) == 1

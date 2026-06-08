@@ -3,6 +3,10 @@ import json
 import pandas as pd
 import google.generativeai as genai
 
+from services.models import UserProfile
+from services.policy_loader import load_policies
+from services.recommendation import match_policies
+
 # 한 번 불러온 목록은 24시간(86400초) 동안 기억하여 앱 속도를 빠르게 유지합니다.
 @st.cache_data(show_spinner=False, ttl=86400)
 def get_dynamic_google_models(api_key):
@@ -70,39 +74,40 @@ LEVELS = {
 }
 
 def _tool_check_benefit(age, income_level, employment_status, has_house):
-    matched = []
-    is_over = income_level == "소득기준초과"
-    is_u60  = not is_over and income_level == "60%이하"
-    is_u100 = is_u60  or (not is_over and income_level == "100%이하")
-    is_u140 = is_u100 or (not is_over and income_level == "140%이하")
-    is_u150 = is_u140 or (not is_over and income_level == "150%이하")
-    is_u180 = is_u150 or (not is_over and income_level == "180%이하")
-    is_un = employment_status == "미취업"
-    is_wo = employment_status == "취업자"
-    is_fo = employment_status == "창업자"
-    if 19<=age<=34 and not is_over:
-        matched.append({"category":"자산형성","name":"청년미래적금(2026신설)","benefit":"월 최대 50만원x3년, 최대 2,200만원","condition":"만 19~34세, 소득 6천만원 이하"})
-    if 19<=age<=34 and is_u180:
-        matched.append({"category":"자산형성","name":"청년도약계좌","benefit":"5년 월 최대 70만원, 최대 5,000만원+비과세","condition":"만 19~34세, 중위 250% 이하"})
-    if 18<=age<=39 and is_u140 and (is_wo or is_fo):
-        matched.append({"category":"자산형성","name":"전북청년 함께두배적금","benefit":"월 10만원 1:1 매칭, 2년 후 두 배","condition":"전북 거주 근로창업 청년"})
-    if not has_house:
-        if 19<=age<=34 and is_u60:
-            matched.append({"category":"주거","name":"청년월세 한시 특별지원","benefit":"월 최대 20만원x24개월(총 480만원)","condition":"무주택, 중위 60% 이하"})
-        if 19<=age<=39 and not is_over:
-            matched.append({"category":"주거","name":"전세보증금 반환보증 보증료 지원","benefit":"최대 40만원 환급","condition":"무주택, 연소득 5천만원 이하"})
-        if 18<=age<=39 and not is_over:
-            matched.append({"category":"주거","name":"신혼청년 전세자금 대출이자 지원","benefit":"대출잔액 최대 2%, 연 최대 200만원","condition":"중위 180% 이하, 보증금 3억 이하"})
-    if is_un and 18<=age<=34 and is_u100:
-        matched.append({"category":"구직","name":"국민취업지원제도 1유형","benefit":"구직촉진수당 월 60만원x6개월","condition":"만 15~34세, 중위 120% 이하"})
-    if is_un and 18<=age<=39 and is_u150:
-        matched.append({"category":"구직","name":"전북형 청년활력수당","benefit":"월 50만원x6개월(총 300만원)","condition":"군산 거주 미취업, 중위 150% 이하"})
-    if is_wo and 18<=age<=34:
-        matched.append({"category":"구직","name":"청년일자리도약장려금","benefit":"2년간 최대 720만원","condition":"비수도권 기업 6개월 이상 근속"})
-    if 18<=age<=39:
-        matched.append({"category":"생활복지","name":"K-패스 무제한 정액권","benefit":"월 5.5만원 정액, 전국 대중교통 월 20만원 한도","condition":"만 18~39세"})
-        matched.append({"category":"생활복지","name":"전국민 마음투자 지원사업","benefit":"전문 심리상담 바우처 8회","condition":"만 18~39세"})
-    return {"matched_count":len(matched),"benefits":matched,"summary":f"총 {len(matched)}개 혜택 해당"}
+    income_map = {
+        "60%이하": 60,
+        "100%이하": 100,
+        "140%이하": 140,
+        "150%이하": 150,
+        "180%이하": 180,
+        "소득기준초과": None,
+    }
+    employment_map = {
+        "미취업": "job_seeker",
+        "취업자": "worker",
+        "창업자": "founder",
+        "농업종사자": "farmer",
+    }
+    profile = UserProfile(
+        age=int(age),
+        employment_status=employment_map.get(employment_status, "job_seeker"),
+        has_house=bool(has_house),
+        region="군산시",
+        median_income_percent=income_map.get(income_level),
+    )
+    matches = match_policies(profile, load_policies())
+    benefits = [
+        {
+            "category": match.policy.category,
+            "name": match.policy.name,
+            "benefit": match.policy.benefit,
+            "condition": ", ".join(match.reasons),
+            "source": match.policy.source,
+            "url": match.policy.url,
+        }
+        for match in matches
+    ]
+    return {"matched_count": len(benefits), "benefits": benefits, "summary": f"총 {len(benefits)}개 혜택 해당"}
 
 def _tool_gunsan_stats(category):
     INFO = {

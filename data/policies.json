@@ -1,0 +1,212 @@
+[
+  {
+    "schema_version": "1.0",
+    "id": "young_jump_account",
+    "name": "청년도약계좌",
+    "category": "금융",
+    "source": "서민금융진흥원",
+    "benefit": "월 최대 70만 원 납입, 정부기여금 및 비과세 혜택",
+    "url": "https://www.kinfa.or.kr",
+    "updated_at": "2026-06-08",
+    "keywords": ["저축", "청년", "비과세"],
+    "eligibility": {
+      "age_min": 19,
+      "age_max": 34,
+      "employment_status": ["worker", "job_seeker", "student", "founder", "farmer"],
+      "regions": ["전국"],
+      "housing_required": null,
+      "requires_no_house": null,
+      "median_income_percent_max": 250,
+      "annual_income_limit_million_krw": 75
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "id": "jeonbuk_double_savings",
+    "name": "전북청년 함께 두배적금",
+    "category": "금융",
+    "source": "전북특별자치도",
+    "benefit": "월 10만 원 저축 시 지자체가 동일 금액을 매칭 지원",
+    "url": "https://www.jeonbuk.go.kr",
+    "updated_at": "2026-06-08",
+    "keywords": ["저축", "매칭지원", "전북"],
+    "eligibility": {
+      "age_min": 18,
+      "age_max": 39,
+      "employment_status": ["worker", "founder", "farmer"],
+      "regions": ["전북", "군산시"],
+      "housing_required": null,
+      "requires_no_house": null,
+      "median_income_percent_max": 140,
+      "annual_income_limit_million_krw": null
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "id": "youth_monthly_rent",
+    "name": "청년월세 한시 특별지원",
+    "category": "주거",
+    "source": "복지로",
+    "benefit": "월 최대 20만 원씩 최장 24개월 임대료 지원",
+    "url": "https://www.bokjiro.go.kr",
+    "updated_at": "2026-06-08",
+    "keywords": ["주거", "월세", "무주택"],
+    "eligibility": {
+      "age_min": 19,
+      "age_max": 34,
+      "employment_status": ["worker", "job_seeker", "student", "founder"],
+      "regions": ["전국"],
+      "housing_required": null,
+      "requires_no_house": true,
+      "median_income_percent_max": 60,
+      "annual_income_limit_million_krw": null
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "id": "deposit_guarantee_fee",
+    "name": "전세보증금 반환보증 보증료 지원",
+    "category": "주거",
+    "source": "국토교통부",
+    "benefit": "전세보증금 반환보증 보증료를 최대 40만 원까지 환급",
+    "url": "https://www.molit.go.kr",
+    "updated_at": "2026-06-08",
+    "keywords": ["주거", "전세", "무주택"],
+    "eligibility": {
+      "age_min": 19,
+      "age_max": 39,
+      "employment_status": ["worker", "job_seeker", "student", "founder"],
+      "regions": ["전국"],
+      "housing_required": null,
+      "requires_no_house": true,
+      "median_income_percent_max": null,
+      "annual_income_limit_million_krw": 50
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "id": "national_employment_support",
+    "name": "국민취업지원제도 1유형",
+    "category": "취업",
+    "source": "고용노동부",
+    "benefit": "구직촉진수당 월 최대 60만 원씩 6개월 지원",
+    "url": "https://www.work.go.kr",
+    "updated_at": "2026-06-08",
+    "keywords": ["취업", "구직", "수당"],
+    "eligibility": {
+      "age_min": 18,
+      "age_max": 34,
+      "employment_status": ["job_seeker"],
+      "regions": ["전국"],
+      "housing_required": null,
+      "requires_no_house": null,
+      "median_income_percent_max": 120,
+      "annual_income_limit_million_krw": null
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "id": "jeonbuk_youth_activity_allowance",
+    "name": "전북형 청년활력수당",
+    "category": "취업",
+    "source": "전북특별자치도",
+    "benefit": "미취업 청년에게 월 50만 원씩 6개월 활동수당 지원",
+    "url": "https://www.jeonbuk.go.kr",
+    "updated_at": "2026-06-08",
+    "keywords": ["취업", "구직", "전북"],
+    "eligibility": {
+      "age_min": 18,
+      "age_max": 39,
+      "employment_status": ["job_seeker"],
+      "regions": ["전북", "군산시"],
+      "housing_required": null,
+      "requires_no_house": null,
+      "median_income_percent_max": 150,
+      "annual_income_limit_million_krw": null
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "id": "youth_job_leap",
+    "name": "청년일자리도약장려금",
+    "category": "취업",
+    "source": "고용노동부",
+    "benefit": "비수도권 기업 근속 청년에게 최대 720만 원 인센티브",
+    "url": "https://www.work.go.kr",
+    "updated_at": "2026-06-08",
+    "keywords": ["취업", "근속", "중소기업"],
+    "eligibility": {
+      "age_min": 18,
+      "age_max": 34,
+      "employment_status": ["worker"],
+      "regions": ["전국"],
+      "housing_required": null,
+      "requires_no_house": null,
+      "median_income_percent_max": null,
+      "annual_income_limit_million_krw": null
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "id": "youth_mind_care",
+    "name": "청년 마음건강지원사업",
+    "category": "생활복지",
+    "source": "복지로",
+    "benefit": "전문 심리상담 바우처 제공",
+    "url": "https://www.bokjiro.go.kr",
+    "updated_at": "2026-06-08",
+    "keywords": ["복지", "상담", "마음건강"],
+    "eligibility": {
+      "age_min": 19,
+      "age_max": 34,
+      "employment_status": ["worker", "job_seeker", "student", "founder", "farmer"],
+      "regions": ["전국"],
+      "housing_required": null,
+      "requires_no_house": null,
+      "median_income_percent_max": null,
+      "annual_income_limit_million_krw": null
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "id": "k_pass_youth",
+    "name": "K-패스 청년 교통 지원",
+    "category": "생활복지",
+    "source": "국토교통부",
+    "benefit": "대중교통 이용 부담 완화를 위한 청년 교통비 지원",
+    "url": "https://korea-pass.kr",
+    "updated_at": "2026-06-08",
+    "keywords": ["교통", "생활비", "청년"],
+    "eligibility": {
+      "age_min": 18,
+      "age_max": 39,
+      "employment_status": ["worker", "job_seeker", "student", "founder", "farmer"],
+      "regions": ["전국"],
+      "housing_required": null,
+      "requires_no_house": null,
+      "median_income_percent_max": null,
+      "annual_income_limit_million_krw": null
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "id": "hrd_card",
+    "name": "국민내일배움카드",
+    "category": "교육",
+    "source": "HRD-Net",
+    "benefit": "직업훈련비 300만~500만 원 지원",
+    "url": "https://www.hrd.go.kr",
+    "updated_at": "2026-06-08",
+    "keywords": ["교육", "훈련", "취업"],
+    "eligibility": {
+      "age_min": 15,
+      "age_max": null,
+      "employment_status": ["worker", "job_seeker", "student", "founder", "farmer"],
+      "regions": ["전국"],
+      "housing_required": null,
+      "requires_no_house": null,
+      "median_income_percent_max": null,
+      "annual_income_limit_million_krw": null
+    }
+  }
+]

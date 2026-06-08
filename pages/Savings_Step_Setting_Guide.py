@@ -4,8 +4,6 @@ import gspread
 import json
 from datetime import datetime
 
-st.write("---")
-
 st.set_page_config(page_title="저축단계 상세", page_icon="🎯", layout="wide")
 st.title("🎯 상세 가이드")
 st.markdown("#### 사회초년생을 위한 저축·소비 습관 계획 서비스")
@@ -74,9 +72,6 @@ total_save   = monthly_save * months
 st.success(f"**{months}개월 후 예상 저축액: {total_save:,}원** (월 {monthly_save:,}원 × {months}개월)")
 
 st.write("---")
-
-st.set_page_config(page_title="청년 머니 플래너", page_icon="💰", layout="wide")
-
 
 LEVELS = {
     1:  {"name":"여가 최우선",    "save":0.05, "fix":0.45, "leisure":0.50, "color":"#4CAF50"},
