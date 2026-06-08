@@ -60,21 +60,19 @@ def _format_sync(value: str | None) -> str:
         return value.replace("T", " ").replace("+00:00", " UTC")
 
 
+# --- 메인 실행부 ---
 st.title("청년 혜택 업데이트")
-st.caption(
+t.caption(
     "현재는 공공 API 기반 동기화 구조와 캐시 시스템을 구현했고, "
     "주기적 자동화는 차기 단계에서 확장 가능합니다."
 )
-
-st.divider()
 
 service = YouthDataService()
 if "youth_scheduler" not in st.session_state:
     st.session_state.youth_scheduler = ensure_scheduler_started(service, interval_seconds=30 * 60)
 
-# [설정값 유지] 검색어와 페이지 정보를 세션 상태에 저장하여 새로고침 시에도 유지
+# 세션 상태 초기화 (검색어 유지)
 if "query" not in st.session_state: st.session_state.query = ""
-if "size" not in st.session_state: st.session_state.size = 20
 
 source_label = st.selectbox("데이터 구분", ["정책", "청년센터", "콘텐츠"], index=0)
 source_map = {"정책": "policy", "청년센터": "center", "콘텐츠": "content"}
@@ -149,11 +147,13 @@ size = st.selectbox("표시 개수", [10, 20, 30, 50, 100], index=1)
 
 st.divider()
 
+# 데이터 목록 조회
 result = service.get_list(source=source, query=query, page=1, size=int(size))
 st.write(f"총 {result['total']}건")
 if result.get("fallback_used"):
     st.warning("외부 API 조회가 실패해 저장된 캐시 데이터를 표시하고 있습니다.")
 
+# 데이터 표시 (중복 루프 제거)
 for idx, item in enumerate(result["items"]):
     title = item.get("title") or "제목 없음"
     summary = item.get("summary") or "요약 정보 없음"
@@ -171,11 +171,6 @@ for idx, item in enumerate(result["items"]):
 
 st.caption(f"화면 확인 시각: {datetime.now(timezone(timedelta(hours=9))).strftime('%Y-%m-%d %H:%M:%S')}")
 
-# 데이터 조회
-for item in result["items"]:
-    with st.expander(f"{item.get('title')}"):
-        st.write(item.get("summary"))
-
-# --- 💡 핵심: 30초 자동 새로고침 ---
+# 30초 대기 후 자동 새로고침
 time.sleep(30)
 st.rerun()
