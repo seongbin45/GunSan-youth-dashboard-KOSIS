@@ -35,13 +35,17 @@ def _format_sync(value: str | None) -> str:
         # 2. 현재 한국 시간 가져오기
         now = datetime.now(korea_tz)
         
-        # 3. 날짜(Date)만 추출해서 며칠 차이인지 계산
+        # 3. 날짜 차이 계산
         days_diff = (now.date() - korea_dt.date()).days
         
-        # 4. 시간은 "HH:MM" 형태로 통일
-        time_str = korea_dt.strftime("%H:%M")
+        # 4. 오전/오후 및 12시간제 변환 (예: 오후 2시 30분)
+        ampm = "오후" if korea_dt.hour >= 12 else "오전"
+        hour12 = korea_dt.hour % 12
+        if hour12 == 0:
+            hour12 = 12
+        time_str = f"{ampm} {hour12}시 {korea_dt.minute:02d}분"
         
-        # 5. 차이에 따라 친숙한 말로 반환
+        # 5. 차이에 따라 완벽하게 일상적인 말로 반환
         if days_diff == 0:
             return f"오늘 {time_str}"
         elif days_diff == 1:
@@ -49,8 +53,8 @@ def _format_sync(value: str | None) -> str:
         elif days_diff == 2:
             return f"그저께 {time_str}"
         else:
-            # 3일 이상 지났으면 날짜를 표시
-            return korea_dt.strftime("%Y년 %m월 %d일 %H:%M")
+            # 3일 이상 지났으면 자연스러운 날짜와 시간 표시
+            return f"{korea_dt.year}년 {korea_dt.month}월 {korea_dt.day}일 {time_str}"
             
     except ValueError:
         return value.replace("T", " ").replace("+00:00", " UTC")
