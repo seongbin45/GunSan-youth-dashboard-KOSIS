@@ -103,7 +103,7 @@ with col2:
     .tooltip-wrap .tooltip-box {
         visibility: hidden;
         opacity: 0;
-        background: #f8f9fa;
+        background: #212529;
         color: #fff;
         font-size: 0.82em;
         line-height: 1.6;
@@ -159,7 +159,7 @@ with col2:
             <span style="font-size:1.6em; font-weight:bold; color:#f8f9fa">
                 {amt:,}원
             </span>
-            <span style="color:#888; font-size:0.85em"> / 월</span>
+            <span style="color:#f8f9fa; font-size:0.85em"> / 월</span>
         </div>
         """, unsafe_allow_html=True)
 
