@@ -156,7 +156,7 @@ with col2:
                     <span class="tooltip-box">{tip}</span>
                 </span>
             </span><br>
-            <span style="font-size:1.6em; font-weight:bold; color:#222">
+            <span style="font-size:1.6em; font-weight:bold; color:#f8f9fa">
                 {amt:,}원
             </span>
             <span style="color:#888; font-size:0.85em"> / 월</span>
