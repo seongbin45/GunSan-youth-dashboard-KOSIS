@@ -45,7 +45,7 @@ level  = st.session_state.level
 col1, col2 = st.columns([1, 1], gap="large")
 
 with col1:
-    st.subheader("📋 본인의 정보가 맞는지 확인")
+    st.subheader("📋 본인의 정보를 입력해주세요")
     income = st.number_input(
         "월 소득 / 용돈 (원)",
         min_value=10000, max_value=10000000,
@@ -54,9 +54,9 @@ with col1:
     )
     st.session_state.income = income
 
-    st.subheader("🎚️ 저축 강도 선택 (1~10단계)")
+    st.subheader("🎚️ 어떤 스타일로 돈을 모을까요? (1~10단계)")
     level = st.slider(
-        "1 = 여가 최우선 ~ 10 = 생존형 저축",
+        "여유롭게 즐기기  ←  →  최대한 모으기",
         min_value=1, max_value=10,
         value=st.session_state.level
     )
