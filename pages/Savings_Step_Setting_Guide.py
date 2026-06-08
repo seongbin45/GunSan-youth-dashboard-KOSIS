@@ -179,12 +179,21 @@ for col, (label, ratio, color) in zip(
 ):
     amt = int(income * ratio)
     col.markdown(f"""
-    <div style="text-align:center; background:{color}22;
-                border-radius:12px; padding:20px; border-top:4px solid {color}">
-        <div style="font-size:1em; color:#555">{label}</div>
-        <div style="font-size:2em; font-weight:bold; color:#222">{int(ratio*100)}%</div>
-        <div style="font-size:1.2em; color:#444">{amt:,}원</div>
-    </div>""", unsafe_allow_html=True)
+        <div style="background:#f8f9fa; border-radius:10px; padding:14px 20px; margin-bottom:10px;
+                    border-left:5px solid {color};">
+            <span style="color:#555; font-size:0.9em">
+                {label.split()[0]}&nbsp;
+                <span class="tooltip-wrap" tabindex="0">
+                    {term}
+                    <span class="tooltip-box">{tip}</span>
+                </span>
+            </span><br>
+            <span style="font-size:1.6em; font-weight:bold; color:#222">
+                {amt:,}원
+            </span>
+            <span style="color:#888; font-size:0.85em"> / 월</span>
+        </div>
+        """, unsafe_allow_html=True)
 
 st.markdown("#### 💡 이 단계 실천 팁")
 for tip in lv["tips"]:
