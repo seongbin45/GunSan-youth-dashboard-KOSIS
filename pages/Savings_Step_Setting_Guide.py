@@ -179,8 +179,8 @@ for col, (label, ratio, color) in zip(
 ):
     amt = int(income * ratio)
     col.markdown(f"""
-        <div style="background:#f8f9fa; border-radius:10px; padding:14px 20px; margin-bottom:10px;
-                    border-left:5px solid {color};">
+        <div style="text-align:center; background:{color}22;
+                    border-radius:12px; padding:20px; border-top:4px solid {color}">
             <span style="color:#555; font-size:0.9em">
                 {label.split()[0]}&nbsp;
                 <span class="tooltip-wrap" tabindex="0">
