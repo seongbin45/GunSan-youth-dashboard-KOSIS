@@ -85,7 +85,7 @@ with col2:
 
     # ✅ metrics 리스트 정의 추가
     metrics = [
-        ("💎 저축 목표",      save_amt,    lv['color']),
+        ("💎 저축 목표",      save_amt,    "#fef08a"),
         ("🏠 고정비 예산",    fix_amt,     "#2196F3"),
         ("🎉 여가·식비 예산", leisure_amt, "#4CAF50"),
     ]
