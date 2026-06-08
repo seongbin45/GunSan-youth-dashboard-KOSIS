@@ -94,11 +94,11 @@ with col2:
     st.markdown("""
     <style>
     .tooltip-wrap {
-        display: inline-block;
+        display: #bfdbfe;
         position: relative;
         cursor: pointer;
         border-bottom: 1.5px dashed #bfdbfe;
-        color: #bfdbfe;
+        color: #f8f9fa;
     }
     .tooltip-wrap .tooltip-box {
         visibility: hidden;
