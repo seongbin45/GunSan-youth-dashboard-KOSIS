@@ -81,7 +81,7 @@ for category, items in terms.items():
 
 st.divider() 
 st.subheader("💬 더 궁금한 점이 있으신가요?")
-st.caption("자신의 상황을 알려주시면 맞춤형 정보를 찾아드릴게요!")
+st.caption("구체적인 상황을 알려주시면 맞춤형 정보를 찾아드릴게요!")
 
 # prefill 상태 가져오기
 prefill = st.session_state.pop("prefill", "")
