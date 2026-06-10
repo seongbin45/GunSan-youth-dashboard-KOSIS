@@ -8,6 +8,224 @@ from services.models import UserProfile
 from services.policy_loader import load_policies
 from services.recommendation import match_policies
 
+
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# 푸터
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# 1. ⚠️ 핵심 개선점: 캐싱 추가 (55분마다 한 번만 구글 인증 수행)
+@st.cache_resource(ttl=3300)
+def get_gspread_client():
+    # Secrets에서 통째로 저장된 JSON 문자열을 가져옴
+    json_string = st.secrets["gspread_json"]
+    
+    # 문자열을 파이썬 딕셔너리로 변환
+    credentials = json.loads(json_string)
+    
+    # 구글 서비스 계정 인증 수행
+    gc = gspread.service_account_from_dict(credentials)
+    return gc
+
+st.markdown(
+   '<a href="https://docs.google.com/forms/d/e/1FAIpQLSco-O4cGhbt1iMOwrEkqX5Vt0-8ctAtCxM5Z6JjmFlP-Uqq-Q/viewform?usp=header" target="_blank"><button style="color: peach;">💌 설문 링크로 이동</button></a>', 
+    unsafe_allow_html=True        
+           )
+
+
+# 의견 입력 창
+user_feedback = st.text_area(
+    "여러분의 생각을 자유롭게 적어주세요 👇", 
+    placeholder="예: 이런 기능이 추가되면 좋겠어요 / 이 부분이 사용하기 조금 불편해요"
+)
+
+# 의견 남기기 버튼 (CTA)
+if st.button("피드백 남기기", use_container_width=True):
+    if user_feedback.strip() == "":
+        st.warning("내용을 입력한 후 버튼을 눌러주세요! ⚠️")
+    else:
+        try:
+            # 2. 구글 인증 및 시트 열기 (이제 캐시된 클라이언트를 빠르게 불러옴)
+            gc = get_gspread_client()
+            sh = gc.open_by_key(st.secrets["spreadsheet_id"])
+            
+            # 시트 이름으로 명확하게 지정하는 것을 권장하나, 인덱스(0)도 무방합니다.
+            worksheet = sh.get_worksheet(0) 
+            
+            # 3. 데이터 추가
+            current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            worksheet.append_row([current_time, user_feedback])
+            
+            # 4. 제출 성공 완료 메시지 및 시각 효과
+            st.balloons()
+            st.success("""
+            🎉 **소중한 피드백이 성공적으로 전달되었어요!**  
+            보내주신 다정한 말씀과 조언은  
+            서비스 개선에 적극 반영하겠습니다.  
+            앞으로도 많은 기대 부탁드려요! 🙏
+            """)
+            
+        except Exception as e:
+            st.error(f"데이터 저장 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요: {e}")
+            
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+st.write("---")
+
+st.set_page_config(page_title="금융 용어 사전", page_icon="📚", layout="wide")
+st.title("📚 필수 금융 용어")
+st.caption("복잡한 용어를 쉽게 정리했어요")
+
+terms = {
+    "💰 저축·투자": [
+        ("CMA 통장", "종합자산관리계좌. 하루만 맡겨도 이자가 붙는 통장. 비상금 보관에 최적."),
+        ("ISA 계좌", "개인종합자산관리계좌. 예금·펀드·ETF를 한 통장에서 관리. 비과세 혜택."),
+        ("ETF", "주식처럼 사고파는 펀드. 코스피200 같은 지수를 따라가는 상품. 분산투자 효과."),
+        ("적금 vs 예금", "적금 = 매달 일정 금액 납입. 예금 = 한 번에 목돈 맡기기."),
+        ("복리", "이자에 이자가 붙는 구조. 오래 투자할수록 폭발적 증가. 사회초년생이 가장 유리."),
+        ("단리", "원금에만 이자가 붙는 구조. 대부분의 1~2년 적금 상품이 단리 적용."),
+    ],
+    "📊 신용·대출": [
+        ("신용점수", "돈을 잘 갚는지 나타내는 점수 (0~1000점). 높을수록 대출 금리가 낮아짐."),
+        ("DSR", "총부채원리금상환비율. 연소득 대비 모든 빚 상환액 비율. 대출 심사 기준."),
+        ("마이너스 통장", "한도 내에서 자유롭게 빌리고 갚는 통장. 이자는 실제 사용 금액에만 적용."),
+        ("연이율 vs 월이율", "연이율 12% = 월이율 약 1%. 대출 광고는 월이율로 속이는 경우 있으니 주의."),
+        ("연체", "대출·카드값을 제때 못 갚는 것. 단 하루도 신용점수에 영향. 절대 주의."),
+    ],
+    "🏦 세금·연금": [
+        ("연말정산", "1년간 낸 세금을 다시 계산해 더 낸 세금을 돌려받거나 추가 납부하는 절차."),
+        ("국민연금", "노후를 위해 국가가 운영하는 연금. 직장인은 월급의 4.5% 자동 납부."),
+        ("건강보험", "직장인은 월급의 약 3.5% 납부. 피부양자 등록 여부도 확인하세요."),
+        ("소득공제 vs 세액공제", "소득공제 = 세금 계산 기준인 소득을 줄임. 세액공제 = 최종 세금을 직접 줄임."),
+        ("IRP", "개인형 퇴직연금. 연 900만원까지 세액공제. 직장 퇴직금도 이 계좌로 수령."),
+    ],
+    "💳 일상 금융": [
+        ("체크카드 vs 신용카드", "체크카드 = 잔액 내에서 사용._. 신용카드 = 나중에 결제._.  연말정산 공제율은 체크카드가 더 높음(30%)."),
+        ("자동이체", "정해진 날짜에 자동으로 이체. 저축은 월급날 바로 자동이체 설정이 핵심."),
+        ("비상금", "갑작스런 지출을 대비한 생활비 3~6개월치. 손대기 어려운 별도 통장에 보관."),
+        ("페이 서비스", "카카오페이·네이버페이·토스 등. 편리하지만 소비 내역 관리가 중요."),
+        ("환율", "원화와 외화의 교환 비율. 환율 높을수록 달러 구매 비용 증가."),
+    ],
+}
+
+# 1. 상단 용어 검색 기능 (구조 통일 및 라벨 숨김)
+keyword = st.text_input(
+    label="용어 검색",
+    placeholder="🔍 찾으시는 금융 용어를 입력해주세요 (예: CMA, DSR)",
+    label_visibility="collapsed"  # 입력창 위쪽의 글자를 숨겨서 깔끔하게 만듭니다.
+)
+
+for category, items in terms.items():
+    filtered = [(t, d) for t, d in items
+                if not keyword or keyword.lower() in t.lower() or keyword.lower() in d.lower()]
+    if not filtered:
+        continue
+    st.subheader(category)
+    cols = st.columns(2)
+    for i, (term, desc) in enumerate(filtered):
+        with cols[i % 2]:
+            # ✨ 수정된 부분: 어두운 배경(#2b2b36)과 밝은 글자색(#ffffff, #cccccc) 적용
+            st.markdown(f"""
+            <div style="background:#2b2b36; border-radius:10px; padding:14px 16px;
+                        margin-bottom:10px; border-left:4px solid #667eea; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">
+                <b style="color:#ffffff; font-size:1.1em;">{term}</b><br>
+                <span style="color:#cccccc; font-size:0.95em; line-height: 1.5; display: inline-block; margin-top: 5px;">{desc}</span>
+            </div>""", unsafe_allow_html=True)
+    #st.divider()
+
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# 다크 모드에 맞춘 스타일 업데이트
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+st.markdown("""
+<style>
+    /* 배경을 투명하게 만들어 Streamlit 다크 모드 기본 테마를 따르도록 변경 */
+    .main {
+        background-color: transparent;
+    }
+    
+    .header-container {
+        text-align: center;
+        margin-bottom: 2rem;
+        padding-top: 2rem;
+    }
+    
+    .header-title {
+        font-size: 3em;
+        font-weight: 700;
+        color: #ffffff;
+        margin-bottom: 0.2em;
+    }
+    
+    .header-subtitle {
+        font-size: 1.3em;
+        color: #aaaaaa;
+        font-weight: 500;
+        margin-bottom: 2em;
+    }
+    
+    /* 사용하지 않는 카드의 스타일도 다크 모드에 맞게 미리 세팅 */
+    .feature-card {
+        background: #1e1e24;
+        border-radius: 16px;
+        padding: 2.5rem 2rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        border-left: 6px solid;
+        transition: all 0.3s ease;
+        min-height: 350px;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .feature-card:hover {
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.5);
+        transform: translateY(-6px);
+    }
+    
+    div[data-testid="stButton"] > button {
+        width: 100%;
+        font-size: 1.05em !important;
+        font-weight: 600 !important;
+        padding: 0.8em 1.5em !important;
+        height: auto !important;
+        min-height: 45px !important;
+        border-radius: 8px !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    hr {
+        margin: 3rem 0;
+        border: none;
+        border-top: 2px solid #333333;
+    }
+    
+    .footer {
+        text-align: center;
+        padding: 2rem 0;
+        color: #888888;
+        font-size: 0.95em;
+        border-top: 1px solid #333333;
+    }
+    
+    @media (max-width: 768px) {
+        .header-title {
+            font-size: 2.2em;
+        }
+        
+        .header-subtitle {
+            font-size: 1.1em;
+        }
+        
+        .feature-card {
+            min-height: 320px;
+        }
+    }
+</style>
+""", unsafe_allow_html=True)
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 # 한 번 불러온 목록은 24시간(86400초) 동안 기억하여 앱 속도를 빠르게 유지합니다.
 @st.cache_data(show_spinner=False, ttl=86400)
 def get_dynamic_google_models(api_key):
@@ -320,7 +538,7 @@ with st.form(key="chat_form", clear_on_submit=True):
         )
         
     with col2:
-        submit_button = st.form_submit_button(label="전송", use_container_width=True)
+        submit_button = st.form_submit_button(label="질문 보내기", use_container_width=True)
 
 # 폼 버튼이 눌리고 텍스트가 있을 때 AI가 작동하도록 트리거를 변경했습니다.
 if submit_button and user_input:
@@ -364,254 +582,4 @@ if submit_button and user_input:
                     st.error("API 사용량 한도 초과. 잠시 후 다시 시도하세요.")
                 else:
                     st.error(f"오류: {err}")
-
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-# 푸터
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-# 1. ⚠️ 핵심 개선점: 캐싱 추가 (55분마다 한 번만 구글 인증 수행)
-@st.cache_resource(ttl=3300)
-def get_gspread_client():
-    # Secrets에서 통째로 저장된 JSON 문자열을 가져옴
-    json_string = st.secrets["gspread_json"]
-    
-    # 문자열을 파이썬 딕셔너리로 변환
-    credentials = json.loads(json_string)
-    
-    # 구글 서비스 계정 인증 수행
-    gc = gspread.service_account_from_dict(credentials)
-    return gc
-
-st.markdown(
-   '<a href="https://docs.google.com/forms/d/e/1FAIpQLSco-O4cGhbt1iMOwrEkqX5Vt0-8ctAtCxM5Z6JjmFlP-Uqq-Q/viewform?usp=header" target="_blank"><button style="color: peach;">💌 설문 링크로 이동</button></a>', 
-    unsafe_allow_html=True        
-           )
-
-
-# 의견 입력 창
-user_feedback = st.text_area(
-    "여러분의 생각을 자유롭게 적어주세요 👇", 
-    placeholder="예: 이런 기능이 추가되면 좋겠어요 / 이 부분이 사용하기 조금 불편해요"
-)
-
-# 의견 남기기 버튼 (CTA)
-if st.button("피드백 남기기", use_container_width=True):
-    if user_feedback.strip() == "":
-        st.warning("내용을 입력한 후 버튼을 눌러주세요! ⚠️")
-    else:
-        try:
-            # 2. 구글 인증 및 시트 열기 (이제 캐시된 클라이언트를 빠르게 불러옴)
-            gc = get_gspread_client()
-            sh = gc.open_by_key(st.secrets["spreadsheet_id"])
-            
-            # 시트 이름으로 명확하게 지정하는 것을 권장하나, 인덱스(0)도 무방합니다.
-            worksheet = sh.get_worksheet(0) 
-            
-            # 3. 데이터 추가
-            current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            worksheet.append_row([current_time, user_feedback])
-            
-            # 4. 제출 성공 완료 메시지 및 시각 효과
-            st.balloons()
-            st.success("""
-            🎉 **소중한 피드백이 성공적으로 전달되었어요!**  
-            보내주신 다정한 말씀과 조언은  
-            서비스 개선에 적극 반영하겠습니다.  
-            앞으로도 많은 기대 부탁드려요! 🙏
-            """)
-            
-        except Exception as e:
-            st.error(f"데이터 저장 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요: {e}")
-            
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-st.write("---")
-
-st.set_page_config(page_title="금융 용어 사전", page_icon="📚", layout="wide")
-st.title("📚 필수 금융 용어")
-st.caption("복잡한 용어를 쉽게 정리했어요")
-
-terms = {
-    "💰 저축·투자": [
-        ("CMA 통장", "종합자산관리계좌. 하루만 맡겨도 이자가 붙는 통장. 비상금 보관에 최적."),
-        ("ISA 계좌", "개인종합자산관리계좌. 예금·펀드·ETF를 한 통장에서 관리. 비과세 혜택."),
-        ("ETF", "주식처럼 사고파는 펀드. 코스피200 같은 지수를 따라가는 상품. 분산투자 효과."),
-        ("적금 vs 예금", "적금 = 매달 일정 금액 납입. 예금 = 한 번에 목돈 맡기기."),
-        ("복리", "이자에 이자가 붙는 구조. 오래 투자할수록 폭발적 증가. 사회초년생이 가장 유리."),
-        ("단리", "원금에만 이자가 붙는 구조. 대부분의 1~2년 적금 상품이 단리 적용."),
-    ],
-    "📊 신용·대출": [
-        ("신용점수", "돈을 잘 갚는지 나타내는 점수 (0~1000점). 높을수록 대출 금리가 낮아짐."),
-        ("DSR", "총부채원리금상환비율. 연소득 대비 모든 빚 상환액 비율. 대출 심사 기준."),
-        ("마이너스 통장", "한도 내에서 자유롭게 빌리고 갚는 통장. 이자는 실제 사용 금액에만 적용."),
-        ("연이율 vs 월이율", "연이율 12% = 월이율 약 1%. 대출 광고는 월이율로 속이는 경우 있으니 주의."),
-        ("연체", "대출·카드값을 제때 못 갚는 것. 단 하루도 신용점수에 영향. 절대 주의."),
-    ],
-    "🏦 세금·연금": [
-        ("연말정산", "1년간 낸 세금을 다시 계산해 더 낸 세금을 돌려받거나 추가 납부하는 절차."),
-        ("국민연금", "노후를 위해 국가가 운영하는 연금. 직장인은 월급의 4.5% 자동 납부."),
-        ("건강보험", "직장인은 월급의 약 3.5% 납부. 피부양자 등록 여부도 확인하세요."),
-        ("소득공제 vs 세액공제", "소득공제 = 세금 계산 기준인 소득을 줄임. 세액공제 = 최종 세금을 직접 줄임."),
-        ("IRP", "개인형 퇴직연금. 연 900만원까지 세액공제. 직장 퇴직금도 이 계좌로 수령."),
-    ],
-    "💳 일상 금융": [
-        ("체크카드 vs 신용카드", "체크카드 = 잔액 내에서 사용._. 신용카드 = 나중에 결제._.  연말정산 공제율은 체크카드가 더 높음(30%)."),
-        ("자동이체", "정해진 날짜에 자동으로 이체. 저축은 월급날 바로 자동이체 설정이 핵심."),
-        ("비상금", "갑작스런 지출을 대비한 생활비 3~6개월치. 손대기 어려운 별도 통장에 보관."),
-        ("페이 서비스", "카카오페이·네이버페이·토스 등. 편리하지만 소비 내역 관리가 중요."),
-        ("환율", "원화와 외화의 교환 비율. 환율 높을수록 달러 구매 비용 증가."),
-    ],
-}
-
-# 1. 상단 용어 검색 기능 (구조 통일 및 라벨 숨김)
-keyword = st.text_input(
-    label="용어 검색",
-    placeholder="🔍 찾으시는 금융 용어를 입력해주세요 (예: CMA, DSR)",
-    label_visibility="collapsed"  # 입력창 위쪽의 글자를 숨겨서 깔끔하게 만듭니다.
-)
-
-for category, items in terms.items():
-    filtered = [(t, d) for t, d in items
-                if not keyword or keyword.lower() in t.lower() or keyword.lower() in d.lower()]
-    if not filtered:
-        continue
-    st.subheader(category)
-    cols = st.columns(2)
-    for i, (term, desc) in enumerate(filtered):
-        with cols[i % 2]:
-            # ✨ 수정된 부분: 어두운 배경(#2b2b36)과 밝은 글자색(#ffffff, #cccccc) 적용
-            st.markdown(f"""
-            <div style="background:#2b2b36; border-radius:10px; padding:14px 16px;
-                        margin-bottom:10px; border-left:4px solid #667eea; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">
-                <b style="color:#ffffff; font-size:1.1em;">{term}</b><br>
-                <span style="color:#cccccc; font-size:0.95em; line-height: 1.5; display: inline-block; margin-top: 5px;">{desc}</span>
-            </div>""", unsafe_allow_html=True)
-    #st.divider()
-
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-# ✨ 카카오톡 스타일로 가로 배치된 스크롤형 질문창
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-st.divider() 
-st.subheader("💬 더 궁금한 점이 있으신가요?")
-st.caption("구체적인 상황을 알려주시면 맞춤형 정보를 찾아드릴게요!")
-
-# prefill 상태 가져오기
-prefill = st.session_state.pop("prefill", "")
-
-with st.form(key="question_form", clear_on_submit=True):
-    # 1단계: 가로로 나란히 배치하기 위해 컬럼을 나눕니다. (입력창 비율 6 : 버튼 비율 1)
-    col1, col2 = st.columns([6, 1])
-    
-    with col1:
-        user_input = st.text_input(
-            label="질문을 적어주세요.", 
-            value=prefill,
-            placeholder="여기에 모두 적어주세요",
-            label_visibility="collapsed"
-        )
-        
-    with col2:
-        # 버튼이 컬럼 안에서 가득 차도록(use_container_width) 설정하여 오른쪽에 이쁘게 배치합니다.
-        submit_button = st.form_submit_button(label="질문 보내기", use_container_width=True)
-
-# 사용자가 버튼을 누르거나 엔터를 쳤을 때 작동
-if submit_button and user_input:
-    with st.chat_message("user"):
-        st.write(user_input)
-    
-    with st.chat_message("assistant"):
-        st.info(f"방금 남겨주신 **'{user_input}'** 에 대한 맞춤형 정보를 준비하는 기능입니다! 😊")
-
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-# 다크 모드에 맞춘 스타일 업데이트
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-st.markdown("""
-<style>
-    /* 배경을 투명하게 만들어 Streamlit 다크 모드 기본 테마를 따르도록 변경 */
-    .main {
-        background-color: transparent;
-    }
-    
-    .header-container {
-        text-align: center;
-        margin-bottom: 2rem;
-        padding-top: 2rem;
-    }
-    
-    .header-title {
-        font-size: 3em;
-        font-weight: 700;
-        color: #ffffff;
-        margin-bottom: 0.2em;
-    }
-    
-    .header-subtitle {
-        font-size: 1.3em;
-        color: #aaaaaa;
-        font-weight: 500;
-        margin-bottom: 2em;
-    }
-    
-    /* 사용하지 않는 카드의 스타일도 다크 모드에 맞게 미리 세팅 */
-    .feature-card {
-        background: #1e1e24;
-        border-radius: 16px;
-        padding: 2.5rem 2rem;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-        border-left: 6px solid;
-        transition: all 0.3s ease;
-        min-height: 350px;
-        display: flex;
-        flex-direction: column;
-    }
-    
-    .feature-card:hover {
-        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.5);
-        transform: translateY(-6px);
-    }
-    
-    div[data-testid="stButton"] > button {
-        width: 100%;
-        font-size: 1.05em !important;
-        font-weight: 600 !important;
-        padding: 0.8em 1.5em !important;
-        height: auto !important;
-        min-height: 45px !important;
-        border-radius: 8px !important;
-        transition: all 0.3s ease !important;
-    }
-    
-    hr {
-        margin: 3rem 0;
-        border: none;
-        border-top: 2px solid #333333;
-    }
-    
-    .footer {
-        text-align: center;
-        padding: 2rem 0;
-        color: #888888;
-        font-size: 0.95em;
-        border-top: 1px solid #333333;
-    }
-    
-    @media (max-width: 768px) {
-        .header-title {
-            font-size: 2.2em;
-        }
-        
-        .header-subtitle {
-            font-size: 1.1em;
-        }
-        
-        .feature-card {
-            min-height: 320px;
-        }
-    }
-</style>
-""", unsafe_allow_html=True)
-
-
 
