@@ -174,8 +174,8 @@ c1, c2, c3 = st.columns(3)
 for col, (label, ratio, color) in zip(
     [c1, c2, c3],
     [("💎 저축", lv["save"], lv["color"]),
-     ("🏠 고정비", lv["fix"], lv["color"]), #bfdbfe
-     ("🎉 여가·식비", lv["leisure"], lv["color"])] #bbf7d0
+     ("🏠 고정비", lv["fix"], lv["color"], "#bfdbfe"), #bfdbfe
+     ("🎉 여가·식비", lv["leisure"], lv["color"], "#bbf7d0")] #bbf7d0
 ):
     amt = int(income * ratio)
     col.markdown(f"""
