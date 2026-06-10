@@ -12,6 +12,8 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
+st.write("---")
+
 st.set_page_config(page_title="금융 용어 사전", page_icon="📚", layout="wide")
 st.title("📚 사회초년생 필수 금융 용어")
 st.caption("복잡한 용어를 쉽게 정리했어요")
