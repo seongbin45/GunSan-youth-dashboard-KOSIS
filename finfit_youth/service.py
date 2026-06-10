@@ -48,7 +48,7 @@ class YouthDataService:
             title = str(item.get("pstTtl") or item.get("title") or item.get("name") or "")
             summary = str(item.get("pstWholCn") or item.get("summary") or item.get("desc") or "")
             region = str(item.get("pstSeNm") or item.get("pstSeCd") or item.get("region") or item.get("rgnNm") or "")
-            return {
+            normalized = {
                 "id": uid,
                 "source": source,
                 "title": title,
@@ -56,13 +56,12 @@ class YouthDataService:
                 "region": region,
                 "raw": item,
             }
-
-        if source == "policy":
+        elif source == "policy":
             uid = str(item.get("plcyNo") or item.get("id") or item.get("idx") or "")
             title = str(item.get("plcyNm") or item.get("title") or item.get("name") or "")
             summary = str(item.get("plcyExplnCn") or item.get("summary") or item.get("desc") or "")
             region = str(item.get("zipCd") or item.get("region") or item.get("rgnNm") or "")
-            return {
+            normalized = {
                 "id": uid,
                 "source": source,
                 "title": title,
@@ -70,8 +69,7 @@ class YouthDataService:
                 "region": region,
                 "raw": item,
             }
-
-        if source == "center":
+        elif source == "center":
             uid = str(item.get("cntrSn") or item.get("plcSn") or item.get("id") or "")
             title = str(item.get("cntrNm") or item.get("title") or item.get("name") or "")
             addr = str(item.get("cntrAddr") or "").strip()
@@ -84,33 +82,6 @@ class YouthDataService:
                 or item.get("rgnNm")
                 or ""
             )
-            return {
-                "id": uid,
-                "source": source,
-                "title": title,
-                "summary": summary,
-                "region": region,
-                "raw": item,
-            }
-
-        uid = str(item.get("id") or item.get("idx") or "")
-        title = str(item.get("title") or item.get("name") or "")
-        summary = str(item.get("summary") or item.get("desc") or "")
-        region = str(item.get("region") or item.get("rgnNm") or "")
-        return {
-            "id": uid,
-            "source": source,
-            "title": title,
-            "summary": summary,
-            "region": region,
-            "raw": item,
-        }
-
-        if source == "policy":
-            uid = str(item.get("plcyNo") or item.get("id") or item.get("idx") or "")
-            title = str(item.get("plcyNm") or item.get("title") or item.get("name") or "")
-            summary = str(item.get("plcyExplnCn") or item.get("summary") or item.get("desc") or "")
-            region = str(item.get("zipCd") or item.get("region") or item.get("rgnNm") or "")
             normalized = {
                 "id": uid,
                 "source": source,
@@ -119,28 +90,31 @@ class YouthDataService:
                 "region": region,
                 "raw": item,
             }
-
         else:
+            uid = str(item.get("id") or item.get("idx") or "")
+            title = str(item.get("title") or item.get("name") or "")
+            summary = str(item.get("summary") or item.get("desc") or "")
+            region = str(item.get("region") or item.get("rgnNm") or "")
             normalized = {
-                "id": str(item.get("id") or ""),
+                "id": uid,
                 "source": source,
-                "title": str(item.get("title") or ""),
-                "summary": str(item.get("summary") or ""),
-                "region": "",
+                "title": title,
+                "summary": summary,
+                "region": region,
                 "raw": item,
             }
 
         # ===================== P0: NormalizedItem 검증 =====================
         try:
             NormalizedItem.model_validate(normalized)
-            return normalized                     # dict 그대로 반환 (캐시 호환)
+            return normalized  # dict 그대로 반환 (캐시 호환성 최고)
         except ValidationError as e:
             logger.warning(
                 f"NormalizedItem validation failed for {source} item {normalized.get('id')}: {e}"
             )
-            # 실패한 데이터는 skip (전체 sync가 죽지 않도록)
-            continue   # sync_source 루프 안에서 사용할 경우
-            # 또는 raise   # 엄격하게 하고 싶다면
+            # 검증 실패 → skip (전체 sync가 죽지 않도록)
+            # sync_source 루프에서 호출되므로 raise 대신 continue를 상위에서 처리하는 게 좋음
+            raise  # 지금은 raise로 문제 즉시 발견
     
     
     def _extract_list(self, payload: Any) -> list[dict[str, Any]]:
