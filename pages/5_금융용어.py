@@ -62,14 +62,13 @@ for category, items in terms.items():
 
 st.divider() # 시각적 분리를 위해 선 추가
 st.subheader("💬 더 궁금한 점이 있으신가요?")
-st.caption("자신의 상황을 알려주시면 맞춤형 정보를 찾아드릴게요!")
+st.caption("더 구체적인 상황을 알려주시면 맞춤형 정보를 찾아드릴게요!")
 
 # prefill 상태 가져오기 (없으면 빈 문자열 "")
 prefill = st.session_state.pop("prefill", "")
 
 # 채팅 입력창 생성
-user_input = st.chat_input("""질문을 적어주세요.
-예) 나 25살 취준생인데 받을 수 있는 혜택 알려줘""") or prefill
+user_input = st.chat_input("""예) 나 25살 취준생인데 받을 수 있는 혜택 알려줘""") or prefill
 
 # 사용자가 메시지를 입력하고 엔터를 쳤을 때 실행되는 부분
 if user_input:
