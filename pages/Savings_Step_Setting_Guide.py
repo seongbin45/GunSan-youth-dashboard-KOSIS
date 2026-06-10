@@ -137,7 +137,7 @@ with col2:
     """, unsafe_allow_html=True)
     
     # 👇 기존 metrics 루프를 이걸로 교체
-    TERM_TIPS = {
+    CARD_TIPS = {
         "💎 저축 목표":      ("저축", "쓰지 않고 모아두는 돈이에요.<br>이 금액을 매달 통장에 먼저 빼두는 게 핵심이에요!"),
         "🏠 고정비 예산":    ("고정비", "매달 비슷하게 나가는 돈이에요.<br>월세, 통신비, 교통비처럼 줄이기 어려운 지출들이에요."),
         "🎉 여가·식비 예산": ("여가·식비", "밥값, 카페, 취미, 쇼핑처럼<br>생활을 즐기는 데 쓰는 돈이에요."),
@@ -177,6 +177,7 @@ for col, (label, ratio, color) in zip(
      ("🏠 고정비", lv["fix"], "#bfdbfe"), #bfdbfe
      ("🎉 여가·식비", lv["leisure"], "#bbf7d0")] #bbf7d0
 ):
+    term, tip = CARD_TIPS[label]
     amt = int(income * ratio)
     col.markdown(f"""
         <div style="text-align:center; background:{color}22;
