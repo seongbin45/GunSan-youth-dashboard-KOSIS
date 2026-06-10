@@ -411,7 +411,7 @@ def get_gspread_client():
     return gc
     
 # UI 안내 문구 출력
-st.markdown("### 💌 서비스 의견 공유")
+st.markdown("###서비스 의견 남기기")
 st.markdown("""
 **저희는 더 나은 경험을 드리기 위해   
 꾸준히 준비 중입니다.**  
@@ -421,7 +421,7 @@ st.markdown("""
 
 🔒 개인정보 보호 |
 """
-   '<a href="https://docs.google.com/forms/d/e/1FAIpQLSco-O4cGhbt1iMOwrEkqX5Vt0-8ctAtCxM5Z6JjmFlP-Uqq-Q/viewform?usp=header" target="_blank"><button style="color: #667eea;">설문 링크로 이동</button></a>', 
+   '<a href="https://docs.google.com/forms/d/e/1FAIpQLSco-O4cGhbt1iMOwrEkqX5Vt0-8ctAtCxM5Z6JjmFlP-Uqq-Q/viewform?usp=header" target="_blank"><button style="color: peach;">💌 설문 링크로 이동</button></a>', 
     unsafe_allow_html=True        
            )
 
