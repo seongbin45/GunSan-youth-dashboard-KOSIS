@@ -137,7 +137,7 @@ with col2:
     """, unsafe_allow_html=True)
     
     # 👇 기존 metrics 루프를 이걸로 교체
-    CARD_TIPS = {
+    TERM_TIPS = {
         "💎 저축 목표":      ("저축", "쓰지 않고 모아두는 돈이에요.<br>이 금액을 매달 통장에 먼저 빼두는 게 핵심이에요!"),
         "🏠 고정비 예산":    ("고정비", "매달 비슷하게 나가는 돈이에요.<br>월세, 통신비, 교통비처럼 줄이기 어려운 지출들이에요."),
         "🎉 여가·식비 예산": ("여가·식비", "밥값, 카페, 취미, 쇼핑처럼<br>생활을 즐기는 데 쓰는 돈이에요."),
@@ -145,7 +145,7 @@ with col2:
 
     # ✅ for 루프가 with col2: 안에 들여쓰기 되어 있어야 해
     for label, amt, color in metrics:
-        term, tip = TERM_TIPS[label] #{label.split()[0]}&nbsp
+        term, tip = TERM_TIPS[label] 
         st.markdown(f"""
         <div style="background:#1a1a1a; border-radius:10px; padding:14px 20px; margin-bottom:10px;
                     border-left:5px solid #f8f9fa;">
@@ -168,6 +168,12 @@ st.write("---")
 
 
 st.subheader(f"✅ 현재 선택: {level}단계 — {LEVELS[level]['name']}")
+
+CARD_TIPS = {
+    "💎 저축 목표":      ("저축", "쓰지 않고 모아두는 돈이에요.<br>이 금액을 매달 통장에 먼저 빼두는 게 핵심이에요!"),
+    "🏠 고정비 예산":    ("고정비", "매달 비슷하게 나가는 돈이에요.<br>월세, 통신비, 교통비처럼 줄이기 어려운 지출들이에요."),
+    "🎉 여가·식비 예산": ("여가·식비", "밥값, 카페, 취미, 쇼핑처럼<br>생활을 즐기는 데 쓰는 돈이에요."),
+}
 
 lv = LEVELS[level]
 c1, c2, c3 = st.columns(3)
