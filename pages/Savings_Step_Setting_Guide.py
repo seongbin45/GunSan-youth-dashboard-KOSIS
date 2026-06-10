@@ -176,15 +176,15 @@ CARD_TIPS = {
 }
 
 lv = LEVELS[level]
-c1, c2, c3 = st.columns(1)
+c1, c2, c3 = st.columns(3)
 for col, (label, ratio, color) in zip(
     [c1, c2, c3],
     [("💎 저축", lv["save"], "#fef08a"),
      ("🏠 고정비", lv["fix"], "#bfdbfe"), #bfdbfe
      ("🎉 여가·식비", lv["leisure"], "#bbf7d0")] #bbf7d0
 ):
-    term, tip = CARD_TIPS[label]
     amt = int(income * ratio)
+    term, tip = TERM_TIPS[label] 
     col.markdown(f"""
         <div style="text-align:center; background:{color}22;
                     border-radius:12px; padding:20px; border-top:4px solid {color}">
