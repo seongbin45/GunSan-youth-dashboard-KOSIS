@@ -17,6 +17,7 @@ def get_gspread_client():
     gc = gspread.service_account_from_dict(credentials)
     return gc
 
+st.markdown(
    '<a href="https://docs.google.com/forms/d/e/1FAIpQLSco-O4cGhbt1iMOwrEkqX5Vt0-8ctAtCxM5Z6JjmFlP-Uqq-Q/viewform?usp=header" target="_blank"><button style="color: peach;">💌 설문 링크로 이동</button></a>', 
     unsafe_allow_html=True        
            )
