@@ -5,7 +5,7 @@ import streamlit as st
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 st.markdown("""
-<div class="feature-card">
+<div class="feature-card:hover">
     <p>저희는 더 나은 경험을 드리기 위해</p>
     <p>꾸준히 준비 중에 있습니다.</p>
     <p>소중한 의견을 들려주시면,</p>
