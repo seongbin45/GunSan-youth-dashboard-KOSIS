@@ -86,8 +86,8 @@ with col2:
     # ✅ metrics 리스트 정의 추가
     metrics = [
         ("💎 저축",      save_amt,    "#fef08a"),
-        ("🏠 고정비",    fix_amt,     "#2196F3"),
-        ("🎉 여가·식비", leisure_amt, "#4CAF50"),
+        ("🏠 고정비",    fix_amt,     "#bfdbfe"),  #2196F3
+        ("🎉 여가·식비", leisure_amt, "#bbf7d0"),  #4CAF50
     ]
 
     # 👇 이 CSS 툴팁 블록 추가
