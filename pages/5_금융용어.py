@@ -58,7 +58,7 @@ terms = {
 # 1. 상단 용어 검색 기능 (구조 통일 및 라벨 숨김)
 keyword = st.text_input(
     label="용어 검색",
-    placeholder="🔍 찾으시는 금융 용어를 입력하세요 (예: CMA, DSR)",
+    placeholder="🔍 찾으시는 금융 용어를 입력해주세요 (예: CMA, DSR)",
     label_visibility="collapsed"  # 입력창 위쪽의 글자를 숨겨서 깔끔하게 만듭니다.
 )
 
