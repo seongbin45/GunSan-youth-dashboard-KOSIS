@@ -176,7 +176,7 @@ CARD_TIPS = {
 }
 
 lv = LEVELS[level]
-c1, c2, c3 = st.columns()
+c1, c2, c3 = st.columns(1)
 for col, (label, ratio, color) in zip(
     [c1, c2, c3],
     [("💎 저축", lv["save"], "#fef08a"),
