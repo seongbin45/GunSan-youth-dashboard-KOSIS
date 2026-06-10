@@ -15,6 +15,8 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 st.write("---")
 
 st.set_page_config(page_title="금융 용어 사전", page_icon="📚", layout="wide")
@@ -74,28 +76,33 @@ for category, items in terms.items():
     #st.divider()
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-# ✨ 새로 추가된 맞춤형 질문 채팅 기능
+# ✨ 화면 맨 아래에 위치하는 스크롤형 질문창 구현
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-st.divider() # 시각적 분리를 위해 선 추가
+st.divider() 
 st.subheader("💬 더 궁금한 점이 있으신가요?")
-st.caption("더 구체적인 상황을 알려주시면 맞춤형 정보를 찾아드릴게요!")
+st.caption("자신의 상황을 알려주시면 맞춤형 정보를 찾아드릴게요!")
 
-# prefill 상태 가져오기 (없으면 빈 문자열 "")
+# prefill 상태 가져오기
 prefill = st.session_state.pop("prefill", "")
 
-# 채팅 입력창 생성
-user_input = st.chat_input("""예) 나 25살 취준생인데 받을 수 있는 혜택 알려줘""") or prefill
+# st.form을 사용하여 화면 고정을 풀고, 일반적인 컴포넌트 흐름(스크롤)을 따르게 만듭니다.
+with st.form(key="question_form", clear_on_submit=True):
+    user_input = st.text_input(
+        label="질문을 적어주세요.", 
+        value=prefill,
+        placeholder="예) 나 25살 취준생인데 받을 수 있는 혜택 알려줘",
+        label_visibility="collapsed" # 라벨을 숨겨서 깔끔하게 만듭니다.
+    )
+    submit_button = st.form_submit_button(label="질문 보내기")
 
-# 사용자가 메시지를 입력하고 엔터를 쳤을 때 실행되는 부분
-if user_input:
-    # 챗봇 메시지 UI를 사용하여 사용자 입력 표시
+# 사용자가 버튼을 누르거나 엔터를 쳤을 때 작동
+if submit_button and user_input:
     with st.chat_message("user"):
         st.write(user_input)
     
-    # 시스템/AI 응답을 위한 자리 표시 (이후 기능 확장 가능)
     with st.chat_message("assistant"):
-        st.info(f"방금 남겨주신 **'{user_input}'** 에 대한 맞춤형 혜택과 정보를 준비하는 기능을 여기에 연결할 수 있습니다! 😊")
+        st.info(f"방금 남겨주신 **'{user_input}'** 에 대한 맞춤형 정보를 준비하는 기능입니다! 😊")
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 # 다크 모드에 맞춘 스타일 업데이트
