@@ -94,11 +94,11 @@ with col2:
     st.markdown("""
     <style>
     .tooltip-wrap {
-        display: #bfdbfe;
+        display: inline-block;
         position: relative;
         cursor: pointer;
         border-bottom: 1.5px dashed #bfdbfe;
-        color: #f8f9fa;
+        clor: #bfdbfe;
     }
     .tooltip-wrap .tooltip-box {
         visibility: hidden;
@@ -148,7 +148,7 @@ with col2:
         term, tip = TERM_TIPS[label] 
         st.markdown(f"""
         <div style="background:#1a1a1a; border-radius:10px; padding:14px 20px; margin-bottom:10px;
-                    border-left:5px solid #f8f9fa;">
+                    border-left:5px solid {color};">
             <span style="color:#f8f9fa; font-size:0.9em">
                 {label.split()[0]}&nbsp
                 <span class="tooltip-wrap" tabindex="0">
@@ -176,7 +176,7 @@ CARD_TIPS = {
 }
 
 lv = LEVELS[level]
-c1, c2, c3 = st.columns(3)
+c1, c2, c3 = st.columns()
 for col, (label, ratio, color) in zip(
     [c1, c2, c3],
     [("💎 저축", lv["save"], "#fef08a"),
