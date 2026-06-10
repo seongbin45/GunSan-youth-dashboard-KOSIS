@@ -148,7 +148,7 @@ with st.form(key="question_form", clear_on_submit=True):
         
     with col2:
         # 버튼이 컬럼 안에서 가득 차도록(use_container_width) 설정하여 오른쪽에 이쁘게 배치합니다.
-        submit_button = st.form_submit_button(label="전송", use_container_width=True)
+        submit_button = st.form_submit_button(label="질문 보내기", use_container_width=True)
 
 # 사용자가 버튼을 누르거나 엔터를 쳤을 때 작동
 if submit_button and user_input:
