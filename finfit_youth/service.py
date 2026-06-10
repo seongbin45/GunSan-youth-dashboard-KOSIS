@@ -106,6 +106,43 @@ class YouthDataService:
             "raw": item,
         }
 
+        if source == "policy":
+            uid = str(item.get("plcyNo") or item.get("id") or item.get("idx") or "")
+            title = str(item.get("plcyNm") or item.get("title") or item.get("name") or "")
+            summary = str(item.get("plcyExplnCn") or item.get("summary") or item.get("desc") or "")
+            region = str(item.get("zipCd") or item.get("region") or item.get("rgnNm") or "")
+            normalized = {
+                "id": uid,
+                "source": source,
+                "title": title,
+                "summary": summary,
+                "region": region,
+                "raw": item,
+            }
+
+        else:
+            normalized = {
+                "id": str(item.get("id") or ""),
+                "source": source,
+                "title": str(item.get("title") or ""),
+                "summary": str(item.get("summary") or ""),
+                "region": "",
+                "raw": item,
+            }
+
+        # ===================== P0: NormalizedItem 검증 =====================
+        try:
+            NormalizedItem.model_validate(normalized)
+            return normalized                     # dict 그대로 반환 (캐시 호환)
+        except ValidationError as e:
+            logger.warning(
+                f"NormalizedItem validation failed for {source} item {normalized.get('id')}: {e}"
+            )
+            # 실패한 데이터는 skip (전체 sync가 죽지 않도록)
+            continue   # sync_source 루프 안에서 사용할 경우
+            # 또는 raise   # 엄격하게 하고 싶다면
+    
+    
     def _extract_list(self, payload: Any) -> list[dict[str, Any]]:
         if isinstance(payload, list):
             return [x for x in payload if isinstance(x, dict)]
