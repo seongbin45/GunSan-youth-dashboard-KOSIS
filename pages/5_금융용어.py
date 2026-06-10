@@ -16,18 +16,7 @@ def get_gspread_client():
     # 구글 서비스 계정 인증 수행
     gc = gspread.service_account_from_dict(credentials)
     return gc
-    
-# UI 안내 문구 출력
-st.markdown("### 서비스 의견 남기기")
-st.markdown("""
-**저희는 더 나은 경험을 드리기 위해   
-꾸준히 준비 중입니다.**  
 
-소중한 의견을 들려주시면,  
-서비스 개선에 큰 도움이 됩니다!  
-
-🔒 개인정보 보호 |
-"""
    '<a href="https://docs.google.com/forms/d/e/1FAIpQLSco-O4cGhbt1iMOwrEkqX5Vt0-8ctAtCxM5Z6JjmFlP-Uqq-Q/viewform?usp=header" target="_blank"><button style="color: peach;">💌 설문 링크로 이동</button></a>', 
     unsafe_allow_html=True        
            )
