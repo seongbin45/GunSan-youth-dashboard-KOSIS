@@ -84,7 +84,7 @@ st.markdown("""
     }
     
     .feature-card {
-        background: #ffffff;
+        background: white;
         border-radius: 16px;
         padding: 2.5rem 2rem;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
@@ -108,20 +108,20 @@ st.markdown("""
     .card-title {
         font-size: 1.6em;
         font-weight: 700;
-        color: #ffffff;
+        color: #1a1a1a;
         margin-bottom: 0.8rem;
     }
     
     .card-description {
         font-size: 1em;
-        color: #eceff1;
+        color: #555555;
         line-height: 1.7;
         margin-bottom: 1.5rem;
         flex-grow: 1;
     }
     
     .card-features {
-        background: linear-gradient(135deg, #f5f5f5 0%, #1a1a1a 100%);
+        background: linear-gradient(135deg, #f5f5f5 0%, #f9f9f9 100%);
         padding: 1.2rem;
         border-radius: 8px;
         margin-bottom: 1.5rem;
@@ -130,14 +130,14 @@ st.markdown("""
     .card-features-title {
         font-size: 0.9em;
         font-weight: 700;
-        color: #ffffff;
+        color: #333333;
         margin-bottom: 0.8rem;
         display: block;
     }
     
     .feature-item {
         font-size: 0.95em;
-        color: #ffffff;
+        color: #444444;
         margin-bottom: 0.5rem;
         padding-left: 1.5rem;
         position: relative;
@@ -282,7 +282,7 @@ st.markdown("""
 <div class="footer">
     <p>💌 저희는 더 나은 경험을 드리기 위해 꾸준히 준비 중입니다. 소중한 의견을 들려주시면 서비스 개선에 큰 도움이 됩니다.</p>
     <p>🔒 개인정보 보호</p>
-    <a href="https://docs.google.com/forms/d/e/1FAIpQLSco-O4cGhbt1iMOwrEkqX5Vt0-8ctAtCxM5Z6JjmFlP-Uqq-Q/viewform?usp=header" target="_blank"><button style="color: #667eea;">설문 링크로 이동</button></a>
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLSco-O4cGhbt1iMOwrEkqX5Vt0-8ctAtCxM5Z6JjmFlP-Uqq-Q/viewform?usp=header" target="_blank"><button style="color: blue;">설문 링크로 이동</button></a>
 </div>
 """, unsafe_allow_html=True)
 
