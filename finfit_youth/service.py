@@ -4,6 +4,12 @@ import logging
 from datetime import UTC, datetime
 from typing import Any, Callable
 
+# 파일 맨 위 import 부분에 추가
+from pydantic import ValidationError
+from models.normalized import NormalizedItem
+
+logger = logging.getLogger(__name__)
+
 from .cache_store import CacheStore
 from .client import YouthApiClient, YouthApiError
 from .config import (
