@@ -57,6 +57,31 @@ for category, items in terms.items():
     #st.divider()
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# ✨ 새로 추가된 맞춤형 질문 채팅 기능
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+st.divider() # 시각적 분리를 위해 선 추가
+st.subheader("💬 더 궁금한 점이 있으신가요?")
+st.caption("자신의 상황을 알려주시면 맞춤형 정보를 찾아드릴게요!")
+
+# prefill 상태 가져오기 (없으면 빈 문자열 "")
+prefill = st.session_state.pop("prefill", "")
+
+# 채팅 입력창 생성
+user_input = st.chat_input("""질문을 적어주세요.
+예) 나 25살 취준생인데 받을 수 있는 혜택 알려줘""") or prefill
+
+# 사용자가 메시지를 입력하고 엔터를 쳤을 때 실행되는 부분
+if user_input:
+    # 챗봇 메시지 UI를 사용하여 사용자 입력 표시
+    with st.chat_message("user"):
+        st.write(user_input)
+    
+    # 시스템/AI 응답을 위한 자리 표시 (이후 기능 확장 가능)
+    with st.chat_message("assistant"):
+        st.info(f"방금 남겨주신 **'{user_input}'** 에 대한 맞춤형 혜택과 정보를 준비하는 기능을 여기에 연결할 수 있습니다! 😊")
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 # 다크 모드에 맞춘 스타일 업데이트
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -158,9 +183,4 @@ st.markdown("""
     <a href="https://docs.google.com/forms/d/e/1FAIpQLSco-O4cGhbt1iMOwrEkqX5Vt0-8ctAtCxM5Z6JjmFlP-Uqq-Q/viewform?usp=header" target="_blank"><button style="color: peach;">💌 설문 링크로 이동</button></a>
 </div>
 """, unsafe_allow_html=True)
-
-
-
-
-
 
