@@ -9,7 +9,6 @@ from pydantic import ValidationError
 from models.normalized import NormalizedItem
 
 logger = logging.getLogger(__name__)
-
 # ---------------------------
 
 from .cache_store import CacheStore
