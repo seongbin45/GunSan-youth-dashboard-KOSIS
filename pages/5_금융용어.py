@@ -124,41 +124,12 @@ for category, items in terms.items():
     #st.divider()
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-# ✨ 화면 맨 아래에 위치하는 스크롤형 질문창 구현
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-st.divider() 
-st.subheader("💬 더 궁금한 점이 있으신가요?")
-st.caption("구체적인 상황을 알려주시면 맞춤형 정보를 찾아드릴게요!")
-
-# prefill 상태 가져오기
-prefill = st.session_state.pop("prefill", "")
-
-# st.form을 사용하여 화면 고정을 풀고, 일반적인 컴포넌트 흐름(스크롤)을 따르게 만듭니다.
-with st.form(key="question_form", clear_on_submit=True):
-    user_input = st.text_input(
-        label="질문을 적어주세요.", 
-        value=prefill,
-        placeholder="여기에 모두 적어주세요",
-        label_visibility="collapsed" # 라벨을 숨겨서 깔끔하게 만듭니다.
-    )
-    submit_button = st.form_submit_button(label="질문 보내기")
-
-# 사용자가 버튼을 누르거나 엔터를 쳤을 때 작동
-if submit_button and user_input:
-    with st.chat_message("user"):
-        st.write(user_input)
-    
-    with st.chat_message("assistant"):
-        st.info(f"방금 남겨주신 **'{user_input}'** 에 대한 맞춤형 정보를 준비하는 기능입니다! 😊")
-
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 # ✨ 카카오톡 스타일로 가로 배치된 스크롤형 질문창
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 st.divider() 
 st.subheader("💬 더 궁금한 점이 있으신가요?")
-st.caption("자신의 상황을 알려주시면 맞춤형 정보를 찾아드릴게요!")
+st.caption("구체적인 상황을 알려주시면 맞춤형 정보를 찾아드릴게요!")
 
 # prefill 상태 가져오기
 prefill = st.session_state.pop("prefill", "")
@@ -171,7 +142,7 @@ with st.form(key="question_form", clear_on_submit=True):
         user_input = st.text_input(
             label="질문을 적어주세요.", 
             value=prefill,
-            placeholder="예) 나 25살 취준생인데 받을 수 있는 혜택 알려줘",
+            placeholder="여기에 모두 적어주세요",
             label_visibility="collapsed"
         )
         
