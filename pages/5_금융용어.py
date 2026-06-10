@@ -137,7 +137,7 @@ st.markdown("""
     
     .feature-item {
         font-size: 0.95em;
-        color: #444444;
+        color: #ffffff;
         margin-bottom: 0.5rem;
         padding-left: 1.5rem;
         position: relative;
