@@ -112,7 +112,7 @@ with col2:
         position: absolute;
         z-index: 999;
         bottom: 130%;
-        left: 30%; 
+        left: 0%; 
         transform: none;
         width: 220px;
         box-shadow: 0 4px 16px rgba(0,0,0,0.18);
@@ -128,8 +128,8 @@ with col2:
         content: "";
         position: absolute;
         top: 100%;
-        left: 20px;       /* 기존 left: 50% → 20px로 변경 */
-        transform: none;  /* 기존 translateX(-50%) 제거 */
+        left: 50px;       /* 기존 left: 50% → 20px로 변경 */
+        transform: -50%;  /* 기존 translateX(-50%) 제거 → none */
         border: 6px solid transparent;
         border-top-color: #1a1a1a;
     }
