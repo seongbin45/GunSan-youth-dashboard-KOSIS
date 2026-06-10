@@ -149,7 +149,8 @@ with col2:
         st.markdown(f"""
         <div style="background:#1a1a1a; border-radius:10px; padding:14px 20px; margin-bottom:10px;
                     border-left:5px solid #f8f9fa;">
-            <span style="color:#f8f9fa; font-size:0.9em"; {label}>
+            <span style="color:#f8f9fa; font-size:0.9em">
+                {label.split()[0]}&nbsp
                 <span class="tooltip-wrap" tabindex="0">
                     {term}
                     <span class="tooltip-box">{tip}</span>
