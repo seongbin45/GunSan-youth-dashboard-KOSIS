@@ -1,5 +1,17 @@
 import streamlit as st
 
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# 푸터
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+st.markdown("""
+<div class="footer">
+    <p>저희는 더 나은 경험을 드리기 위해 꾸준히 준비 중입니다. 소중한 의견을 들려주시면 서비스 개선에 큰 도움이 됩니다.</p>
+    <p>🔒 개인정보 보호</p>
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLSco-O4cGhbt1iMOwrEkqX5Vt0-8ctAtCxM5Z6JjmFlP-Uqq-Q/viewform?usp=header" target="_blank"><button style="color: peach;">💌 설문 링크로 이동</button></a>
+</div>
+""", unsafe_allow_html=True)
+
 st.set_page_config(page_title="금융 용어 사전", page_icon="📚", layout="wide")
 st.title("📚 사회초년생 필수 금융 용어")
 st.caption("복잡한 용어를 쉽게 정리했어요")
@@ -171,15 +183,4 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-# 푸터
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-st.markdown("""
-<div class="footer">
-    <p>저희는 더 나은 경험을 드리기 위해 꾸준히 준비 중입니다. 소중한 의견을 들려주시면 서비스 개선에 큰 도움이 됩니다.</p>
-    <p>🔒 개인정보 보호</p>
-    <a href="https://docs.google.com/forms/d/e/1FAIpQLSco-O4cGhbt1iMOwrEkqX5Vt0-8ctAtCxM5Z6JjmFlP-Uqq-Q/viewform?usp=header" target="_blank"><button style="color: peach;">💌 설문 링크로 이동</button></a>
-</div>
-""", unsafe_allow_html=True)
 
