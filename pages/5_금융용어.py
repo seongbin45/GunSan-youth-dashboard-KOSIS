@@ -274,8 +274,8 @@ KEYS = {
     "Anthropic": _secret("ANTHROPIC_API_KEY"),
     "OpenAI":    _secret("OPENAI_API_KEY"),
     "Google":    _secret("GOOGLE_API_KEY"),
-    "Groq":      _secret("GROQ_API_KEY"),
-    "Mistral":   _secret("MISTRAL_API_KEY"),
+    "Groq":    _secret("GROQ_API_KEY"),
+    "Mistral": _secret("MISTRAL_API_KEY"),
 }
 
 LEVELS = {
@@ -408,8 +408,26 @@ def run_anthropic(user_message,key):
         else:
             return "".join(b.text for b in resp.content if hasattr(b,"text")),tool_steps
 
-# 중복 선언되어 있던 run_openai 함수를 하나로 통합했습니다.
 def run_openai(user_message, key, model="gpt-4o", base_url=None):
+    # base_url 지정 시 Groq/Mistral 등 OpenAI 호환 Provider 재사용 가능
+    client = _OpenAI(api_key=key, base_url=base_url) if base_url else _OpenAI(api_key=key)
+    messages=[{"role":"system","content":SYSTEM_PROMPT},{"role":"user","content":user_message}]
+    tool_steps=[]
+    while True:
+        resp=client.chat.completions.create(model=model,messages=messages,tools=_openai_tools(),tool_choice="auto")
+        choice=resp.choices[0]
+        if choice.finish_reason=="tool_calls":
+            messages.append(choice.message)
+            for tc in choice.message.tool_calls:
+                inp=json.loads(tc.function.arguments)
+                out=execute_tool(tc.function.name,inp)
+                tool_steps.append({"tool":tc.function.name,"input":inp,"output":json.loads(out)})
+                messages.append({"role":"tool","tool_call_id":tc.id,"content":out})
+        else:
+            return choice.message.content or "",tool_steps
+
+def run_openai(user_message, key, model="gpt-4o", base_url=None):
+    # base_url 지정 시 Groq/Mistral 등 OpenAI 호환 Provider 재사용 가능
     client = _OpenAI(api_key=key, base_url=base_url) if base_url else _OpenAI(api_key=key)
     messages=[{"role":"system","content":SYSTEM_PROMPT},{"role":"user","content":user_message}]
     tool_steps=[]
@@ -451,13 +469,17 @@ with st.sidebar:
     st.header("⚙️ 설정")
     provider_options=[]
     if GOOGLE_OK and KEYS["Google"]:        provider_options.append("🔵 Google (Gemini)")
-    if OPENAI_OK   and KEYS["Groq"]:        provider_options.append("⚡ Groq (무료)")
-    if OPENAI_OK   and KEYS["Mistral"]:     provider_options.append("🌊 Mistral (무료)")
+    ##if OPENAI_OK and KEYS["OpenAI"]:       provider_options.append("🟢 OpenAI (GPT-4o)")
+    ##if ANTHROPIC_OK and KEYS["Anthropic"]: provider_options.append("🟣 Anthropic (Claude)")
+    if OPENAI_OK   and KEYS["Groq"]:       provider_options.append("⚡ Groq (무료)")
+    if OPENAI_OK   and KEYS["Mistral"]:    provider_options.append("🌊 Mistral (무료)")
     
     missing=[]
     if not (GOOGLE_OK and KEYS["Google"]):         missing.append("GOOGLE_API_KEY")
-    if not KEYS["Groq"]:                           missing.append("GROQ_API_KEY    (무료: console.groq.com)")
-    if not KEYS["Mistral"]:                        missing.append("MISTRAL_API_KEY (무료tier: console.mistral.ai)")
+    ##if not (OPENAI_OK and KEYS["OpenAI"]):        missing.append("OPENAI_API_KEY")
+    ##if not (ANTHROPIC_OK and KEYS["Anthropic"]): missing.append("ANTHROPIC_API_KEY")
+    if not KEYS["Groq"]:                          missing.append("GROQ_API_KEY    (무료: console.groq.com)")
+    if not KEYS["Mistral"]:                       missing.append("MISTRAL_API_KEY (무료tier: console.mistral.ai)")
     
     if missing:
         with st.expander("⚠️ 미설정 키"):
@@ -480,10 +502,18 @@ with st.sidebar:
         model_selected=st.selectbox("모델",["mistral-small-latest","open-mistral-7b","mistral-large-latest"])
         st.caption("🌊 mistral-small / open-mistral-7b 는 무료 tier입니다.")
     elif "Google" in provider:
+        # 1. 등록된 구글 API 키를 가져옵니다.
         google_key = KEYS["Google"]
+    
+        # 2. 동적으로 사용 가능한 모델 목록을 불러옵니다.
         google_models = get_dynamic_google_models(google_key)
+    
+        # 3. 불러온 목록을 그대로 선택지(selectbox)에 넣습니다.
         model_selected = st.selectbox("모델", google_models)
-        
+
+    #elif "Google" in provider:
+        #model_selected = st.selectbox("모델", ["gemini-3.5-flash", "gemini-2.5-pro", "gemini-2.0-flash"])
+     
     st.divider()
     st.markdown("**🔧 사용 가능한 도구**")
     st.markdown("🔍 `check_benefit_eligibility` — 청년 혜택 자격 확인")
@@ -501,10 +531,34 @@ with st.sidebar:
         st.rerun()
     st.write("---")
 
+    ### --- [여기에 임시 테스트 코드 추가] ---
+    #st.divider()
+    #st.markdown("**👨‍💻 관리자 도구**")
+    #if st.sidebar.button("🔍 [개발 유지 보수] 현시점 사용 가능한 구글 API 모델 목록 확인하기"):
+        #import google.generativeai as genai
+        #try:
+            # Streamlit secrets에서 키를 가져와 설정합니다.
+            #genai.configure(api_key=st.secrets["GOOGLE_API_KEY"])
+            
+            #available_models = []
+            #for m in genai.list_models():
+                # 텍스트 생성(generateContent)을 지원하는 모델만 걸러냅니다.
+                #if 'generateContent' in m.supported_generation_methods:
+                    # 모델 이름에서 'models/' 부분을 제외하고 깔끔하게 저장합니다.
+                    #clean_name = m.name.replace('models/', '')
+                    #available_models.append(clean_name)
+            
+            # 사이드바에 화면에 목록을 출력합니다.
+            #st.sidebar.success("사용 가능한 모델 목록:")
+            #st.sidebar.write(available_models)
+        #except Exception as e:
+            #st.sidebar.error(f"목록을 불러오는 중 오류 발생: {e}")
+    #st.divider()
+    ### ----------------------------------
+
 if "chat_history" not in st.session_state:
     st.session_state.chat_history=[]
 
-# 대화 기록 렌더링
 for msg in st.session_state.chat_history:
     with st.chat_message(msg["role"]):
         if msg["role"]=="assistant" and msg.get("tool_steps"):
@@ -538,14 +592,12 @@ with st.form(key="chat_form", clear_on_submit=True):
         )
         
     with col2:
-        submit_button = st.form_submit_button(label="질문 보내기", use_container_width=True)
+        submit_button = st.form_submit_button(label="질문 보내기", use_container_width=True) or prefill
 
-# 폼 버튼이 눌리고 텍스트가 있을 때 AI가 작동하도록 트리거를 변경했습니다.
-if submit_button and user_input:
+if user_input:
     with st.chat_message("user"):
         st.markdown(user_input)
     st.session_state.chat_history.append({"role":"user","content":user_input})
-    
     with st.chat_message("assistant"):
         with st.spinner(f"🤖 {provider.split('(')[0].strip()} Agent 분석 중..."):
             try:
@@ -582,4 +634,5 @@ if submit_button and user_input:
                     st.error("API 사용량 한도 초과. 잠시 후 다시 시도하세요.")
                 else:
                     st.error(f"오류: {err}")
+
 
