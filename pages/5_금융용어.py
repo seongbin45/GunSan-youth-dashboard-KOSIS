@@ -121,7 +121,7 @@ st.markdown("""
     }
     
     .card-features {
-        background: linear-gradient(135deg, #f5f5f5 0%, #f9f9f9 100%);
+        background: linear-gradient(135deg, #f5f5f5 0%, #1a1a1a 100%);
         padding: 1.2rem;
         border-radius: 8px;
         margin-bottom: 1.5rem;
@@ -130,7 +130,7 @@ st.markdown("""
     .card-features-title {
         font-size: 0.9em;
         font-weight: 700;
-        color: #333333;
+        color: #ffffff;
         margin-bottom: 0.8rem;
         display: block;
     }
