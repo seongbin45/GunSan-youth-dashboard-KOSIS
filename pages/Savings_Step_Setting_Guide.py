@@ -187,10 +187,10 @@ for label, ratio, color in [
     term, tip = TERM_TIPS[label] 
     st.markdown(f"""
         <div style="text-align:center; background:{color}22;
-                    border-radius:12px; padding:20px; border-left:5px solid {color}">
+                    border-radius:12px; padding:20px; border-top:4px solid {color}">
             <span style="color:#f8f9fa; font-size:0.9em">
                 {label.split()[0]}&nbsp;
-                <span class="tooltip-wrap" tabindex="0">
+                <span class="tooltip-wrap" tabindex="5">
                     {term}
                     <span class="tooltip-box">{tip}</span>
                 </span>
