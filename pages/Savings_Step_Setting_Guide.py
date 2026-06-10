@@ -145,12 +145,12 @@ with col2:
 
     # ✅ for 루프가 with col2: 안에 들여쓰기 되어 있어야 해
     for label, amt, color in metrics:
-        term, tip = TERM_TIPS[label]
+        term, tip = TERM_TIPS[label] #{label.split()[0]}&nbsp
         st.markdown(f"""
         <div style="background:#1a1a1a; border-radius:10px; padding:14px 20px; margin-bottom:10px;
                     border-left:5px solid #f8f9fa;">
             <span style="color:#f8f9fa; font-size:0.9em">
-                {label.split()[0]}&nbsp;
+                {label}&nbsp;
                 <span class="tooltip-wrap" tabindex="0">
                     {term}
                     <span class="tooltip-box">{tip}</span>
