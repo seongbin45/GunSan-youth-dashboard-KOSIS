@@ -84,7 +84,7 @@ st.markdown("""
     }
     
     .feature-card {
-        background: white;
+        background: #ffffff;
         border-radius: 16px;
         padding: 2.5rem 2rem;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
@@ -108,13 +108,13 @@ st.markdown("""
     .card-title {
         font-size: 1.6em;
         font-weight: 700;
-        color: #1a1a1a;
+        color: #ffffff;
         margin-bottom: 0.8rem;
     }
     
     .card-description {
         font-size: 1em;
-        color: #555555;
+        color: #eceff1;
         line-height: 1.7;
         margin-bottom: 1.5rem;
         flex-grow: 1;
