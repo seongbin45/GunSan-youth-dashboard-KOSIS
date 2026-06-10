@@ -128,7 +128,7 @@ with col2:
         content: "";
         position: absolute;
         top: 100%;
-        left: 50px;       /* 기존 left: 50% → 20px로 변경 */
+        left: 50%;       /* 기존 left: 50% → 20px로 변경 */
         transform: -50%;  /* 기존 translateX(-50%) 제거 → none */
         border: 6px solid transparent;
         border-top-color: #1a1a1a;
