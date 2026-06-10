@@ -190,7 +190,7 @@ for label, ratio, color in [
                     border-radius:12px; padding:20px; border-top:4px solid {color}">
             <span style="color:#f8f9fa; font-size:0.9em">
                 {label.split()[0]}&nbsp;
-                <span class="tooltip-wrap" tabindex="5">
+                <span class="tooltip-wrap" tabindex="0">
                     {term}
                     <span class="tooltip-box">{tip}</span>
                 </span>
