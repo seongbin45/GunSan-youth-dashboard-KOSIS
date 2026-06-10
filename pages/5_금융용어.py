@@ -91,7 +91,7 @@ with st.form(key="question_form", clear_on_submit=True):
     user_input = st.text_input(
         label="질문을 적어주세요.", 
         value=prefill,
-        placeholder="예) 나 25살 취준생인데 받을 수 있는 혜택 알려줘",
+        placeholder="여기에 적어주세요",
         label_visibility="collapsed" # 라벨을 숨겨서 깔끔하게 만듭니다.
     )
     submit_button = st.form_submit_button(label="질문 보내기")
