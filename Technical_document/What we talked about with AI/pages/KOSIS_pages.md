@@ -1951,7 +1951,7 @@ KOSIS 웹 화면에서 만들어주는 URL의 파라미터 규격을 딱 한 번
 
 우선 27개 표의 한글 이름을 뽑는 코드를 먼저 돌려보시겠어요? 어떤 결과가 나오는지 공유해 주시면 감사하겠습니다!
 
-https://kosis.kr/openapi/Param/statisticsParameterData.do?method=getList&apiKey=ZTkyOWQwZWQ1YjNjMDlmOTdlMGM2YWIxMDliN2EwYzk=&itmId=T001+&objL1=A01+A02+A03+&objL2=B02+B03+&objL3=&objL4=&objL5=&objL6=&objL7=&objL8=&format=json&jsonVD=Y&prdSe=F&newEstPrdCnt=3&orgId=712&tblId=DT_712005_2024A001
+https://kosis.kr/openapi/Param/statisticsParameterData.do?method=getList&apiKey=👉이 자리에 본인이 직접 KOSIS에서 발급받은 API키 넣기👈&itmId=T001+&objL1=A01+A02+A03+&objL2=B02+B03+&objL3=&objL4=&objL5=&objL6=&objL7=&objL8=&format=json&jsonVD=Y&prdSe=F&newEstPrdCnt=3&orgId=712&tblId=DT_712005_2024A001
 
 
 [3년 2024~2024, DT_712005_2024A001, 전북 시·군별 청년인구]
@@ -2038,8 +2038,8 @@ def fetch_gunsan_youth_population(api_key):
     return pd.DataFrame()
 
 def main():
-    # ⚠️ 방금 공유해주신 URL에 있던 API 키를 그대로 넣어두었습니다!
-    KOSIS_API_KEY = "ZTkyOWQwZWQ1YjNjMDlmOTdlMGM2YWIxMDliN2EwYzk=" 
+    # ⚠️ 본인이 KOSIS에서 직접 발급한 키를 넣어주세요
+    KOSIS_API_KEY = "YOUR_KOSIS_API_KEY" 
     
     # 데이터 가져오기
     df = fetch_gunsan_youth_population(KOSIS_API_KEY)
@@ -2171,7 +2171,7 @@ def fetch_kosis_economy_list(api_key):
 
 def main():
     # ⚠️ 사용 중이신 API 키를 입력하세요!
-    KOSIS_API_KEY = "ZTkyOWQwZWQ1YjNjMDlmOTdlMGM2YWIxMDliN2EwYzk=" 
+    KOSIS_API_KEY = "YOUR_KOSIS_API_KEY" 
     
     list_df = fetch_kosis_economy_list(KOSIS_API_KEY)
     
@@ -2294,8 +2294,8 @@ def fetch_gunsan_youth_housing_data(api_key):
     return pd.DataFrame()
 
 def main():
-    # 사용 중이신 API 키
-    KOSIS_API_KEY = "ZTkyOWQwZWQ1YjNjMDlmOTdlMGM2YWIxMDliN2EwYzk=" 
+    # 사용 중이신 API 키를 입력해주세요
+    KOSIS_API_KEY = "YOUR_KOSIS_API_KEY" 
     
     df = fetch_gunsan_youth_housing_data(KOSIS_API_KEY)
     
@@ -2420,8 +2420,8 @@ def fetch_kosis_job_list(api_key):
     return pd.DataFrame()
 
 def main():
-    # 사용 중이신 API 키
-    KOSIS_API_KEY = "ZTkyOWQwZWQ1YjNjMDlmOTdlMGM2YWIxMDliN2EwYzk=" 
+    # 사용 중이신 API 키를 입력해주세요
+    KOSIS_API_KEY = "YOUR_KOSIS_API_KEY" 
     
     list_df = fetch_kosis_job_list(KOSIS_API_KEY)
     
@@ -2549,8 +2549,8 @@ def fetch_gunsan_youth_wage_data(api_key):
     return pd.DataFrame()
 
 def main():
-    # 사용 중이신 API 키
-    KOSIS_API_KEY = "ZTkyOWQwZWQ1YjNjMDlmOTdlMGM2YWIxMDliN2EwYzk=" 
+    # 사용 중이신 API 키를 입력해주세요
+    KOSIS_API_KEY = "YOUR_KOSIS_API_KEY" 
     
     df = fetch_gunsan_youth_wage_data(KOSIS_API_KEY)
     
@@ -2678,8 +2678,8 @@ def fetch_kosis_startup_list(api_key):
     return pd.DataFrame()
 
 def main():
-    # 사용 중이신 API 키
-    KOSIS_API_KEY = "ZTkyOWQwZWQ1YjNjMDlmOTdlMGM2YWIxMDliN2EwYzk=" 
+    # 사용 중이신 API 키를 입력해주세요
+    KOSIS_API_KEY = "YOUR_KOSIS_API_KEY" 
     
     list_df = fetch_kosis_startup_list(KOSIS_API_KEY)
     
@@ -2803,8 +2803,8 @@ def fetch_gunsan_youth_startup_data(api_key):
     return pd.DataFrame()
 
 def main():
-    # 사용 중이신 API 키
-    KOSIS_API_KEY = "ZTkyOWQwZWQ1YjNjMDlmOTdlMGM2YWIxMDliN2EwYzk=" 
+    # 사용 중이신 API 키를 입력해주세요
+    KOSIS_API_KEY = "YOUR_KOSIS_API_KEY" 
     
     df = fetch_gunsan_youth_startup_data(KOSIS_API_KEY)
     
@@ -2929,8 +2929,8 @@ def fetch_kosis_welfare_list(api_key):
     return pd.DataFrame()
 
 def main():
-    # 사용 중이신 API 키
-    KOSIS_API_KEY = "ZTkyOWQwZWQ1YjNjMDlmOTdlMGM2YWIxMDliN2EwYzk=" 
+    # 사용 중이신 API 키를 입력해주세요
+    KOSIS_API_KEY = "YOUR_KOSIS_API_KEY" 
     
     list_df = fetch_kosis_welfare_list(KOSIS_API_KEY)
     
@@ -3050,8 +3050,8 @@ def fetch_gunsan_youth_welfare_data(api_key):
     return pd.DataFrame()
 
 def main():
-    # 사용 중이신 API 키
-    KOSIS_API_KEY = "ZTkyOWQwZWQ1YjNjMDlmOTdlMGM2YWIxMDliN2EwYzk=" 
+    # 사용 중이신 API 키를 입력해주세요
+    KOSIS_API_KEY = "YOUR_KOSIS_API_KEY" 
     
     df = fetch_gunsan_youth_welfare_data(KOSIS_API_KEY)
     
@@ -3176,8 +3176,8 @@ def fetch_kosis_health_list(api_key):
     return pd.DataFrame()
 
 def main():
-    # 사용 중이신 API 키
-    KOSIS_API_KEY = "ZTkyOWQwZWQ1YjNjMDlmOTdlMGM2YWIxMDliN2EwYzk=" 
+    # 사용 중이신 API 키를 입력해주세요
+    KOSIS_API_KEY = "YOUR_KOSIS_API_KEY" 
     
     list_df = fetch_kosis_health_list(KOSIS_API_KEY)
     
@@ -3294,8 +3294,8 @@ def fetch_gunsan_youth_health_data(api_key):
     return pd.DataFrame()
 
 def main():
-    # 사용 중이신 API 키
-    KOSIS_API_KEY = "ZTkyOWQwZWQ1YjNjMDlmOTdlMGM2YWIxMDliN2EwYzk=" 
+    # 사용 중이신 API 키를 입력해주세요
+    KOSIS_API_KEY = "YOUR_KOSIS_API_KEY" 
     
     df = fetch_gunsan_youth_health_data(KOSIS_API_KEY)
     
@@ -3584,7 +3584,7 @@ C:\Windows\System32>streamlit run app.py
 
 전체인구 대비 청년 인구가 100%로 나오는건 뭔가 조금 잘못된 것 같아 
 아래의 주소를 사용해서 이 부분만 다시 조사하자
-https://kosis.kr/openapi/Param/statisticsParameterData.do?method=getList&apiKey=ZTkyOWQwZWQ1YjNjMDlmOTdlMGM2YWIxMDliN2EwYzk=&itmId=T001+&objL1=A01+A02+A03+&objL2=B02+B03+&objL3=&objL4=&objL5=&objL6=&objL7=&objL8=&format=json&jsonVD=Y&prdSe=F&newEstPrdCnt=3&orgId=712&tblId=DT_712005_2024A001
+https://kosis.kr/openapi/Param/statisticsParameterData.do?method=getList&apiKey=👉이 자리에 KOSIS에서 본인이 직접 발급받은 API키를 넣어주세요👈&itmId=T001+&objL1=A01+A02+A03+&objL2=B02+B03+&objL3=&objL4=&objL5=&objL6=&objL7=&objL8=&format=json&jsonVD=Y&prdSe=F&newEstPrdCnt=3&orgId=712&tblId=DT_712005_2024A001
 
 전체 인구 대비 청년 인구가 100%로 나오는 문제를 아주 날카롭게 짚어내셨습니다! 데이터가 제대로 정제되지 않았거나, KOSIS에서 제공하는 분류 조건(예: 군산시 전체 vs 연령대별)이 엉뚱하게 묶여서 합산되었을 확률이 매우 높습니다.
 
@@ -3606,7 +3606,7 @@ def analyze_population_data():
     url = "https://kosis.kr/openapi/Param/statisticsParameterData.do"
     params = {
         "method": "getList",
-        "apiKey": "ZTkyOWQwZWQ1YjNjMDlmOTdlMGM2YWIxMDliN2EwYzk=",
+        "apiKey": "👉YOUR_KOSIS_API_KEY👈",
         "itmId": "T001 ",                # 항목 ID
         "objL1": "A01 A02 A03",           # 분류 1 (연령대 등)
         "objL2": "B02 B03",               # 분류 2 (성별 등)
