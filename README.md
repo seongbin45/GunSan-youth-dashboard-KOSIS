@@ -1,5 +1,5 @@
 
-Languages: [English](/seongbin45/GunSan-youth-dashboard-KOSIS/blob/main/README.md) | [한국어](/seongbin45/GunSan-youth-dashboard-KOSIS/blob/main/README.ko.md)
+Languages: [English](/seongbin45/GunSan-youth-dashboard-KOSIS/README.md) | [한국어](/seongbin45/GunSan-youth-dashboard-KOSIS/README.ko.md)
 
 # FinFit
 
