@@ -11,7 +11,7 @@ github_image_url = "https://github.com/seongbin45/GunSan-youth-dashboard-KOSIS/b
 st.image(github_image_url, use_container_width=True)
 
 # 1. ⚠️ 핵심 개선점: 캐싱 추가 (55분마다 한 번만 구글 인증 수행)
-@st.cache_resourc(ttl=3300)
+@st.cache_resource(ttl=3300)
 def get_gspread_client():
     # Secrets에서 통째로 저장된 JSON 문자열을 가져옴
     json_string = st.secrets["gspread_json"]
