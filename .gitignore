@@ -1,0 +1,31 @@
+# Secrets & local env
+.streamlit/secrets.toml
+.env
+.env.local
+*.pem
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Local agent state / caches
+agent_state_*.json
+data/agent_state/*.json
+!data/agent_state/README.md
+data/turn_logs/*.jsonl
+!data/turn_logs/README.md
+youth_cache.db
+gunsan_youth_data.db
+*.log
+
+# Ad-hoc local scratch (do not commit)
+tmp_*.py
+_check_*.py
+_xcheck*.py
+_patch_*.py
+
+# OS
+.DS_Store
+Thumbs.db

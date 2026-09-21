@@ -1,0 +1,14 @@
+[theme]
+# FinFit unified theme (inspired by Figma prototype + React demo in /new)
+primaryColor        = "#6366F1"          # Indigo (main accent from prototype)
+backgroundColor     = "#111111"          # Soft blue-gray background (prototype default)
+secondaryBackgroundColor = "#000000"     # Cards / surfaces
+textColor           = "#ffffff"          # Slate-800
+font                = "sans serif"
+
+[browser]
+gatherUsageStats = false
+
+[server]
+headless = true
+port = 8501
