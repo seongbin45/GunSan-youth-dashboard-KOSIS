@@ -8,7 +8,9 @@ def run_reboot_macro():
     target_apps = [
         "gunsan-youth-dashboard-kosis",  # 군산 청년 대시보드
         "choisungbin.py",                # 첫 번째 프로젝트 (-1)
-        "wongchour_finfit_prototype1"    # 세 번째 프로토타입 프로젝트
+        "wongchour_finfit_prototype1",    # 세 번째 프로토타입 프로젝트
+        "codyssey_1_project",  # 네 번째 프로젝트
+        "vocab-recall"  # 다섯 번째 프로젝트
     ]
 
     with sync_playwright() as p:
