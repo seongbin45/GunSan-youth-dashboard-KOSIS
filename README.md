@@ -1,5 +1,5 @@
 
-Languages: [English](README.md) | [한국어](README.ko.md)
+Languages: [English](README.md) | [한국어](README.kr.md)
 
 # FinFit
 
